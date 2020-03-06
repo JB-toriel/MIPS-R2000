@@ -1,0 +1,35 @@
+module fetch_tb; 
+     reg clk; 
+     reg br, except;
+
+// for pc register
+  reg [31:0] pc_out;
+
+  // for pc mux
+  reg [31:0] sign, fixed;
+
+  parameter CLK_PERIOD = 10;
+
+  always #(CLK_PERIOD/2.0) clk = ~clk;
+
+ // Instantiate design under test
+  IF Instruction_fetch ( clk, sign, fixed, br, except, pc_out );
+
+  /*task display;
+    #1 $display( "pc = %0h - pc_4 = %0h", pc, pc_4);
+  endtask
+  */
+
+  initial
+        begin
+                sign = 0; fixed = 0;
+                br = 1; except = 0;
+		#5 br = 0;
+                clk = 1;
+                #100
+            $display( "End of simulation time is %d", $time );
+                $finish(1);
+        end
+
+
+endmodule
