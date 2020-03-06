@@ -40,14 +40,11 @@ module fetch_tb;
 
   initial
         begin
-          		$dumpfile("dump.vcd"); 
-          		$dumpvars;
-          	
                 sign = 0; fixed = 0;
                 br = 0; except = 0;
                 clk = 1;
                 #100
-            $display( "End of simulation time is %d", $time );
+				$display( "End of simulation time is %d", $time );
                 $finish(1);
         end
 
