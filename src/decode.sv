@@ -1,7 +1,7 @@
 //-----------------------------------------------------
-	// This is design of the fetch stage of the pipeline
-	// Design Name : IF
-	// File Name   : fetch.sv
+	// This is design of the decode stage of the pipeline
+	// Design Name : ID
+	// File Name   : decode.sv
 	// Function    : 
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
 //-----------------------------------------------------
