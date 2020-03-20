@@ -1,7 +1,7 @@
 //-----------------------------------------------------
 	// This is the test bench of th fetch stage design 
-	// Design Name : fetch_tb
-	// File Name   : fetch_tb.sv
+	// Design Name : test_fetch
+	// File Name   : test_fetch.sv
 	// Function    : 
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
 //-----------------------------------------------------
@@ -23,13 +23,14 @@ TACHES ET FONCTIONS
 endmodule
 */
 
-module fetch_tb; 
+module test_fetch; 
   
 	reg clk; 
 	reg br, except;
 
 	// for pc register
 	reg [31:0] pc_out;
+	reg [31:0] inst_out;
 
 	// for pc mux
 	reg [31:0] sign, fixed;
@@ -39,7 +40,7 @@ module fetch_tb;
 	always #(CLK_PERIOD/2.0) clk = ~clk;
 	
 	// Instantiation of design under test
-	IF Instruction_fetch ( clk, sign, fixed, br, except, pc_out );
+	IF instruction_fetch ( clk, sign, fixed, br, except, pc_out, inst_out );
 
 	// Test bench starts Here
 	initial
@@ -49,7 +50,7 @@ module fetch_tb;
 			clk = 1;
 			#100
 			$display( "End of simulation time is %d", $time );
-			$finish(1);
+			$stop;
 		end
 
-endmodule // End of Module fetch_tb
+endmodule // End of Module test_fetch
