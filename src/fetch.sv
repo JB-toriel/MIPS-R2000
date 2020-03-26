@@ -70,14 +70,51 @@ module fetch_MUX( inc_pc, sign, fixed, br, except, new_pc );
 			assign new_pc = sign;
 
 		if ( br == 1 && except == 1 )
-			assign new_pc = 8'hFFFF_FFFF;
+			assign new_pc = 32'hFFFF_FFFF;
 	  end
   
   	initial new_pc=0;
 
 endmodule // End of Module fetch_MUX
 
-module IF( clk, sign, fixed, br, except, pc_out/*, inst*/);
+
+module fetch_ROM ( pc/*, chip_en, read_en*/, inst );
+	
+	// Inputs Declaration
+	input [31:0] pc;
+	/*
+	input logic chip_en;
+	input logic read_en;
+	*/
+
+	// Ouputs Declaration
+	output reg [31:0] inst;
+
+	//------Variable declaration------//
+	reg [31:0] rom_code [0:3];	
+
+
+	// Code starts Here
+	always @(pc)
+		inst <= rom_code[pc/4];
+	
+	/*
+	if (chip_en && read_en)
+		assign inst = rom_code[pc];
+  	else
+		assign inst = 32'hFFFF_FFFF;
+	*/
+
+	initial 
+		begin
+			$readmemh("src/memory.list", rom_code);
+		end
+		
+
+endmodule	// End of Module fetch_ROM
+
+
+module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 	
 	// Inputs Declaration
 	input clk;
@@ -86,7 +123,7 @@ module IF( clk, sign, fixed, br, except, pc_out/*, inst*/);
 	
 	// Outputs Declaration
 	output reg [31:0] pc_out;
-	//output inst;
+	output reg [31:0] inst_out;
 	
 	// Ports data types
 	wire [31:0] pc;
@@ -106,7 +143,7 @@ module IF( clk, sign, fixed, br, except, pc_out/*, inst*/);
 	
 	fetch_MUX mux( 
 	
-  		.inc_pc (	pc	  	), // input	[31:0]
+  		.inc_pc (	pc	), // input	[31:0]
   		.sign   (	sign  	), // input	[31:0]
   		.fixed  (	fixed   ), // input	[31:0]
 		.br  	(	br   	), // input
@@ -114,8 +151,17 @@ module IF( clk, sign, fixed, br, except, pc_out/*, inst*/);
 		.new_pc (	pc_4    )  // output	[31:0]
 		
 	);
+
+	fetch_ROM rom(
+
+		.pc	(	pc_4	), // input	[31:0]
+		/*.chip_en(	chip_en	), // input
+		.read_en(	read_en	), // input*/
+		.inst 	(	inst_out)  // output	[31:0]
+
+	);
 	
 	always @(pc_4)
-		assign pc_out = pc_4;
+		assign pc_out = pc_4;	
 
 endmodule // End of Module IF

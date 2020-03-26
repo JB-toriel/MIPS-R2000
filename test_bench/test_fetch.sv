@@ -1,5 +1,5 @@
 //-----------------------------------------------------
-	// This is the test bench of th fetch stage design
+	// This is the test bench of the fetch stage design
 	// Design Name : test_fetch
 	// File Name   : test_fetch.sv
 	// Function    :
@@ -23,8 +23,8 @@ TACHES ET FONCTIONS
 endmodule
 */
 
-module test_fetch;
 
+module test_fetch;
 	reg clk;
 	reg br, except;
 
@@ -55,4 +55,5 @@ module test_fetch;
 			$stop;
 		end
 
-	endmodule // End of Module test_fetch
+
+endmodule // End of Module test_fetch
