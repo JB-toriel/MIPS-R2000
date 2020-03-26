@@ -1,8 +1,8 @@
 //-----------------------------------------------------
-	// This is design of the decode stage of the pipeline
-	// Design Name : ID
-	// File Name   : decode.sv
-	// Function    : 
+	// This is design of the fetch stage of the pipeline
+	// Design Name : IF
+	// File Name   : fetch.sv
+	// Function    :
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
 //-----------------------------------------------------
 
@@ -30,7 +30,15 @@ endmodule
 */
 
 
-module ID ( inst_in/*, ...*/);	
+module ID ( inst_in, inst_2521, inst_2016, inst_1511/*, ...*/);
 	input [31:0] inst_in;
-	
+	output reg [4:0] inst_2521, inst_2016, inst_1511;
+
+  	always@(inst_in)
+  		begin
+          inst_2521 <= inst_in[25:21];
+          inst_2016 <= inst_in[20:16];
+          inst_1511 <= inst_in[15:11];
+        end
+
 	endmodule // End of ID module
