@@ -29,16 +29,48 @@ endmodule
 	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
+module decode_REG_MAPP ( rs, rt, rd, data_1, data_2);
 
-module ID ( inst_in, inst_2521, inst_2016, inst_1511/*, ...*/);
+	// Inputs declaration
+	input [4:0] rs, rt, rd;
+
+	// Outputs declaration
+	output reg [31:0] data_1, data_2;
+
+	//Variables DECLARATION
+	reg [31:0] registers [0:31];
+	integer i;
+	initial
+        begin
+            for(i = 0; i < 32; i = i + 1)
+                begin
+                    registers[i]=i;
+                end
+        end
+
+	//Code start here
+		always @(rs, rt)
+			begin
+				data_1 <= registers[rs];
+				data_2 <= registers[rt];
+			end
+	endmodule // End of decode_REG_MAPP module
+
+module ID ( inst_in, rs, rt, rd, imm, data_1, data_2/*, ...*/);
 	input [31:0] inst_in;
-	output reg [4:0] inst_2521, inst_2016, inst_1511;
+	output reg [4:0] rs, rt, rd;
+	output reg [31:0] imm, data_1, data_2;
 
   	always@(inst_in)
   		begin
-          inst_2521 <= inst_in[25:21];
-          inst_2016 <= inst_in[20:16];
-          inst_1511 <= inst_in[15:11];
+          rs <= inst_in[25:21];
+          rt <= inst_in[20:16];
+          rd <= inst_in[15:11];
+					imm <=  {16'h0000, inst_in[15:0]};
         end
+
+
+
+		decode_REG_MAPP reg_MAPP ( rs, rt, rd, data_1, data_2);
 
 	endmodule // End of ID module
