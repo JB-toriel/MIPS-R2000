@@ -32,6 +32,11 @@ module test_fetch;
 	// for pc registers
 	reg [31:0] pc_out;
 	reg [31:0] inst_out;
+	
+	// for decode
+	reg [4:0] rs, rt, rd;
+	reg [31:0] imm;
+	reg [31:0] data_1, data_2;
 
 	// for pc mux
 	reg [31:0] sign, fixed;
