@@ -28,7 +28,8 @@ module test_fetch;
 	reg clk;
 	reg br, except;
 
-	// for pc register
+// for Fetch
+	// for pc registers
 	reg [31:0] pc_out;
 	reg [31:0] inst_out;
 	
@@ -39,6 +40,11 @@ module test_fetch;
 
 	// for pc mux
 	reg [31:0] sign, fixed;
+
+// for Decode
+	reg [31:0] imm, data_1, data_2;
+	reg [4:0] rs, rt, rd;
+
 
 	parameter CLK_PERIOD = 10;
 
