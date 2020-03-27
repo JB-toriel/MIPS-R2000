@@ -28,13 +28,18 @@ module test_fetch;
 	reg clk;
 	reg br, except;
 
-	// for pc register
+// for Fetch
+	// for pc registers
 	reg [31:0] pc_out;
 	reg [31:0] inst_out;
-	reg [4:0] inst_2521, inst_2016, inst_1511;
 
 	// for pc mux
 	reg [31:0] sign, fixed;
+
+// for Decode
+	reg [31:0] imm, data_1, data_2;
+	reg [4:0] rs, rt, rd;
+
 
 	parameter CLK_PERIOD = 10;
 
@@ -42,7 +47,7 @@ module test_fetch;
 
 	// Instantiation of design under test
 	IF instruction_fetch ( clk, sign, fixed, br, except, pc_out, inst_out );
-	ID Instruction_decode ( .inst_in (inst_out), .inst_2521(inst_2521), .inst_2016(inst_2016), .inst_1511(inst_1511)/*, ...*/);
+	ID Instruction_decode ( .inst_in (inst_out), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2)/*, ...*/);
 
 	// Test bench starts Here
 	initial
