@@ -76,7 +76,7 @@ module ID ( inst_in, rs, rt, rd, imm, data_1, data_2/*, ...*/);
 			rs  <= inst_in[25:21];
 			rt  <= inst_in[20:16];
 			rd  <= inst_in[15:11];
-			imm <= {16'h0000, inst[15:0]}
+			imm <= {16'h0000, inst_in[15:0]};
 		end
 	
 	decode_REG_MAPP reg_MAPP(
