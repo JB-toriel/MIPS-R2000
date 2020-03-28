@@ -41,10 +41,6 @@ module test_fetch;
 	// for pc mux
 	reg [31:0] sign, fixed;
 
-// for Decode
-	reg [31:0] imm, data_1, data_2;
-	reg [4:0] rs, rt, rd;
-
 
 	parameter CLK_PERIOD = 10;
 
