@@ -1,7 +1,7 @@
 //-----------------------------------------------------
-	// This is design of the fetch stage of the pipeline
-	// Design Name : IF
-	// File Name   : fetch.sv
+	// This is design of the decode stage of the pipeline
+	// Design Name : ID
+	// File Name   : decode.sv
 	// Function    :
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
 //-----------------------------------------------------
@@ -29,48 +29,70 @@ endmodule
 	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
-module decode_REG_MAPP ( rs, rt, rd, data_1, data_2);
+module decode_REG_MAPP ( clk, rs, rt, rd, write_data, reg_write, data_1, data_2 );
 
-	// Inputs declaration
+	// Inputs Declaration
+  	input clk, reg_write;
 	input [4:0] rs, rt, rd;
-
-	// Outputs declaration
-	output reg [31:0] data_1, data_2;
-
-	//Variables DECLARATION
+  	input [31:0] write_data;
+	
+	// Ouputs Declaration
+	output [31:0] data_1, data_2;
+	
+	
+	//------Variable declaration------//
 	reg [31:0] registers [0:31];
 	integer i;
+	
+	// Code starts Here
+	assign data_1 = registers[rs];
+	assign data_2 = registers[rt];
+  
+  	always @(posedge clk)
+    	begin
+      		if(reg_write) registers[rd] <= write_data;
+    	end
+		
 	initial
-        begin
-            for(i = 0; i < 32; i = i + 1)
-                begin
-                    registers[i]=i;
-                end
-        end
+		begin
+			for(i = 0; i < 32; i = i + 1)
+				begin
+					registers[i]=i;
+				end
+		end
 
-	//Code start here
-		always @(rs, rt)
-			begin
-				data_1 <= registers[rs];
-				data_2 <= registers[rt];
-			end
-	endmodule // End of decode_REG_MAPP module
+endmodule // End of decode_REG_MAPP
 
-module ID ( inst_in, rs, rt, rd, imm, data_1, data_2/*, ...*/);
+module ID ( clk, inst_in, write_data, reg_write, rs, rt, rd, imm, data_1, data_2, /*, ...*/);
+	
+	// Inputs Declaration
+  	input clk, reg_write;
 	input [31:0] inst_in;
-	output reg [4:0] rs, rt, rd;
-	output reg [31:0] imm, data_1, data_2;
-
-  	always@(inst_in)
-  		begin
-          rs <= inst_in[25:21];
-          rt <= inst_in[20:16];
-          rd <= inst_in[15:11];
-					imm <=  {16'h0000, inst_in[15:0]};
-        end
-
-
-
-		decode_REG_MAPP reg_MAPP ( rs, rt, rd, data_1, data_2);
-
-	endmodule // End of ID module
+  	input [31:0] write_data;
+	
+	// Ouputs Declaration
+	output  [32:0] imm;
+	output  [32:0] data_1, data_2;
+	output  [4:0] rs, rt, rd;
+	
+	// Code starts Here
+  
+	//assign opcode = inst_in[31:26];
+	assign rs  = inst_in[25:21];
+  	assign rt  = inst_in[20:16];
+	assign rd  = inst_in[15:11];
+	assign imm = {16'h0000, inst_in[15:0]};
+	
+	decode_REG_MAPP reg_MAPP(
+      
+      	.clk		( clk	 	 ),  // input
+      	.rs 		( rs   	 	 ),  // input	[4:0]
+      	.rt 		( rt    	 ),  // input	[4:0]
+      	.rd 		( rd    	 ),  // input	[4:0]
+      	.write_data ( write_data ),  // input   [31:0]
+      	.reg_write 	( reg_write  ),  // input   [31:0]
+      	.data_1 	( data_1 	 ),  // output  [31:0]
+      	.data_2 	( data_2 	 )   // output  [31:0]
+	);
+	
+endmodule // End of ID module
