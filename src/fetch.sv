@@ -2,7 +2,7 @@
 	// This is design of the fetch stage of the pipeline
 	// Design Name : IF
 	// File Name   : fetch.sv
-	// Function    : 
+	// Function    :
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
 //-----------------------------------------------------
 
@@ -31,18 +31,18 @@ endmodule
 
 
 module fetch_PC_REG ( clk, old_pc, new_pc );
-	
+
 	// Inputs Declaration
 	input clk;
 	input [31:0] new_pc;
-	
+
 	// Ouputs Declaration
 	output reg [31:0] old_pc;
-	
+
 	// Code starts Here
 	always @(posedge clk)
 		old_pc <= new_pc;
-  
+
 endmodule	// End of Module fetch_PC_REG
 
 
@@ -52,13 +52,13 @@ module fetch_MUX( inc_pc, sign, fixed, br, except, new_pc );
 	input [31:0] inc_pc;	//old_pc "+ 4"
 	input [31:0] sign, fixed;
 	input br, except;
-	
+
 	// Outputs Declaration
 	output reg [31:0] new_pc;
-	
-	
+
+
 	// Code starts Here
-	always @(br or except or inc_pc) 
+	always @(br or except or inc_pc)
       begin
 		if ( br == 0 && except == 0 )
 			assign new_pc = inc_pc + 4;
@@ -72,14 +72,14 @@ module fetch_MUX( inc_pc, sign, fixed, br, except, new_pc );
 		if ( br == 1 && except == 1 )
 			assign new_pc = 32'hFFFF_FFFF;
 	  end
-  
+
   	initial new_pc=0;
 
 endmodule // End of Module fetch_MUX
 
 
 module fetch_ROM ( pc/*, chip_en, read_en*/, inst );
-	
+
 	// Inputs Declaration
 	input [31:0] pc;
 	/*
@@ -91,13 +91,13 @@ module fetch_ROM ( pc/*, chip_en, read_en*/, inst );
 	output reg [31:0] inst;
 
 	//------Variable declaration------//
-	reg [31:0] rom_code [0:3];	
+	reg [31:0] rom_code [0:8];	
 
 
 	// Code starts Here
 	always @(pc)
 		inst <= rom_code[pc/4];
-	
+
 	/*
 	if (chip_en && read_en)
 		assign inst = rom_code[pc];
@@ -105,31 +105,31 @@ module fetch_ROM ( pc/*, chip_en, read_en*/, inst );
 		assign inst = 32'hFFFF_FFFF;
 	*/
 
-	initial 
+	initial
 		begin
 			$readmemh("src/memory.list", rom_code);
 		end
-		
+
 
 endmodule	// End of Module fetch_ROM
 
 
 module IF( clk, sign, fixed, br, except, pc_out, inst_out);
-	
+
 	// Inputs Declaration
 	input clk;
 	input [31:0] sign, fixed;
 	input br, except;
-	
+
 	// Outputs Declaration
 	output reg [31:0] pc_out;
 	output reg [31:0] inst_out;
-	
+
 	// Ports data types
 	wire [31:0] pc;
 	reg [31:0] pc_4;
-  
-	
+
+
 
 	// Modules Instantiation
 
@@ -140,16 +140,16 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 		.new_pc (	pc_4  )  // output	[31:0]
 
 	);
-	
-	fetch_MUX mux( 
-	
+
+	fetch_MUX mux(
+
   		.inc_pc (	pc	), // input	[31:0]
   		.sign   (	sign  	), // input	[31:0]
   		.fixed  (	fixed   ), // input	[31:0]
 		.br  	(	br   	), // input
 		.except (	except  ), // input
 		.new_pc (	pc_4    )  // output	[31:0]
-		
+
 	);
 
 	fetch_ROM rom(
@@ -160,8 +160,8 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 		.inst 	(	inst_out)  // output	[31:0]
 
 	);
-	
+
 	always @(pc_4)
-		assign pc_out = pc_4;	
+		assign pc_out = pc_4;
 
 endmodule // End of Module IF
