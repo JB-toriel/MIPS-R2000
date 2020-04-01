@@ -1,5 +1,5 @@
 //-----------------------------------------------------
-	// This is the test bench of the fetch stage design
+	// This is the test bench of the fetch and decode stage design
 	// Design Name : test_fetch
 	// File Name   : test_fetch.sv
 	// Function    :
@@ -25,21 +25,27 @@ endmodule
 
 
 module test_fetch;
+
 	reg clk;
-	reg br, except;
 
-// for Fetch
-	// for pc registers
-	reg [31:0] pc_out;
-	reg [31:0] inst_out;
+	//------For fetch stage------//
+
+		// for pc registers
+		reg [31:0] pc_out;
+		reg [31:0] inst_out;
+		
+		// for pc mux
+		reg br, except;
+		reg [31:0] sign, fixed;
 	
-	// for decode
-	reg [4:0] rs, rt, rd;
-	reg [31:0] imm;
-	reg [31:0] data_1, data_2;
-
-	// for pc mux
-	reg [31:0] sign, fixed;
+	//------For decode stage------//
+		
+		// for register mapping
+		wire write_data;
+		wire reg_write;
+		wire [4:0] rs, rt, rd;
+		wire [31:0] imm;
+		wire [31:0] data_1, data_2;
 
 
 	parameter CLK_PERIOD = 10;
@@ -48,11 +54,13 @@ module test_fetch;
 
 	// Instantiation of design under test
 	IF instruction_fetch ( clk, sign, fixed, br, except, pc_out, inst_out );
-	ID Instruction_decode ( .inst_in (inst_out), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2)/*, ...*/);
+	ID Instruction_decode ( .clk(clk), .inst_in (inst_out), .write_data(write_data), .reg_write(reg_write), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2)/*, ...*/);
 
 	// Test bench starts Here
 	initial
 		begin
+          	//$dumpfile("dump.vcd"); 
+			//$dumpvars;
 			sign = 0; fixed = 0;
 			br = 0; except = 0;
 			clk = 1;
@@ -63,3 +71,4 @@ module test_fetch;
 
 
 endmodule // End of Module test_fetch
+
