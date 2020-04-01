@@ -41,7 +41,7 @@ module test_fetch;
 	//------For decode stage------//
 		
 		// for register mapping
-		wire write_data;
+		wire [31:0] write_data;
 		wire reg_write;
 		wire [4:0] rs, rt, rd;
 		wire [31:0] imm;
