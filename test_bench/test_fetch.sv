@@ -59,8 +59,6 @@ module test_fetch;
 	// Test bench starts Here
 	initial
 		begin
-          	//$dumpfile("dump.vcd"); 
-			//$dumpvars;
 			sign = 0; fixed = 0;
 			br = 0; except = 0;
 			clk = 1;
