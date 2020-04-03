@@ -29,10 +29,13 @@ endmodule
 	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
-module decode_REG_MAPP ( rs, rt, rd, data_1, data_2);
+module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data_1, data_2);
 
 	// Inputs declaration
-	input [4:0] rs, rt, rd;
+	input [4:0] rs, rt;
+	input logic reg_write;
+	input reg [4:0] write_register;
+	input reg [31:0] write_data_reg;
 
 	// Outputs declaration
 	output [31:0] data_1, data_2;
@@ -40,7 +43,7 @@ module decode_REG_MAPP ( rs, rt, rd, data_1, data_2);
 	//Variables DECLARATION
 	reg [31:0] registers [0:31];
 	integer i;
-	
+
 	initial
     begin
       for(i = 0; i < 32; i = i + 1)
@@ -52,6 +55,9 @@ module decode_REG_MAPP ( rs, rt, rd, data_1, data_2);
 	//Code start here
 		assign data_1 = registers[rs];
 		assign data_2 = registers[rt];
+		always @ ( * ) begin
+			if (reg_write) registers[write_register] <= write_data_reg;
+		end
 
 	endmodule // End of decode_REG_MAPP module
 
@@ -110,13 +116,13 @@ module decode_CONTROL_UNIT (inst_in, exception, jump, wb, m, ex);
 endmodule // decode_CONTROL_UNIT
 
 
-module ID ( clk, inst_in, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, equal, wb, m, ex/*, ...*/);
+module ID ( clk, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, equal, wb, m, ex/*, ...*/);
 
 	//Inputs declaration
 	input clk;
 	input [31:0] inst_in, write_data_reg;
 	input logic reg_write;
-
+	input reg [4:0] write_register;
 
 	//Outputs declaration
 	output logic exception, jump;
@@ -135,7 +141,7 @@ module ID ( clk, inst_in, write_data_reg, reg_write, exception, jump, rs, rt, rd
 	assign imm = {16'h0000, inst_in[15:0]};
 
 
-	decode_REG_MAPP reg_MAPP ( rs, rt, rd, data_1, data_2);
+	decode_REG_MAPP reg_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data_1, data_2);
 	decode_CONTROL_UNIT control_UNIT (inst_in, exception, jump, wb, m, ex);
 
 	assign equal = (data_1 == data_2);
