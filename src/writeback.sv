@@ -1,0 +1,50 @@
+//-----------------------------------------------------
+	// This is design of the writeback stage of the pipeline
+	// Design Name : IF
+	// File Name   : writeback.sv
+	// Function    :
+	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
+//-----------------------------------------------------
+
+/*
+module NOM (LISTE DES PORTS);
+
+DECLARATION DES PORTS
+DECLARATION DES PARAMETRES
+
+`include "NOM DE FICHIER";
+
+DECLARATIONS DE VARIABLES
+AFFECTATIONS
+INSTANCIATIONS DE SOUS-MODULES
+BLOCS initial ET always
+TACHES ET FONCTIONS
+
+endmodule
+*/
+
+/*
+	Inputs : internally must always be of type net, externally the inputs can be connected to a variable of type reg or net.
+	Outputs : internally can be of type net or reg, externally the outputs must be connected to a variable of type net.
+	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
+*/
+
+
+module WB ( wb, read_data, address_WB, reg_WB, write_data_reg, write_register, reg_write/*, ...*/);
+
+	//Inputs declaration
+	input reg [31:0] read_data, address_WB;
+	input reg [1:0] wb;
+	input reg [4:0] reg_WB;
+
+	//Inputs declaration
+	output [31:0] write_data_reg;
+	output [4:0] write_register;
+	output logic reg_write;
+
+	//Actual code
+	assign reg_write = wb[1];
+	assign write_data_reg = wb[0] ? read_data : address_WB; // Mux to chose between data_2 or the immediate sign extended
+	assign write_register = reg_WB;
+
+endmodule // End of WB module
