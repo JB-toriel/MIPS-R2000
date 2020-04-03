@@ -59,7 +59,7 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	output reg [3:0] ALU_ctrl;
 
 	// Code starts Here
-	always 
+	always @(ALU_op, fnc_code)
 		begin
 			case(fnc_code)
 				32: ALU_ctrl <= 4'b0010; // ADD
@@ -74,10 +74,9 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 
 endmodule // End of module ALU_ctrl_unit
 
-module ALU ( op_1, sign_ext, sel, op_2, ALU_ctrl, zero, res );
+module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 
 	// Inputs Declaration
-	input sel;
 	input [3:0] ALU_ctrl;
 	input [31:0] op_1, sign_ext, op_2;
 	
@@ -103,11 +102,10 @@ module ALU ( op_1, sign_ext, sel, op_2, ALU_ctrl, zero, res );
 endmodule // End of module ALU
 
 
-module EX ( data_1, data_2, sel, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register, m_MEM, wb_MEM/*, ...*/);
+module EX ( data_1, data_2, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register, m_MEM, wb_MEM/*, ...*/);
 
 	// Inputs declaration
 	input [4:0] rs, rt, rd;
-	input sel;
 	input [3:0] ALU_ctrl;
 	input [31:0] imm, data_1, data_2;
 	input reg [3:0] ex;
@@ -121,7 +119,8 @@ module EX ( data_1, data_2, sel, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zer
 	output reg [2:0] m_MEM;
 	output reg [1:0] wb_MEM;
 	
-	// Variables declaration 
+	// Variables declaration
+	wire sel;
 	wire [1:0] ALU_op;
 	wire [5:0] fnc_code;
 	wire [31:0] op_2;
@@ -130,7 +129,7 @@ module EX ( data_1, data_2, sel, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zer
 	// Code starts here
 	assign ALU_op = ex[2:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions 
-	assign op_2 = sel ? imm : data_2; // Mux to chose between data_2 or the immediate sign extended
+	assign op_2 = ex[0] ? imm : data_2; // Mux to chose between data_2 or the immediate sign extended
 	
 	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, write_register);
 	
@@ -145,7 +144,6 @@ module EX ( data_1, data_2, sel, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zer
 	
   		.op_1 		(	data_1		), // input	 [31:0]
   		.sign_ext  	(	imm   		), // input	 [31:0]
-		.sel  		(	sel   		), // input
 		.op_2 		(	op_2  		), // output [31:0]
 		.ALU_ctrl 	(	ALU_ctrl    ), // output [3:0]
 		.zero 		(	zero		), // output 
