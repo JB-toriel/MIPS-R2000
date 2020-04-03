@@ -41,7 +41,7 @@ module test_fetch;
 	//------For decode stage------//
 		wire equal;
 		// for register mapping
-		wire [31:0] write_data;
+		wire [31:0] write_data_reg;
 		wire reg_write;
 		wire [4:0] rs, rt, rd;
 		wire [31:0] imm;
@@ -54,13 +54,18 @@ module test_fetch;
 		reg [2:0] m;
 		reg [1:0] wb;
 
-	//------For decode stage------//
-		reg [31:0] alu_op2;
+	//------For execute stage------//
 		reg [4:0] write_register;
 		reg [2:0] m_MEM;
 		reg [1:0] wb_MEM;
-		reg res;
+		reg [31:0] res;
+		reg zero;
 
+	//------For memory stage------//
+		reg [4:0] reg_WB;
+		reg [1:0] wb_WB;
+		reg [31:0] address_WB, read_data;
+		logic PCSrc;
 
 	parameter CLK_PERIOD = 10;
 
@@ -68,10 +73,11 @@ module test_fetch;
 
 	// Instantiation of design under test
 	IF instruction_fetch ( clk, sign, fixed, br, except, pc_out, inst_out );
-	ID instruction_decode ( .clk(clk), .inst_in (inst_out), .write_data(write_data), .reg_write(reg_write), .exception(exception),
+	ID instruction_decode ( .clk(clk), .inst_in (inst_out), .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
 	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .equal(equal), .wb(wb), .m(m), .ex(ex)/*, ...*/);
-  EX instruction_execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, imm, res, write_register, alu_op2, m_MEM, wb_MEM/*, ...*/);
-
+  EX execute ( data_1, data_2, ALU_ctrl, rs, rt, rd, ex, m, wb, imm, zero, res, write_register, m_MEM, wb_MEM/*, ...*/);
+	MEM memory ( wb_MEM, m_MEM, zero, res, data_2, write_register, wb_WB, read_data, address_WB, PCSrc, reg_WB/*, ...*/);
+	WB writeback ( wb_WB, read_data, address_WB, reg_WB, write_data_reg, write_register, reg_write/*, ...*/);
 
 
 	// Test bench starts Here
