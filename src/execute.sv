@@ -120,7 +120,6 @@ module EX ( data_1, data_2, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, re
 	output reg [1:0] wb_MEM;
 	
 	// Variables declaration
-	wire sel;
 	wire [1:0] ALU_op;
 	wire [5:0] fnc_code;
 	wire [31:0] op_2;
