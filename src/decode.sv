@@ -110,11 +110,11 @@ module decode_CONTROL_UNIT (inst_in, exception, jump, wb, m, ex);
 endmodule // decode_CONTROL_UNIT
 
 
-module ID ( clk, inst_in, write_data, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, equal, wb, m, ex/*, ...*/);
+module ID ( clk, inst_in, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, equal, wb, m, ex/*, ...*/);
 
 	//Inputs declaration
 	input clk;
-	input [31:0] inst_in, write_data;
+	input [31:0] inst_in, write_data_reg;
 	input logic reg_write;
 
 
