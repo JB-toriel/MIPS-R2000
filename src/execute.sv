@@ -77,7 +77,7 @@ endmodule // End of module ALU_ctrl_unit
 module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 
 	// Inputs Declaration
-	input reg [3:0] ALU_ctrl;
+	input [3:0] ALU_ctrl;
 	input [31:0] op_1, sign_ext, op_2;
 
 	// Ouputs Declaration
