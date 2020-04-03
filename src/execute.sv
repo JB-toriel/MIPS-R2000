@@ -57,19 +57,28 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 
 	// Ouputs Declaration
 	output reg [3:0] ALU_ctrl;
+	
+	// Variables declaration
+	parameter ADD = 4'b0000;
+	parameter SUB = 4'b0001;
+	parameter AND = 4'b0010;
+	parameter OR = 4'b0011;
+	parameter SHFT_L = 4'b0111;
+	parameter NOR = 4'b1001;
 
 	// Code starts Here
 	always @ (ALU_op, fnc_code)
+
 		begin
 			case(fnc_code)
-				32: ALU_ctrl <= 4'b0010; // ADD
-				34: ALU_ctrl <= 4'b0110; // SUB
-				36: ALU_ctrl <= 4'b0000; // AND
-				37: ALU_ctrl <= 4'b0001; // OR
-				39: ALU_ctrl <= 4'b1100; // Set on less than
-				42: ALU_ctrl <= 4'b0111; // NOR
-				default: ALU_ctrl <= 4'b1111;
-			endcase
+				32: ALU_ctrl <= ADD; 	// ADD
+				34: ALU_ctrl <= SUB; 	// SUB
+				36: ALU_ctrl <= AND; 	// AND
+				37: ALU_ctrl <= OR; 	// OR
+				39: ALU_ctrl <= SHFT_L; // Set on less than
+				42: ALU_ctrl <= NOR; 	// NOR
+				default: ALU_ctrl <= 4'b1111;  
+			endcase			
 		end
 
 endmodule // End of module ALU_ctrl_unit
@@ -83,6 +92,14 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 	// Ouputs Declaration
 	output zero;
 	output reg [31:0] res;
+	
+	// Variables declaration
+	parameter ADD = 4'b0000;
+	parameter SUB = 4'b0001;
+	parameter AND = 4'b0010;
+	parameter OR = 4'b0011;
+	parameter SHFT_L = 4'b0111;
+	parameter NOR = 4'b1001;
 
 	// Code starts Here
 	assign zero = (res==0); // zero flag = 0 if the result is 0
@@ -90,13 +107,14 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 	always @(ALU_ctrl, op_1, op_2)
 		begin
 			case(ALU_ctrl)
-				4'b0000: res <=   op_1 & op_2; 		   // AND
-				4'b0001: res <=   op_1 | op_2; 		   // OR
-				4'b0010: res <=   op_1 + op_2; 		   // ADD
-				4'b0110: res <=   op_1 - op_2; 		   // SUB
-				4'b0111: res <=   op_1 < op_2 ? 1 : 0; // Set on less than
-				4'b1100: res <= ~(op_1 | op_2); 	   // NOR
-			endcase
+				   ADD: res <=   op_1 & op_2; 		  // AND
+				    OR: res <=   op_1 | op_2; 		  // OR
+				   ADD: res <=   op_1 + op_2; 		  // ADD
+				   SUB: res <=   op_1 - op_2; 		  // SUB
+				SHFT_L: res <=   op_1 < op_2 ? 1 : 0; // Set on less than
+				   NOR: res <= ~(op_1 | op_2); 	   	  // NOR
+			   default: res <= 0;
+			endcase			
 		end
 
 endmodule // End of module ALU

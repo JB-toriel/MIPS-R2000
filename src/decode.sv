@@ -40,6 +40,7 @@ module decode_REG_MAPP ( rs, rt, rd, data_1, data_2);
 	//Variables DECLARATION
 	reg [31:0] registers [0:31];
 	integer i;
+	
 	initial
     begin
       for(i = 0; i < 32; i = i + 1)
@@ -128,9 +129,9 @@ module ID ( clk, inst_in, write_data_reg, reg_write, exception, jump, rs, rt, rd
 	output reg [1:0] wb;
 
 	//Actual code
-  assign rs = inst_in[25:21];
-  assign rt = inst_in[20:16];
-  assign rd = inst_in[15:11];
+	assign rs = inst_in[25:21];
+	assign rt = inst_in[20:16];
+	assign rd = inst_in[15:11];
 	assign imm = {16'h0000, inst_in[15:0]};
 
 
