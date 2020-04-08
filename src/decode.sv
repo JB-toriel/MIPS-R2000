@@ -73,43 +73,37 @@ module decode_CONTROL_UNIT (inst_in, exception, jump, wb, m, ex);
 	output reg [2:0] m;
 	output reg [1:0] wb;
 
-	// Variables declaration
-	initial begin
-		assign ex = 4'b0000;
-		assign m = 4'b000;
-		assign wb = 2'b00;
-	end
-
 	always @ ( inst_in ) begin
 		case (inst_in[31:26])
 			0:
 			begin
-				assign	ex = 4'b1100;
-				assign	wb = 2'b10;
+				ex <= 4'b1100;
+				m <= 3'b000;
+				wb <= 2'b10;
 			end
 			6'b100011:
 			begin
-				assign	ex = 4'b0001;
-				assign	m = 3'b010;
-				assign	wb = 2'b11;
+				ex <= 4'b0001;
+				m <= 3'b010;
+				wb <= 2'b11;
 			end
 			6'b101011:
 			begin
-				assign	ex = 4'bX001;
-				assign	m = 3'b001;
-				assign	wb = 2'b0X;
+				ex <= 4'bX001;
+				m <= 3'b001;
+				wb <= 2'b0X;
 			end
 			6'b000100:
 			begin
-				assign	ex = 4'bX010;
-				assign	m = 3'b100;
-				assign	wb = 2'b0X;
+				ex <= 4'bX010;
+				m <= 3'b100;
+				wb <= 2'b0X;
 			end
 			default:
 		  begin
-				assign ex = 4'b0000;
-				assign m = 4'b000;
-				assign wb = 2'b00;
+				ex <= 4'b0000;
+				m <= 4'b000;
+				wb <= 2'b00;
 			end
 		endcase
 	end
@@ -126,24 +120,43 @@ module ID ( clk, inst_in, write_register, write_data_reg, reg_write, exception, 
 
 	//Outputs declaration
 	output logic exception, jump;
-	output [4:0] rs, rt, rd;
-	output [31:0] imm, data_1, data_2;
+	output reg [4:0] rs, rt, rd;
+	output reg [31:0] imm, data_1, data_2;
 	output logic equal;
 
 	output reg [3:0] ex;
 	output reg [2:0] m;
 	output reg [1:0] wb;
 
+	//Variable declaration
+	reg [4:0] old_rs, old_rt, old_rd;
+	reg [31:0] old_imm;
+
+	reg [3:0] old_ex;
+	reg [2:0] old_m;
+	reg [1:0] old_wb;
+
 	//Actual code
-	assign rs = inst_in[25:21];
-	assign rt = inst_in[20:16];
-	assign rd = inst_in[15:11];
-	assign imm = {16'h0000, inst_in[15:0]};
+	always @ ( inst_in ) begin
+		old_rs <= inst_in[25:21];
+		old_rt <= inst_in[20:16];
+		old_rd <= inst_in[15:11];
+		old_imm <= {16'h0000, inst_in[15:0]};
+	end
 
 
-	decode_REG_MAPP reg_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data_1, data_2);
-	decode_CONTROL_UNIT control_UNIT (inst_in, exception, jump, wb, m, ex);
+	decode_REG_MAPP reg_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data_1, data_2 );
+	decode_CONTROL_UNIT control_UNIT ( inst_in, exception, jump, old_wb, old_m, old_ex );
 
 	assign equal = (data_1 == data_2);
+	always_ff @ ( posedge clk ) begin
+		ex <= old_ex;
+		m <= old_m;
+		wb <= old_wb;
+		imm <= old_imm;
+		rs <= old_rs;
+		rt <= old_rt;
+		rd <= old_rd;
+	end
 
 endmodule // End of ID module
