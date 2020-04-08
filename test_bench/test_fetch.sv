@@ -79,10 +79,14 @@ module test_fetch;
 
 	// Instantiation of design under test
 	IF instruction_fetch ( clk, sign, fixed, br, except, pc_out, inst_out );
+	
 	ID instruction_decode ( .clk(clk), .inst_in (inst_out), .write_register(write_register), .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
 	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .equal(equal), .wb(wb), .m(m), .ex(ex) );
+	
 	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, imm, zero, res, write_register, write_data_ex, m_MEM, wb_MEM );
+	
 	MEM memory ( clk, wb_MEM, m_MEM, zero, res, write_data_ex, write_register, wb_WB, read_data, address_WB, PCSrc, reg_WB );
+	
 	WB writeback ( clk, wb_WB, read_data, address_WB, reg_WB, write_data_reg, write_register_WB, reg_write );
 
 
