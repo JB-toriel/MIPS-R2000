@@ -61,16 +61,16 @@ module fetch_MUX( inc_pc, sign, fixed, br, except, new_pc );
 	always @( br or except or inc_pc )
       begin
 		if ( br == 0 && except == 0 )
-			assign new_pc = inc_pc + 4;
+			 new_pc = inc_pc + 4;
 
 		if ( br == 0 && except == 1 )
-			assign new_pc = except;
+			 new_pc = except;
 
 		if ( br == 1 && except == 0 )
-			assign new_pc = sign;
+			 new_pc = sign;
 
 		if ( br == 1 && except == 1 )
-			assign new_pc = 32'hFFFF_FFFF;
+			 new_pc = 32'hFFFF_FFFF;
 	  end
 
   	initial new_pc=0;
