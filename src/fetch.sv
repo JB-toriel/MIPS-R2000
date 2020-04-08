@@ -154,11 +154,11 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 
 	fetch_ROM rom(
 
-		.clk 	(	clk			 ),
+		.clk	(	clk			 ),
 		.pc		(	pc_4		 ), // input	[31:0]
 		/*.chip_en(	chip_en	), // input
 		.read_en(	read_en	), // input*/
-		.inst 	(	old_inst_out )  // output	[31:0]
+		.inst	(	old_inst_out )  // output	[31:0]
 
 	);
 
