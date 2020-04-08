@@ -136,17 +136,17 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 	fetch_PC_REG pc_REG(
 
 		.clk    (	clk   ), // input
-  	.old_pc (	pc    ), // input	[31:0]
+		.old_pc (	pc    ), // input	[31:0]
 		.new_pc (	pc_4  )  // output	[31:0]
 
 	);
 
 	fetch_MUX mux(
 
-  	.inc_pc (	pc			), // input	[31:0]
-  	.sign   (	sign  	), // input	[31:0]
-  	.fixed  (	fixed   ), // input	[31:0]
-		.br  		(	br   		), // input
+		.inc_pc (	pc		), // input	[31:0]
+		.sign   (	sign  	), // input	[31:0]
+		.fixed  (	fixed   ), // input	[31:0]
+		.br  	(	br   	), // input
 		.except (	except  ), // input
 		.new_pc (	pc_4    )  // output	[31:0]
 
@@ -154,11 +154,11 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 
 	fetch_ROM rom(
 
-		.clk 		(	clk			),
-		.pc	(	pc_4	), // input	[31:0]
+		.clk 	(	clk			 ),
+		.pc		(	pc_4		 ), // input	[31:0]
 		/*.chip_en(	chip_en	), // input
 		.read_en(	read_en	), // input*/
-		.inst 	(	old_inst_out)  // output	[31:0]
+		.inst 	(	old_inst_out )  // output	[31:0]
 
 	);
 
