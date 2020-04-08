@@ -190,9 +190,9 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
-  		.ALU_op 	(	ALU_op	  ), // input	 [1:0]
-  		.fnc_code   (	fnc_code  ), // input	 [5:0]
-  		.ALU_ctrl  	(	ALU_ctrl  )  // input	 [3:0]
+  		.ALU_op		(	ALU_op	  ), // input	 [1:0]
+  		.fnc_code	(	fnc_code  ), // input	 [5:0]
+  		.ALU_ctrl 	(	ALU_ctrl  )  // input	 [3:0]
 	);
 
 	ALU alu(
