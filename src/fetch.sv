@@ -161,7 +161,7 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 
 	);
 
-	always @(pc_4)
+	always @(posedge clk)
 		assign pc_out = pc_4;
 
 endmodule // End of Module IF
