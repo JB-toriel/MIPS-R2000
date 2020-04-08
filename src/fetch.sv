@@ -58,7 +58,7 @@ module fetch_MUX( inc_pc, sign, fixed, br, except, new_pc );
 
 
 	// Code starts Here
-	always @(br or except or inc_pc)
+	always @( br or except or inc_pc )
       begin
 		if ( br == 0 && except == 0 )
 			assign new_pc = inc_pc + 4;
@@ -78,9 +78,10 @@ module fetch_MUX( inc_pc, sign, fixed, br, except, new_pc );
 endmodule // End of Module fetch_MUX
 
 
-module fetch_ROM ( pc/*, chip_en, read_en*/, inst );
+module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 
 	// Inputs Declaration
+	input clk;
 	input [31:0] pc;
 	/*
 	input logic chip_en;
@@ -91,11 +92,11 @@ module fetch_ROM ( pc/*, chip_en, read_en*/, inst );
 	output reg [31:0] inst;
 
 	//------Variable declaration------//
-	reg [31:0] rom_code [0:8];	
+	reg [31:0] rom_code [0:8];
 
 
 	// Code starts Here
-	always @(pc)
+	always_ff @( posedge clk )
 		inst <= rom_code[pc/4];
 
 	/*
@@ -128,25 +129,24 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 	// Ports data types
 	wire [31:0] pc;
 	reg [31:0] pc_4;
-
-
+	reg [31:0] old_inst_out;
 
 	// Modules Instantiation
 
 	fetch_PC_REG pc_REG(
 
 		.clk    (	clk   ), // input
-  		.old_pc (	pc    ), // input	[31:0]
+  	.old_pc (	pc    ), // input	[31:0]
 		.new_pc (	pc_4  )  // output	[31:0]
 
 	);
 
 	fetch_MUX mux(
 
-  		.inc_pc (	pc	), // input	[31:0]
-  		.sign   (	sign  	), // input	[31:0]
-  		.fixed  (	fixed   ), // input	[31:0]
-		.br  	(	br   	), // input
+  	.inc_pc (	pc			), // input	[31:0]
+  	.sign   (	sign  	), // input	[31:0]
+  	.fixed  (	fixed   ), // input	[31:0]
+		.br  		(	br   		), // input
 		.except (	except  ), // input
 		.new_pc (	pc_4    )  // output	[31:0]
 
@@ -154,14 +154,18 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 
 	fetch_ROM rom(
 
+		.clk 		(	clk			),
 		.pc	(	pc_4	), // input	[31:0]
 		/*.chip_en(	chip_en	), // input
 		.read_en(	read_en	), // input*/
-		.inst 	(	inst_out)  // output	[31:0]
+		.inst 	(	old_inst_out)  // output	[31:0]
 
 	);
 
-	always @(posedge clk)
-		assign pc_out = pc_4;
+	always_ff @( posedge clk )begin
+		pc_out <= pc_4;
+		inst_out <= old_inst_out;
+	end
+
 
 endmodule // End of Module IF

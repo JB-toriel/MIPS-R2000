@@ -30,9 +30,10 @@ endmodule
 */
 
 
-module MEM ( wb_MEM, m, zero, address_MEM, write_data_mem, reg_MEM, wb, read_data, address_WB, PCSrc, reg_WB/*, ...*/);
+module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, reg_MEM, wb, read_data, address_WB, PCSrc, reg_WB/*, ...*/);
 
 	//Inputs declaration
+	input clk;
 	input reg [2:0] m;
 	input reg [1:0] wb_MEM;
 	input reg [4:0] reg_MEM;
@@ -55,20 +56,23 @@ module MEM ( wb_MEM, m, zero, address_MEM, write_data_mem, reg_MEM, wb, read_dat
           memory[i]=i;
         end
   	end
+		reg [31:0] old_read_data, old_address_WB;
+
 
 	//Actual code
-	assign PCSrc = ( m[2] & zero);
-	assign address_WB = address_MEM;
-	assign reg_WB = reg_MEM;
-	assign wb = wb_MEM;
-
+	assign old_address_WB = address_MEM;
 
 	always @ ( m ) begin
-		if (m[1]) read_data <= memory[address_MEM];
+		if (m[1]) old_read_data <= memory[address_MEM];
 		if (m[0]) memory[address_MEM] = write_data_mem;
 	end
 
-
+	always_ff @ ( posedge clk ) begin
+		wb <= wb_MEM;
+		reg_WB <= reg_MEM;
+		address_WB <= old_address_WB;
+		read_data <= old_read_data;
+	end
 
 
 endmodule // End of MEM module

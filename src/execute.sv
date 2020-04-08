@@ -57,7 +57,7 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 
 	// Ouputs Declaration
 	output reg [3:0] ALU_ctrl;
-	
+
 	// Variables declaration
 	parameter ADD = 4'b0000;
 	parameter SUB = 4'b0001;
@@ -77,8 +77,8 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 				37: ALU_ctrl <= OR; 	// OR
 				39: ALU_ctrl <= SHFT_L; // Set on less than
 				42: ALU_ctrl <= NOR; 	// NOR
-				default: ALU_ctrl <= 4'b1111;  
-			endcase			
+				default: ALU_ctrl <= 4'b1111;
+			endcase
 		end
 
 endmodule // End of module ALU_ctrl_unit
@@ -92,7 +92,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 	// Ouputs Declaration
 	output zero;
 	output reg [31:0] res;
-	
+
 	// Variables declaration
 	parameter ADD = 4'b0000;
 	parameter SUB = 4'b0001;
@@ -114,24 +114,24 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 				SHFT_L: res <=   op_1 < op_2 ? 1 : 0; // Set on less than
 				   NOR: res <= ~(op_1 | op_2); 	   	  // NOR
 			   default: res <= 0;
-			endcase			
+			endcase
 		end
 
 endmodule // End of module ALU
 
 
-module EX ( data_1, data_2, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register, m_MEM, wb_MEM/*, ...*/);
+module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register, m_MEM, wb_MEM/*, ...*/);
 
 	// Inputs declaration
+	input clk;
 	input [4:0] rs, rt, rd;
-	input [3:0] ALU_ctrl;
 	input [31:0] imm, data_1, data_2;
 	input reg [3:0] ex;
 	input reg [2:0] m_EX;
 	input reg [1:0] wb_EX;
 
 	// Outputs declaration
-	output zero;
+	output reg zero;
 	output reg [31:0] res;
 	output reg [4:0] write_register;
 	output reg [2:0] m_MEM;
@@ -139,8 +139,15 @@ module EX ( data_1, data_2, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, re
 
 	// Variables declaration
 	wire [1:0] ALU_op;
+	wire [3:0] ALU_ctrl;
 	wire [5:0] fnc_code;
 	wire [31:0] op_2;
+
+	reg old_zero;
+	reg [31:0] old_res;
+	reg [4:0] old_write_register;
+	/*reg [2:0] old_m_MEM;
+	reg [1:0] old_wb_MEM;*/
 
 
 	// Code starts here
@@ -163,15 +170,16 @@ module EX ( data_1, data_2, ALU_ctrl, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, re
   	.sign_ext (	imm   		), // input	 [31:0]
 		.op_2 		(	op_2  		), // output [31:0]
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
-		.zero 		(	zero			), // output
-		.res 			(	res				)  // output [31:0]
+		.zero 		(	old_zero	), // output
+		.res 			(	old_res		)  // output [31:0]
 	);
 
-
-
-	always @ ( m_EX or wb_EX ) begin
+	always_ff @ ( posedge clk ) begin
 		m_MEM <= m_EX;
 		wb_MEM <= wb_EX;
+		res <= old_res;
+		write_register <= old_write_register;
+		zero <= old_zero;
 	end
 
 endmodule // End of module EX

@@ -46,7 +46,7 @@ module test_fetch;
 		reg [4:0] write_register;
 		wire [4:0] rs, rt, rd;
 		wire [31:0] imm;
-		wire [31:0] data_1, data_2;
+		reg [31:0] data_1, data_2;
 
 		// for control unit
 		logic jump;
@@ -68,6 +68,10 @@ module test_fetch;
 		reg [31:0] address_WB, read_data;
 		logic PCSrc;
 
+	//------For WriteBack stage------//
+		reg [4:0] write_register_WB;
+
+
 	parameter CLK_PERIOD = 10;
 
 	always #(CLK_PERIOD/2.0) clk = ~clk;
@@ -75,10 +79,11 @@ module test_fetch;
 	// Instantiation of design under test
 	IF instruction_fetch ( clk, sign, fixed, br, except, pc_out, inst_out );
 	ID instruction_decode ( .clk(clk), .inst_in (inst_out), .write_register(write_register), .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
-	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .equal(equal), .wb(wb), .m(m), .ex(ex)/*, ...*/);
-  EX execute ( data_1, data_2, ALU_ctrl, rs, rt, rd, ex, m, wb, imm, zero, res, write_register, m_MEM, wb_MEM/*, ...*/);
-	MEM memory ( wb_MEM, m_MEM, zero, res, data_2, write_register, wb_WB, read_data, address_WB, PCSrc, reg_WB/*, ...*/);
-	WB writeback ( wb_WB, read_data, address_WB, reg_WB, write_data_reg, write_register_wb, reg_write/*, ...*/);
+	 			                  .jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .equal(equal), .wb(wb), .m(m), .ex(ex) );
+  EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, imm, zero, res, write_register, m_MEM, wb_MEM );
+	MEM memory ( clk, wb_MEM, m_MEM, zero, res, data_2, write_register, wb_WB, read_data, address_WB, PCSrc, reg_WB );
+	WB writeback ( clk, wb_WB, read_data, address_WB, reg_WB, write_data_reg, write_register_WB, reg_write );
+
 
 
 	// Test bench starts Here
