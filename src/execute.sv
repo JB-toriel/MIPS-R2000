@@ -29,6 +29,36 @@ endmodule
 	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
+module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb, forward_a, forward_b);
+  
+  //Inputs declaration
+  input [4:0] rs_id, rt_id, rd_ex, rd_wb;
+  input reg_write_ex, reg_write_wb;
+ 
+  //Outputs declaration
+  output reg [1:0] forward_a, forward_b;
+  
+  //Actual code
+  always_comb
+    begin
+      if ( reg_write_ex && ~rd_ex==0 && rd_ex==rs_id ) 
+      	forward_a=2;
+      if ( reg_write_wb && ~rd_wb==0 && rd_wb==rs_id )
+        forward_a=1;
+      if ( ~reg_write_ex ) 
+        forward_a=0;
+      
+      if ( reg_write_wb && ~rd_wb==0 && rd_wb==rs_id ) 
+      	forward_b=2;
+      if ( reg_write_wb && ~rd_wb==0 && rd_wb==rs_id )
+        forward_b=1;
+      if ( ~reg_write_wb ) 
+        forward_b<=0;
+      
+    end
+  
+endmodule // End of module forwarding_unit
+
 module execute_MUX_RTRD ( rt, rd, ex, write_register);
 
 	//Inputs declaration
@@ -39,12 +69,7 @@ module execute_MUX_RTRD ( rt, rd, ex, write_register);
 	output reg [4:0] write_register;
 
 	//Actual code
-	always @ ( ex[3] ) begin
-		case (ex[3])
-			0: assign write_register = rt;
-			1: assign write_register = rd;
-		endcase
-	end
+	assign write_register = ex[3] ? rd : rt;
 
 endmodule // execute_MUX_RTRD
 
@@ -146,6 +171,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 
 
 	// Variables declaration
+	wire [1:0] forward_a, forward_b;
 	wire [1:0] ALU_op;
 	wire [3:0] ALU_ctrl;
 	wire [5:0] fnc_code;
@@ -178,6 +204,8 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 		.zero 	  (	old_zero	), // output
 		.res 	  (	old_res		)  // output [31:0]
 	);
+	
+	forwarding_unit fw_unit ( rs, rt, old_write_register, wb_EX[0], write_register, wb_MEM[0], forward_a, forward_b);
 
 	always_ff @ ( posedge clk ) begin
 		m_MEM <= m_EX;
