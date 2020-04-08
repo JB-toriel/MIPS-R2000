@@ -1,6 +1,6 @@
 //-----------------------------------------------------
 	// This is design of the writeback stage of the pipeline
-	// Design Name : IF
+	// Design Name : WB
 	// File Name   : writeback.sv
 	// Function    :
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
