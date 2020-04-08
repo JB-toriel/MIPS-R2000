@@ -43,8 +43,9 @@ module WB ( clk, wb, read_data, address_WB, reg_WB, write_data_reg, write_regist
 	output reg [4:0] write_register;
 	output logic reg_write;
 
-  reg [31:0] old_write_data_reg;
-  reg [4:0] old_write_register;
+	reg [31:0] old_write_data_reg;
+	reg [4:0] old_write_register;
+
 
 	//Actual code
 	assign reg_write = wb[1];

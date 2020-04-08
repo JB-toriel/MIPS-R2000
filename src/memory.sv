@@ -62,6 +62,8 @@ module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, reg_MEM, wb, rea
 	//Actual code
 	assign old_address_WB = address_MEM;
 
+	assign PCSrc = (zero & m[2]);
+
 	always @ ( m ) begin
 		if (m[1]) old_read_data <= memory[address_MEM];
 		if (m[0]) memory[address_MEM] = write_data_mem;

@@ -107,7 +107,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 	always @(ALU_ctrl, op_1, op_2)
 		begin
 			case(ALU_ctrl)
-				   ADD: res <=   op_1 & op_2; 		  // AND
+				   AND: res <=   op_1 & op_2; 		  // AND
 				    OR: res <=   op_1 | op_2; 		  // OR
 				   ADD: res <=   op_1 + op_2; 		  // ADD
 				   SUB: res <=   op_1 - op_2; 		  // SUB
@@ -120,7 +120,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 endmodule // End of module ALU
 
 
-module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register, m_MEM, wb_MEM/*, ...*/);
+module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register, write_data_ex, m_MEM, wb_MEM/*, ...*/);
 
 	// Inputs declaration
 	input clk;
@@ -136,6 +136,8 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	output reg [4:0] write_register;
 	output reg [2:0] m_MEM;
 	output reg [1:0] wb_MEM;
+	output reg [31:0] write_data_ex;
+
 
 	// Variables declaration
 	wire [1:0] ALU_op;
@@ -146,16 +148,13 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	reg old_zero;
 	reg [31:0] old_res;
 	reg [4:0] old_write_register;
-	/*reg [2:0] old_m_MEM;
-	reg [1:0] old_wb_MEM;*/
-
 
 	// Code starts here
 	assign ALU_op = ex[2:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 	assign op_2 = ex[0] ? imm : data_2; // Mux to chose between data_2 or the immediate sign extended
 
-  execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register);
+	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register);
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
@@ -180,6 +179,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 		res <= old_res;
 		write_register <= old_write_register;
 		zero <= old_zero;
+		write_data_ex <= data_2;
 	end
 
 endmodule // End of module EX
