@@ -46,6 +46,7 @@ module WB ( clk, wb, read_data, address_WB, reg_WB, write_data_reg, write_regist
 	reg [31:0] old_write_data_reg;
 	reg [4:0] old_write_register;
 
+
 	//Actual code
 	assign reg_write = wb[1];
 	assign old_write_data_reg = wb[0] ? read_data : address_WB; // Mux to chose between data_2 or the immediate sign extended
