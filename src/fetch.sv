@@ -84,8 +84,8 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 	input clk;
 	input [31:0] pc;
 	/*
-	input logic chip_en;
-	input logic read_en;
+	input chip_en;
+	input read_en;
 	*/
 
 	// Ouputs Declaration
