@@ -33,9 +33,9 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 
 	// Inputs declaration
 	input [4:0] rs, rt;
-	input logic reg_write;
-	input reg [4:0] write_register;
-	input reg [31:0] write_data_reg;
+	input reg_write;
+	input [4:0] write_register;
+	input [31:0] write_data_reg;
 
 	// Outputs declaration
 	output [31:0] data_1, data_2;
@@ -115,14 +115,14 @@ module ID ( clk, inst_in, write_register, write_data_reg, reg_write, exception, 
 	//Inputs declaration
 	input clk;
 	input [31:0] inst_in, write_data_reg;
-	input logic reg_write;
-	input reg [4:0] write_register;
+	input reg_write;
+	input [4:0] write_register;
 
 	//Outputs declaration
-	output logic exception, jump;
+	output exception, jump;
 	output reg [4:0] rs, rt, rd;
 	output reg [31:0] imm, data_1, data_2;
-	output logic equal;
+	output equal;
 
 	output reg [3:0] ex;
 	output reg [2:0] m;
