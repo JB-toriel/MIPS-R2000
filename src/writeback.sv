@@ -34,14 +34,14 @@ module WB ( clk, wb, read_data, address_WB, reg_WB, write_data_reg, write_regist
 	input clk;
 
 	//Inputs declaration
-	input reg [31:0] read_data, address_WB;
-	input reg [1:0] wb;
-	input reg [4:0] reg_WB;
+	input [31:0] read_data, address_WB;
+	input [1:0] wb;
+	input [4:0] reg_WB;
 
 	//Inputs declaration
 	output reg [31:0] write_data_reg;
 	output reg [4:0] write_register;
-	output logic reg_write;
+	output reg_write;
 
 	reg [31:0] old_write_data_reg;
 	reg [4:0] old_write_register;
