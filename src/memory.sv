@@ -1,6 +1,6 @@
 //-----------------------------------------------------
 	// This is design of the memory stage of the pipeline
-	// Design Name : IF
+	// Design Name : MEM
 	// File Name   : memory.sv
 	// Function    :
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste

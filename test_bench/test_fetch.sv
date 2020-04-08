@@ -64,7 +64,7 @@ module test_fetch;
 		reg [31:0] write_data_ex;
 
 	//------For memory stage------//
-		reg [4:0] reg_WB;
+		reg [4:0] reg_WB, write_register_wb;
 		reg [1:0] wb_WB;
 		reg [31:0] address_WB, read_data;
 		logic PCSrc;
@@ -84,6 +84,7 @@ module test_fetch;
   EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, imm, zero, res, write_register, write_data_ex, m_MEM, wb_MEM );
 	MEM memory ( clk, wb_MEM, m_MEM, zero, res, write_data_ex, write_register, wb_WB, read_data, address_WB, PCSrc, reg_WB );
 	WB writeback ( clk, wb_WB, read_data, address_WB, reg_WB, write_data_reg, write_register_WB, reg_write );
+
 
 
 	// Test bench starts Here
