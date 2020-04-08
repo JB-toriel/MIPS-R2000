@@ -63,7 +63,7 @@ module execute_MUX_RTRD ( rt, rd, ex, write_register);
 
 	//Inputs declaration
 	input [4:0] rt, rd;
-	input reg [3:0] ex;
+	input [3:0] ex;
 
 	//Outputs declaration
 	output reg [4:0] write_register;
