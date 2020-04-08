@@ -155,7 +155,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 	assign op_2 = ex[0] ? imm : data_2; // Mux to chose between data_2 or the immediate sign extended
 
-	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, write_register);
+  execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register);
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
