@@ -29,7 +29,6 @@ endmodule
 	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
-
 module execute_MUX_RTRD ( rt, rd, ex, write_register);
 
 	//Inputs declaration
@@ -67,17 +66,24 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter NOR = 4'b1001;
 
 	// Code starts Here
-	always @ (ALU_op, fnc_code)
-
+	always @(ALU_op, fnc_code)
 		begin
-			case(fnc_code)
-				32: ALU_ctrl <= ADD; 	// ADD
-				34: ALU_ctrl <= SUB; 	// SUB
-				36: ALU_ctrl <= AND; 	// AND
-				37: ALU_ctrl <= OR; 	// OR
-				39: ALU_ctrl <= SHFT_L; // Set on less than
-				42: ALU_ctrl <= NOR; 	// NOR
-				default: ALU_ctrl <= 4'b1111;
+        	case(ALU_op)
+            	0: ALU_ctrl <= ADD;
+                1: ALU_ctrl <= SUB;
+                2: begin 
+					case(fnc_code)
+						32: ALU_ctrl <= ADD; 	// ADD
+						34: ALU_ctrl <= SUB; 	// SUB
+						36: ALU_ctrl <= AND; 	// AND
+						37: ALU_ctrl <= OR; 	// OR
+						39: ALU_ctrl <= SHFT_L; // Set on less than
+						42: ALU_ctrl <= NOR; 	// NOR
+						default: ALU_ctrl <= 4'b1111; 
+					endcase
+                end
+                //3: ALU_ctrl <= AND;    
+                default: ALU_ctrl <= 4'b1111;                       
 			endcase
 		end
 
@@ -126,9 +132,9 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	input clk;
 	input [4:0] rs, rt, rd;
 	input [31:0] imm, data_1, data_2;
-	input reg [3:0] ex;
-	input reg [2:0] m_EX;
-	input reg [1:0] wb_EX;
+	input [3:0] ex;
+	input [2:0] m_EX;
+	input [1:0] wb_EX;
 
 	// Outputs declaration
 	output reg zero;
@@ -158,19 +164,19 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
-  		.ALU_op 		(	ALU_op		), // input	 [1:0]
-  		.fnc_code   (	fnc_code 	), // input	 [5:0]
+  		.ALU_op 	(	ALU_op	  ), // input	 [1:0]
+  		.fnc_code   (	fnc_code  ), // input	 [5:0]
   		.ALU_ctrl  	(	ALU_ctrl  )  // input	 [3:0]
 	);
 
 	ALU alu(
 
-  	.op_1 		(	data_1		), // input	 [31:0]
-  	.sign_ext (	imm   		), // input	 [31:0]
-		.op_2 		(	op_2  		), // output [31:0]
+		.op_1 	  (	data_1		), // input	 [31:0]
+		.sign_ext (	imm   		), // input	 [31:0]
+		.op_2 	  (	op_2  		), // output [31:0]
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
-		.zero 		(	old_zero	), // output
-		.res 			(	old_res		)  // output [31:0]
+		.zero 	  (	old_zero	), // output
+		.res 	  (	old_res		)  // output [31:0]
 	);
 
 	always_ff @ ( posedge clk ) begin
