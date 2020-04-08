@@ -167,4 +167,5 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 		inst_out <= old_inst_out;
 	end
 
+
 endmodule // End of Module IF

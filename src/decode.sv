@@ -1,6 +1,6 @@
 //-----------------------------------------------------
 	// This is design of the decode stage of the pipeline
-	// Design Name : IF
+	// Design Name : ID
 	// File Name   : decode.sv
 	// Function    :
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
