@@ -63,7 +63,7 @@ module test_fetch;
 		wire [3:0] ALU_ctrl;
 
 	//------For memory stage------//
-		reg [4:0] reg_WB;
+		reg [4:0] reg_WB, write_register_wb;
 		reg [1:0] wb_WB;
 		reg [31:0] address_WB, read_data;
 		logic PCSrc;
@@ -78,7 +78,7 @@ module test_fetch;
 	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .equal(equal), .wb(wb), .m(m), .ex(ex)/*, ...*/);
   EX execute ( data_1, data_2, ALU_ctrl, rs, rt, rd, ex, m, wb, imm, zero, res, write_register, m_MEM, wb_MEM/*, ...*/);
 	MEM memory ( wb_MEM, m_MEM, zero, res, data_2, write_register, wb_WB, read_data, address_WB, PCSrc, reg_WB/*, ...*/);
-	WB writeback ( wb_WB, read_data, address_WB, reg_WB, write_data_reg, write_register, reg_write/*, ...*/);
+	WB writeback ( wb_WB, read_data, address_WB, reg_WB, write_data_reg, write_register_wb, reg_write/*, ...*/);
 
 
 	// Test bench starts Here
