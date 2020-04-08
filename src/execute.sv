@@ -175,29 +175,31 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	wire [1:0] ALU_op;
 	wire [3:0] ALU_ctrl;
 	wire [5:0] fnc_code;
-	wire [31:0] op_2;
+	wire [31:0] op_1, op_2, op_21;
 
 	reg old_zero;
 	reg [31:0] old_res;
 	reg [4:0] old_write_register;
 
 	// Code starts here
-	assign ALU_op = ex[2:1];		  // 2 bits to select which operation to do with the ALU
+	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
-	assign op_2 = ex[0] ? imm : data_2; // Mux to chose between data_2 or the immediate sign extended
+	assign op_1 	= forward_a==0 ? res : (forward_a==1 ? write_data_ex : data_2);
+	assign op_21 	= forward_b==0 ? res : (forward_b==1 ? write_data_ex : data_2);
+	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
 
 	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register);
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
-  		.ALU_op		(	ALU_op	  ), // input	 [1:0]
-  		.fnc_code	(	fnc_code  ), // input	 [5:0]
-  		.ALU_ctrl 	(	ALU_ctrl  )  // input	 [3:0]
+  		.ALU_op 	(	ALU_op	  ), // input	 [1:0]
+  		.fnc_code   (	fnc_code  ), // input	 [5:0]
+  		.ALU_ctrl  	(	ALU_ctrl  )  // input	 [3:0]
 	);
 
 	ALU alu(
 
-		.op_1 	  (	data_1		), // input	 [31:0]
+		.op_1 	  (	op_1		), // input	 [31:0]
 		.sign_ext (	imm   		), // input	 [31:0]
 		.op_2 	  (	op_2  		), // output [31:0]
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
