@@ -30,35 +30,33 @@ endmodule
 */
 
 module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb, forward_a, forward_b);
-  
+
   //Inputs declaration
   input [4:0] rs_id, rt_id, rd_ex, rd_wb;
   input reg_write_ex, reg_write_wb;
- 
+
   //Outputs declaration
   output reg [1:0] forward_a, forward_b;
-  
+
   //Actual code
   always_comb
     begin
-		if ( reg_write_ex && rd_ex!=0 && rd_ex==rs_id ) 
+		if ( reg_write_ex && rd_ex!=0 && rd_ex==rs_id )
 			forward_a=2;
 		else if ( reg_write_wb && rd_wb!=0 && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
 			forward_a=1;
-		else if ( ~reg_write_ex ) 
+		else if ( ~reg_write_ex )
 			forward_a=0;
       	else forward_a=0;
-		
-		if ( reg_write_wb && rd_wb!=0 && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rs_id ) 
+		if ( reg_write_wb && rd_wb!=0 && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rs_id )
 			forward_b=2;
       	else if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id )
 			forward_b=1;
-		else if ( ~reg_write_wb ) 
+      else if ( ~reg_write_wb )
 			forward_b=0;
-		else forward_b=0;
-      
+      else forward_b=0;
     end
-  
+
 endmodule // End of module forwarding_unit
 
 module execute_MUX_RTRD ( rt, rd, ex, write_register);
@@ -96,9 +94,9 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	always @(ALU_op, fnc_code)
 		begin
         	case(ALU_op)
-            	0: ALU_ctrl <= ADD;
-                1: ALU_ctrl <= SUB;
-                2: begin 
+            0: ALU_ctrl <= ADD;
+            1: ALU_ctrl <= SUB;
+            2: begin 
 					case(fnc_code)
 						32: ALU_ctrl <= ADD; 	// ADD
 						34: ALU_ctrl <= SUB; 	// SUB
@@ -106,11 +104,11 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 						37: ALU_ctrl <= OR; 	// OR
 						39: ALU_ctrl <= SHFT_L; // Set on less than
 						42: ALU_ctrl <= NOR; 	// NOR
-						default: ALU_ctrl <= 4'b1111; 
+						default: ALU_ctrl <= 4'b1111;
 					endcase
                 end
-                //3: ALU_ctrl <= AND;    
-                default: ALU_ctrl <= 4'b1111;                       
+                //3: ALU_ctrl <= AND;
+                default: ALU_ctrl <= 4'b1111;
 			endcase
 		end
 
@@ -186,7 +184,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	// Code starts here
 	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
-	
+
 	assign op_1 	= forward_a==0 ? data_1 : (forward_a==1 ? write_data_ex : res);
 	assign op_21 	= forward_b==0 ? data_2 : (forward_b==1 ? write_data_ex : res);
 	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
@@ -209,7 +207,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 		.zero 	  (	old_zero	), // output
 		.res 	  (	old_res		)  // output [31:0]
 	);
-	
+
 	forwarding_unit fw_unit ( rs, rt, old_write_register, wb_EX[0], write_register, wb_MEM[0], forward_a, forward_b);
 
 	always_ff @ ( posedge clk ) begin
