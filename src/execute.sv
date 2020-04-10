@@ -48,13 +48,14 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 		else if ( ~reg_write_ex ) 
 			forward_a=0;
       	else forward_a=0;
+		
 		if ( reg_write_wb && rd_wb!=0 && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rs_id ) 
 			forward_b=2;
       	else if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id )
 			forward_b=1;
-      else if ( ~reg_write_wb ) 
+		else if ( ~reg_write_wb ) 
 			forward_b=0;
-      else forward_b=0;
+		else forward_b=0;
       
     end
   
