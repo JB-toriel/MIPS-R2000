@@ -43,17 +43,17 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
     begin
 		if ( reg_write_ex && rd_ex!=0 && rd_ex==rs_id ) 
 			forward_a=2;
-		else if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id )
+		if ( reg_write_wb && rd_wb!=0 && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
 			forward_a=1;
-		else if ( ~reg_write_ex ) 
+		if ( ~reg_write_ex ) 
 			forward_a=0;
       
-		if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id ) 
+		if ( reg_write_wb && rd_wb!=0 && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rs_id ) 
 			forward_b=2;
-      	else if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id )
+      	if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id )
 			forward_b=1;
-      	else if ( reg_write_wb==1 ) 
-			forward_b<=0;
+      	if ( ~reg_write_wb ) 
+			forward_b=0;
       
     end
   
