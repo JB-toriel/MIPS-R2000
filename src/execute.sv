@@ -76,7 +76,7 @@ endmodule // execute_MUX_RTRD
 module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 
 	// Inputs Declaration
-	input [1:0] ALU_op;
+	input [2:0] ALU_op;
 	input [5:0] fnc_code;
 
 	// Ouputs Declaration
@@ -172,7 +172,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 
 	// Variables declaration
 	wire [1:0] forward_a, forward_b;
-	wire [1:0] ALU_op;
+	wire [2:0] ALU_op;
 	wire [3:0] ALU_ctrl;
 	wire [5:0] fnc_code;
 	wire [31:0] op_1, op_2, op_21;
@@ -182,7 +182,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	reg [4:0] old_write_register;
 
 	// Code starts here
-	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
+	assign ALU_op 	= ex[3:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
 	assign op_1 	= forward_a==0 ? data_1 : (forward_a==1 ? write_data_ex : res);
@@ -193,7 +193,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
-  		.ALU_op 	(	ALU_op	  ), // input	 [1:0]
+  		.ALU_op 	(	ALU_op	  ), // input	 [2:0]
   		.fnc_code   (	fnc_code  ), // input	 [5:0]
   		.ALU_ctrl  	(	ALU_ctrl  )  // input	 [3:0]
 	);
