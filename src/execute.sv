@@ -41,19 +41,19 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
   //Actual code
   always_comb
     begin
-      if ( reg_write_ex && ~rd_ex==0 && rd_ex==rs_id ) 
-      	forward_a=2;
-      if ( reg_write_wb && ~rd_wb==0 && rd_wb==rs_id )
-        forward_a=1;
-      if ( ~reg_write_ex ) 
-        forward_a=0;
+		if ( reg_write_ex && rd_ex!=0 && rd_ex==rs_id ) 
+			forward_a=2;
+		else if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id )
+			forward_a=1;
+		else if ( ~reg_write_ex ) 
+			forward_a=0;
       
-      if ( reg_write_wb && ~rd_wb==0 && rd_wb==rs_id ) 
-      	forward_b=2;
-      if ( reg_write_wb && ~rd_wb==0 && rd_wb==rs_id )
-        forward_b=1;
-      if ( ~reg_write_wb ) 
-        forward_b<=0;
+		if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id ) 
+			forward_b=2;
+      	else if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id )
+			forward_b=1;
+      	else if ( reg_write_wb==1 ) 
+			forward_b<=0;
       
     end
   
@@ -184,8 +184,9 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	// Code starts here
 	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
-	assign op_1 	= forward_a==0 ? res : (forward_a==1 ? write_data_ex : data_2);
-	assign op_21 	= forward_b==0 ? res : (forward_b==1 ? write_data_ex : data_2);
+	
+	assign op_1 	= forward_a==0 ? data_1 : (forward_a==1 ? write_data_ex : res);
+	assign op_21 	= forward_b==0 ? data_2 : (forward_b==1 ? write_data_ex : res);
 	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
 
 	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register);
