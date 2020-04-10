@@ -200,7 +200,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	reg [4:0] old_write_register;
 
 	// Code starts here
-	assign ALU_op 	= ex[3:1];		  // 2 bits to select which operation to do with the ALU
+	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
 	assign op_1 	= forward_a==0 ? data_1 : (forward_a==1 ? write_data_ex : res);
