@@ -34,17 +34,17 @@ module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, reg_MEM, wb, rea
 
 	//Inputs declaration
 	input clk;
-	input reg [2:0] m;
-	input reg [1:0] wb_MEM;
-	input reg [4:0] reg_MEM;
-	input logic zero;
-	input reg [31:0] address_MEM, write_data_mem;
+	input [2:0] m;
+	input [1:0] wb_MEM;
+	input [4:0] reg_MEM;
+	input zero;
+	input [31:0] address_MEM, write_data_mem;
 
 	//Outputs declaration
 	output reg [31:0] read_data, address_WB;
 	output reg [1:0] wb;
 	output reg [4:0] reg_WB;
-	output logic PCSrc;
+	output PCSrc;
 
 	//Variables DECLARATION
 	reg [31:0] memory [0:31];

@@ -40,7 +40,7 @@ module fetch_PC_REG ( clk, old_pc, new_pc );
 	output reg [31:0] old_pc;
 
 	// Code starts Here
-	always @(posedge clk)
+	always_ff @(posedge clk)
 		old_pc <= new_pc;
 
 endmodule	// End of Module fetch_PC_REG
@@ -61,16 +61,16 @@ module fetch_MUX( inc_pc, sign, fixed, br, except, new_pc );
 	always @( br or except or inc_pc )
       begin
 		if ( br == 0 && except == 0 )
-			assign new_pc = inc_pc + 4;
+			 new_pc = inc_pc + 4;
 
 		if ( br == 0 && except == 1 )
-			assign new_pc = except;
+			 new_pc = except;
 
 		if ( br == 1 && except == 0 )
-			assign new_pc = sign;
+			 new_pc = sign;
 
 		if ( br == 1 && except == 1 )
-			assign new_pc = 32'hFFFF_FFFF;
+			 new_pc = 32'hFFFF_FFFF;
 	  end
 
   	initial new_pc=0;
@@ -84,8 +84,8 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 	input clk;
 	input [31:0] pc;
 	/*
-	input logic chip_en;
-	input logic read_en;
+	input chip_en;
+	input read_en;
 	*/
 
 	// Ouputs Declaration
@@ -154,11 +154,11 @@ module IF( clk, sign, fixed, br, except, pc_out, inst_out);
 
 	fetch_ROM rom(
 
-		.clk 	(	clk			 ),
+		.clk	(	clk			 ),
 		.pc		(	pc_4		 ), // input	[31:0]
 		/*.chip_en(	chip_en	), // input
 		.read_en(	read_en	), // input*/
-		.inst 	(	old_inst_out )  // output	[31:0]
+		.inst	(	old_inst_out )  // output	[31:0]
 
 	);
 
