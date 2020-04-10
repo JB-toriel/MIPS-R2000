@@ -76,7 +76,7 @@ endmodule // execute_MUX_RTRD
 module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 
 	// Inputs Declaration
-	input [1:0] ALU_op;
+	input [2:0] ALU_op;
 	input [5:0] fnc_code;
 
 	// Ouputs Declaration
@@ -86,9 +86,13 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter ADD = 4'b0000;
 	parameter SUB = 4'b0001;
 	parameter AND = 4'b0010;
-	parameter OR = 4'b0011;
-	parameter SHFT_L = 4'b0111;
-	parameter NOR = 4'b1001;
+	parameter  OR = 4'b0011;
+	parameter XOR = 4'b0100;
+	parameter NOR = 4'b0101;
+	parameter SLT = 4'b0110;
+	parameter SLL = 4'b0111;
+	parameter SRL = 4'b1000;
+	parameter SRA = 4'b1001; 
 
 	// Code starts Here
 	always @(ALU_op, fnc_code)
@@ -98,12 +102,16 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
             1: ALU_ctrl <= SUB;
             2: begin 
 					case(fnc_code)
-						32: ALU_ctrl <= ADD; 	// ADD
-						34: ALU_ctrl <= SUB; 	// SUB
-						36: ALU_ctrl <= AND; 	// AND
-						37: ALU_ctrl <= OR; 	// OR
-						39: ALU_ctrl <= SHFT_L; // Set on less than
-						42: ALU_ctrl <= NOR; 	// NOR
+						 0: ALU_ctrl <= SLL; // Shift left logical
+						 2: ALU_ctrl <= SRL; // rigth
+						 3: ALU_ctrl <= SRA; // Arithmetic
+						32: ALU_ctrl <= ADD; // ADD
+						34: ALU_ctrl <= SUB; // SUB
+						36: ALU_ctrl <= AND; // AND
+						37: ALU_ctrl <= OR;  // OR
+						38: ALU_ctrl <= XOR;
+						39: ALU_ctrl <= NOR; // NOR
+						42: ALU_ctrl <= SLT; // Set on less than
 						default: ALU_ctrl <= 4'b1111;
 					endcase
                 end
@@ -128,9 +136,15 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 	parameter ADD = 4'b0000;
 	parameter SUB = 4'b0001;
 	parameter AND = 4'b0010;
-	parameter OR = 4'b0011;
-	parameter SHFT_L = 4'b0111;
-	parameter NOR = 4'b1001;
+	parameter  OR = 4'b0011;
+	parameter XOR = 4'b0100;
+	parameter NOR = 4'b0101;
+	parameter SLT = 4'b0110;
+	parameter SLL = 4'b0111;
+	parameter SRL = 4'b1000;
+	parameter SRA = 4'b1001;
+	//parameter JR = 4'b1010;
+	//parameter JALR = 4'b1100;
 
 	// Code starts Here
 	assign zero = (res==0); // zero flag = 0 if the result is 0
@@ -139,11 +153,15 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 		begin
 			case(ALU_ctrl)
 				   AND: res <=   op_1 & op_2; 		  // AND
-				    OR: res <=   op_1 | op_2; 		  // OR
+					OR: res <=   op_1 | op_2; 		  // OR
 				   ADD: res <=   op_1 + op_2; 		  // ADD
 				   SUB: res <=   op_1 - op_2; 		  // SUB
-				SHFT_L: res <=   op_1 < op_2 ? 1 : 0; // Set on less than
+				   XOR: res <= 	 op_1 ^ op_2;
 				   NOR: res <= ~(op_1 | op_2); 	   	  // NOR
+				   SLT: res <=   op_1 < op_2 ? 1 : 0; // Set on less than
+				   SLL: res <=	 op_2 << op_1;
+				   SRL: res <= 	 op_2 >> op_1;
+				   SRA: res <=	 op_2 >>> op_1;
 			   default: res <= 0;
 			endcase
 		end
@@ -172,7 +190,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 
 	// Variables declaration
 	wire [1:0] forward_a, forward_b;
-	wire [1:0] ALU_op;
+	wire [2:0] ALU_op;
 	wire [3:0] ALU_ctrl;
 	wire [5:0] fnc_code;
 	wire [31:0] op_1, op_2, op_21;
@@ -193,7 +211,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
-  		.ALU_op 	(	ALU_op	  ), // input	 [1:0]
+  		.ALU_op 	(	ALU_op	  ), // input	 [2:0]
   		.fnc_code   (	fnc_code  ), // input	 [5:0]
   		.ALU_ctrl  	(	ALU_ctrl  )  // input	 [3:0]
 	);
