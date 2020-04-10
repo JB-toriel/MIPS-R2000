@@ -55,7 +55,6 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
       else if ( ~reg_write_wb )
 			forward_b=0;
       else forward_b=0;
-
     end
 
 endmodule // End of module forwarding_unit
