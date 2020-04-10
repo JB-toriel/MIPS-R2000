@@ -40,7 +40,7 @@ module fetch_PC_REG ( clk, old_pc, new_pc );
 	output reg [31:0] old_pc;
 
 	// Code starts Here
-	always @(posedge clk)
+	always_ff @(posedge clk)
 		old_pc <= new_pc;
 
 endmodule	// End of Module fetch_PC_REG
