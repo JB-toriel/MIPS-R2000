@@ -60,7 +60,6 @@ module test_fetch;
 		reg [1:0] wb_MEM;
 		reg [31:0] res;
 		reg zero;
-		wire [3:0] ALU_ctrl;
 		reg [31:0] write_data_ex;
 
 	//------For memory stage------//
