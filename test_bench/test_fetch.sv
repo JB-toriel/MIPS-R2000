@@ -38,14 +38,14 @@ module test_fetch;
 		reg except;
 
 	//------For decode stage------//
-		wire equal;
+		wire br;
 		// for register mapping
 		wire [31:0] write_data_reg;
 		wire reg_write;
 		reg [4:0] write_register;
 		wire [4:0] rs, rt, rd;
-		wire [31:0] imm;
-		reg [31:0] data_1, data_2, pc_branch;
+		wire [31:0] imm, pc_branch;
+		reg [31:0] data_1, data_2;
 
 		// for control unit
 		logic jump;
@@ -60,15 +60,14 @@ module test_fetch;
 		reg [31:0] res;
 		reg zero;
 		reg [31:0] write_data_ex;
+		reg [4:0] write_register_ex;
 
 	//------For memory stage------//
-		reg [4:0] reg_WB, write_register_wb;
+		reg [4:0] write_register_mem;
 		reg [1:0] wb_WB;
 		reg [31:0] address_WB, read_data;
-		logic PCSrc;
 
 	//------For WriteBack stage------//
-		reg [4:0] write_register_WB;
 
 
 	parameter CLK_PERIOD = 10;
@@ -76,25 +75,25 @@ module test_fetch;
 	always #(CLK_PERIOD/2.0) clk = ~clk;
 
 	// Instantiation of design under test
-	IF instruction_fetch ( clk, pc_branch, PCSrc, except, pc_out, inst_out );
+	IF instruction_fetch ( clk, pc_branch, br, except, pc_out, inst_out );
 
 	ID instruction_decode ( .clk(clk), .pc(pc_out), .inst_in (inst_out), .write_register(write_register), .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
-	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .equal(equal), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch));
+	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch), .br(br));
 
-	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, imm, zero, res, write_register, write_data_ex, m_MEM, wb_MEM );
+	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
-	MEM memory ( clk, wb_MEM, m_MEM, zero, res, write_data_ex, write_register, wb_WB, read_data, address_WB, PCSrc, reg_WB );
+	MEM memory ( clk, wb_MEM, m_MEM, zero, res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem );
 
-	WB writeback ( clk, wb_WB, read_data, address_WB, reg_WB, write_data_reg, write_register_WB, reg_write );
+	WB writeback ( clk, wb_WB, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write );
 
 
 
 	// Test bench starts Here
 	initial
 		begin
-			except = 0; PCSrc = 0;
+			except = 0;
 			clk = 1;
-			#150
+			#1000
 			$display( "End of simulation time is %d", $time );
 			$stop;
 		end

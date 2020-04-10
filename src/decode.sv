@@ -68,7 +68,7 @@ module decode_CONTROL_UNIT (inst_in, exception, jump, wb, m, ex);
 	input [31:0] inst_in;
 
 	// Outputs declaration
-	output exception, jump;
+	output reg exception, jump;
 	output reg [3:0] ex;
 	output reg [2:0] m;
 	output reg [1:0] wb;
@@ -80,37 +80,42 @@ module decode_CONTROL_UNIT (inst_in, exception, jump, wb, m, ex);
 				ex <= 4'b1100;
 				m <= 3'b000;
 				wb <= 2'b10;
+				jump <= 0;
 			end
 			6'b100011:
 			begin
 				ex <= 4'b0001;
 				m <= 3'b010;
 				wb <= 2'b11;
+				jump <= 0;
 			end
 			6'b101011:
 			begin
 				ex <= 4'bX001;
 				m <= 3'b001;
 				wb <= 2'b0X;
+				jump <= 0;
 			end
 			6'b000100:
 			begin
 				ex <= 4'bX010;
 				m <= 3'b100;
 				wb <= 2'b0X;
+				jump <= 1;
 			end
 			default:
 		  begin
 				ex <= 4'b0000;
 				m <= 4'b000;
 				wb <= 2'b00;
+				jump <= 0;
 			end
 		endcase
 	end
 endmodule // decode_CONTROL_UNIT
 
 
-module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, equal, wb, m, ex, pc_branch/*, ...*/);
+module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, wb, m, ex, br, pc_branch/*, ...*/);
 
 	//Inputs declaration
 	input clk;
@@ -121,8 +126,9 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	//Outputs declaration
 	output exception, jump;
 	output reg [4:0] rs, rt, rd;
-	output reg [31:0] imm, data_1, data_2, pc_branch;
-	output equal;
+	output reg [31:0] imm, data_1, data_2;
+	output br;
+	output [31:0] pc_branch;
 
 	output reg [3:0] ex;
 	output reg [2:0] m;
@@ -135,6 +141,8 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	reg [3:0] old_ex;
 	reg [2:0] old_m;
 	reg [1:0] old_wb;
+	reg [31:0] old_data_1, old_data_2;
+
 
 	//Actual code
 	always @ ( inst_in ) begin
@@ -145,10 +153,12 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	end
 
 
-	decode_REG_MAPP reg_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data_1, data_2 );
+	decode_REG_MAPP reg_MAPP ( old_rs, old_rt, write_register, write_data_reg, reg_write, old_data_1, old_data_2 );
 	decode_CONTROL_UNIT control_UNIT ( inst_in, exception, jump, old_wb, old_m, old_ex );
 
-	assign equal = (data_1 == data_2);
+	assign br = (old_data_1 == old_data_2) & jump;
+	assign pc_branch = pc + (old_imm << 2);
+
 	always_ff @ ( posedge clk ) begin
 		ex <= old_ex;
 		m <= old_m;
@@ -157,7 +167,8 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 		rs <= old_rs;
 		rt <= old_rt;
 		rd <= old_rd;
-		pc_branch <= pc + (imm << 2);
+		data_1 <= old_data_1;
+		data_2 <= old_data_2;
 	end
 
 endmodule // End of ID module
