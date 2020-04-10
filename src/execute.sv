@@ -92,7 +92,7 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter SLT = 4'b0110;
 	parameter SLL = 4'b0111;
 	parameter SRL = 4'b1000;
-	parameter SRA = 4'b1001; 
+	parameter SRA = 4'b1001;
 
 	// Code starts Here
 	always @(ALU_op, fnc_code)
@@ -100,7 +100,7 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
         	case(ALU_op)
             0: ALU_ctrl <= ADD;
             1: ALU_ctrl <= SUB;
-            2: begin 
+            2: begin
 					case(fnc_code)
 						 0: ALU_ctrl <= SLL; // Shift left logical
 						 2: ALU_ctrl <= SRL; // rigth
@@ -169,7 +169,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 endmodule // End of module ALU
 
 
-module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register, write_data_ex, m_MEM, wb_MEM/*, ...*/);
+module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/);
 
 	// Inputs declaration
 	input clk;
@@ -182,7 +182,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	// Outputs declaration
 	output reg zero;
 	output reg [31:0] res;
-	output reg [4:0] write_register;
+	output reg [4:0] write_register_ex;
 	output reg [2:0] m_MEM;
 	output reg [1:0] wb_MEM;
 	output reg [31:0] write_data_ex;
@@ -197,7 +197,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 
 	reg old_zero;
 	reg [31:0] old_res;
-	reg [4:0] old_write_register;
+	reg [4:0] old_write_register_ex;
 
 	// Code starts here
 	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
@@ -207,7 +207,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	assign op_21 	= forward_b==0 ? data_2 : (forward_b==1 ? write_data_ex : res);
 	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
 
-	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register);
+	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register_ex);
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
@@ -226,13 +226,13 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 		.res 	  (	old_res		)  // output [31:0]
 	);
 
-	forwarding_unit fw_unit ( rs, rt, old_write_register, wb_EX[0], write_register, wb_MEM[0], forward_a, forward_b);
+	forwarding_unit fw_unit ( rs, rt, old_write_register_ex, wb_EX[0], write_register_ex, wb_MEM[0], forward_a, forward_b);
 
 	always_ff @ ( posedge clk ) begin
 		m_MEM <= m_EX;
 		wb_MEM <= wb_EX;
 		res <= old_res;
-		write_register <= old_write_register;
+		write_register_ex <= old_write_register_ex;
 		zero <= old_zero;
 		write_data_ex <= data_2;
 	end
