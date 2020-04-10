@@ -110,18 +110,18 @@ module decode_CONTROL_UNIT (inst_in, exception, jump, wb, m, ex);
 endmodule // decode_CONTROL_UNIT
 
 
-module ID ( clk, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, equal, wb, m, ex/*, ...*/);
+module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, equal, wb, m, ex, pc_branch/*, ...*/);
 
 	//Inputs declaration
 	input clk;
-	input [31:0] inst_in, write_data_reg;
+	input [31:0] inst_in, write_data_reg, pc;
 	input reg_write;
 	input [4:0] write_register;
 
 	//Outputs declaration
 	output exception, jump;
 	output reg [4:0] rs, rt, rd;
-	output reg [31:0] imm, data_1, data_2;
+	output reg [31:0] imm, data_1, data_2, pc_branch;
 	output equal;
 
 	output reg [3:0] ex;
@@ -157,6 +157,7 @@ module ID ( clk, inst_in, write_register, write_data_reg, reg_write, exception, 
 		rs <= old_rs;
 		rt <= old_rt;
 		rd <= old_rd;
+		pc_branch <= pc + (imm << 2);
 	end
 
 endmodule // End of ID module
