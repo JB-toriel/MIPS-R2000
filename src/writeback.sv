@@ -30,24 +30,23 @@ endmodule
 */
 
 
-module WB ( clk, wb, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write/*, ...*/);
-	input clk;
+module WB ( clk, wb, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write/*, ...*/ );
 
 	//Inputs declaration
+	input clk;
 	input [31:0] read_data, address_WB;
 	input [1:0] wb;
 	input [4:0] write_register_mem;
 
-	//Inputs declaration
+	//Outputs declaration
 	output reg [31:0] write_data_reg;
 	output reg [4:0] write_register;
 	output reg_write;
 
 
-	//Actual code
+	//------Code starts Here------//
 	assign reg_write = wb[1];
 	assign write_data_reg = wb[0] ? read_data : address_WB; // Mux to chose between data_2 or the immediate sign extended
 	assign write_register = write_register_mem;
-
 
 endmodule // End of WB module
