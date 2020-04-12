@@ -30,33 +30,39 @@ endmodule
 */
 
 
-module fetch_PC_REG ( clk, old_pc, new_pc );
+module fetch_PC_REG ( clk, hold_pc, old_pc, new_pc );
 
-	// Inputs Declaration
-	input clk;
+	//Inputs Declaration
+	input clk, hold_pc;
 	input [31:0] new_pc;
 
-	// Ouputs Declaration
+	//Ouputs Declaration
 	output reg [31:0] old_pc;
 
-	// Code starts Here
+	//------Code starts Here------//
 	always_ff @(posedge clk)
-		old_pc <= new_pc;
-
-endmodule	// End of Module fetch_PC_REG
+		begin 
+			if (hold_pc==0)
+				old_pc <= new_pc;
+		end
+		
+endmodule // End of Module fetch_PC_REG
 
 
 module fetch_MUX( inc_pc, pc_branch, br, except, new_pc );
 
-	// Inputs Declaration
+	//Inputs Declaration
 	input [31:0] inc_pc;	//old_pc "+ 4"
 	input [31:0] pc_branch;
 	input br, except;
 
-	// Outputs Declaration
+	//Outputs Declaration
 	output reg [31:0] new_pc;
 
-	// Code starts Here
+
+	//------Code starts Here------//
+	initial new_pc = 0;
+	
 	always @( br or except or inc_pc )
       begin
 				case ({br,except})
@@ -67,7 +73,7 @@ module fetch_MUX( inc_pc, pc_branch, br, except, new_pc );
 				endcase
 	  end
 
-		initial new_pc = 0;
+		
 
 endmodule // End of Module fetch_MUX
 
@@ -85,11 +91,11 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 	// Ouputs Declaration
 	output reg [31:0] inst;
 
-	//------Variable declaration------//
+	//Variables declaration
 	reg [31:0] rom_code [0:10];
 
 
-	// Code starts Here
+	//------Code starts Here------//
 	always_ff @( posedge clk )
 		inst <= rom_code[pc/4];
 
@@ -102,17 +108,17 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 
 	initial
 		begin
-			$readmemh("src/memory.list", rom_code);
+			$readmemh("memory.list", rom_code);
 		end
 
 
-endmodule	// End of Module fetch_ROM
+endmodule // End of Module fetch_ROM
 
 
-module IF( clk, pc_branch, br, except, pc_out, inst_out);
+module IF( clk, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 	// Inputs Declaration
-	input clk;
+	input clk, hold_if;
 	input [31:0] pc_branch;
 	input br, except;
 
@@ -121,25 +127,27 @@ module IF( clk, pc_branch, br, except, pc_out, inst_out);
 	output reg [31:0] inst_out;
 
 	// Ports data types
+	reg hold_pc;
 	wire [31:0] pc;
 	reg [31:0] pc_4;
 	reg [31:0] old_inst_out;
+	
 
-	// Modules Instantiation
-
+	//------Modules Instantiation------//
 	fetch_PC_REG pc_REG(
 
-		.clk    (	clk   ), // input
-		.old_pc (	pc    ), // input	[31:0]
-		.new_pc (	pc_4  )  // output	[31:0]
+      	.clk    	(	clk   	  ), // input
+      	.hold_pc    (	hold_pc   ), // input
+      	.old_pc 	(	pc    	  ), // input	[31:0]
+      	.new_pc 	(	pc_4  	  )  // output	[31:0]
 
 	);
 
 	fetch_MUX mux(
 
-		.inc_pc 	(	pc				), // input	[31:0]
-		.pc_branch(	pc_branch	), // input	[31:0]
-		.br  			(	br   			), // input
+		.inc_pc 	(	pc			), // input	[31:0]
+		.pc_branch	(	pc_branch	), // input	[31:0]
+		.br  		(	br   		), // input
 		.except 	(	except  	), // input
 		.new_pc 	(	pc_4    	)  // output	[31:0]
 
@@ -147,18 +155,26 @@ module IF( clk, pc_branch, br, except, pc_out, inst_out);
 
 	fetch_ROM rom(
 
-		.clk	(	clk					),
-		.pc		(	pc_4				), // input	[31:0]
+		.clk	(	clk			 ),
+		.pc		(	pc_4		 ), // input	[31:0]
 		/*.chip_en(	chip_en	), // input
 		.read_en(	read_en		), // input*/
 		.inst	(	old_inst_out )  // output	[31:0]
 
 	);
 
-	always_ff @( posedge clk )begin
-		pc_out <= pc_4;
-		inst_out <= old_inst_out;
-	end
 
+	//------Code starts Here------//
+  
+  	initial hold_pc=0; 	
+  
+	always_ff @( posedge clk )
+		begin
+			if ( hold_if==0 )
+				begin
+					pc_out <= pc_4;
+					inst_out <= old_inst_out;
+				end
+		end
 
 endmodule // End of Module IF
