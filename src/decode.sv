@@ -121,9 +121,9 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, exception, jump, wb, m, ex 
 			1:
 			begin
 				ex <= 4'b1100;
-							m <= 3'b000;
-							wb <= 2'b10;
-							jump <= 0;
+				m <= 3'b000;
+				wb <= 2'b10;
+				jump <= 0;
 			end
 			0: 
 				begin
