@@ -42,6 +42,12 @@ module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_p
   
   
 	//------Code starts Here------//
+  	initial 
+    	begin 
+        	hold_pc=0;
+    		hold_if=0; 
+        end
+  
 	always @*
 		begin
 			if ( mem_Read && (rt_ex==rs_id || rt_ex==rt_id) )
@@ -79,6 +85,8 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 
 
 	//------Code starts Here------//
+  	assign registers[0]=0;
+  
 	initial
 		begin
 			for(i = 0; i < 32; i = i + 1)
@@ -112,10 +120,10 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, exception, jump, wb, m, ex 
 		case (mux_ctrl_unit)
 			1:
 			begin
-				ex <= 4'b0000;
-				m <= 3'b000;
-				wb <= 2'b00;
-				jump <= 0;
+				ex <= 4'b1100;
+							m <= 3'b000;
+							wb <= 2'b10;
+							jump <= 0;
 			end
 			0: 
 				begin
@@ -163,7 +171,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, exception, jump, wb, m, ex 
 endmodule // End of module decode_CONTROL_UNIT
 
 
-module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, wb, m, ex, br, pc_branch/*, ...*/ );
+module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, wb, m, ex, br, pc_branch, hold_pc, hold_if/*, ...*/ );
 
 	//Inputs declaration
 	input clk;
@@ -172,6 +180,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	input [4:0] write_register;
 
 	//Outputs declaration
+	output reg hold_pc, hold_if;
 	output exception, jump;
 	output reg [4:0] rs, rt, rd;
 	output reg [31:0] imm, data_1, data_2;
@@ -183,7 +192,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	output reg [1:0] wb;
 
 	//Variables declaration
-	reg mux_ctrl_unit, hold_pc, hold_if;
+	reg mux_ctrl_unit;
 	reg [4:0] old_rs, old_rt, old_rd;
 	reg [31:0] old_imm;
 
