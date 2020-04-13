@@ -84,7 +84,7 @@ module test_fetch;
 	IF instruction_fetch ( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 	ID instruction_decode ( .clk(clk), .pc(pc_out), .inst_in (inst_out), .write_register(write_register), .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
-	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch), .br(br));
+	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch), .br(br), .hold_pc(hold_pc), .hold_if(hold_if));
 
 	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
@@ -97,8 +97,6 @@ module test_fetch;
 	// Test bench starts Here
 	initial
 		begin
-          	hold_pc=0;
-          	hold_if=0;
 			except = 0;
 			clk = 1;
 			#200
