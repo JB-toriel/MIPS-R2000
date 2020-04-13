@@ -31,7 +31,7 @@ module test_fetch;
 	//------For fetch stage------//
 
 		// for pc registers
-  		reg hold_if;
+  		reg hold_pc, hold_if;
 		reg [31:0] pc_out;
 		reg [31:0] inst_out;
 
@@ -81,7 +81,7 @@ module test_fetch;
 	
 
 	// Instantiation of design under test
-	IF instruction_fetch ( clk, hold_if, pc_branch, br, except, pc_out, inst_out );
+  IF instruction_fetch ( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 	ID instruction_decode ( .clk(clk), .pc(pc_out), .inst_in (inst_out), .write_register(write_register), .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
 	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch), .br(br));
@@ -97,10 +97,11 @@ module test_fetch;
 	// Test bench starts Here
 	initial
 		begin
+          	hold_pc=0;
           	hold_if=0;
 			except = 0;
 			clk = 1;
-			#1000
+			#200
 			$display( "End of simulation time is %d", $time );
 			$stop;
 		end
