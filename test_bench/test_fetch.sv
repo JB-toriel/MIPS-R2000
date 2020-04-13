@@ -81,7 +81,7 @@ module test_fetch;
 	
 
 	// Instantiation of design under test
-  IF instruction_fetch ( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
+	IF instruction_fetch ( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 	ID instruction_decode ( .clk(clk), .pc(pc_out), .inst_in (inst_out), .write_register(write_register), .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
 	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch), .br(br));
