@@ -95,8 +95,8 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter XOR = 4'b0100;
 	parameter NOR = 4'b0101;
 	parameter SLT = 4'b0110;
-	parameter SLL = 4'b0111;
-	parameter SRL = 4'b1000;
+	parameter MUL = 4'b0111;
+	parameter DIV = 4'b1000;
 	parameter SRA = 4'b1001;
 
 	
@@ -108,8 +108,8 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
             1: ALU_ctrl <= SUB;
             2: begin
 					case(fnc_code)
-						 0: ALU_ctrl <= SLL; // Shift left logical
-						 2: ALU_ctrl <= SRL; // rigth
+						 /*0: ALU_ctrl <= SLL; // Shift left logical
+						 2: ALU_ctrl <= SRL; // rigth*/
 						 3: ALU_ctrl <= SRA; // Arithmetic
 						32: ALU_ctrl <= ADD; // ADD
 						34: ALU_ctrl <= SUB; // SUB
@@ -118,6 +118,8 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 						38: ALU_ctrl <= XOR;
 						39: ALU_ctrl <= NOR; // NOR
 						42: ALU_ctrl <= SLT; // Set on less than
+					 5'h18: ALU_ctrl <= MUL;
+					 5'h1a: ALU_ctrl <= DIV;
 						default: ALU_ctrl <= 4'b1111;
 					endcase
                 end
@@ -147,8 +149,8 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 	parameter XOR = 4'b0100;
 	parameter NOR = 4'b0101;
 	parameter SLT = 4'b0110;
-	parameter SLL = 4'b0111;
-	parameter SRL = 4'b1000;
+	parameter MUL = 4'b0111;
+	parameter DIV = 4'b1000;
 	parameter SRA = 4'b1001;
 	//parameter JR = 4'b1010;
 	//parameter JALR = 4'b1100;
@@ -167,8 +169,8 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 				   XOR: res <= 	 op_1 ^ op_2;
 				   NOR: res <= ~(op_1 | op_2); 	   	  // NOR
 				   SLT: res <=   op_1 < op_2 ? 1 : 0; // Set on less than
-				   SLL: res <=	 op_2 << op_1;
-				   SRL: res <= 	 op_2 >> op_1;
+				   MUL: res <=	 op_1 * op_2;
+				   DIV: res <= 	 op_1 / op_2;
 				   SRA: res <=	 op_2 >>> op_1;
 			   default: res <= 0;
 			endcase
