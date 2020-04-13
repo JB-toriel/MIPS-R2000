@@ -34,7 +34,7 @@ module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_p
   
 	//Inputs declaration
 	input [4:0] rt_id, rs_id, rt_ex;
-	input [2:0] mem_Read;
+	input mem_Read;
   
 	//Outputs declaration
 	output reg  mux_ctrl_unit;
@@ -116,56 +116,53 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, exception, jump, wb, m, ex 
 
 
 	//------Code starts Here------//
-	always @ ( inst_in, mux_ctrl_unit ) begin
-		case (mux_ctrl_unit)
-			1:
+	always @ ( mux_ctrl_unit, inst_in ) begin
+		if (mux_ctrl_unit==1)
+			begin
+				ex <= 4'b0000;
+				m <= 3'b000;
+				wb <= 2'b00;
+				jump <= 0;
+			end
+		else begin
+		case (inst_in[31:26])
+			0:
 			begin
 				ex <= 4'b1100;
 				m <= 3'b000;
 				wb <= 2'b10;
 				jump <= 0;
 			end
-			0: 
-				begin
-					case (inst_in[31:26])
-						0:
-						begin
-							ex <= 4'b1100;
-							m <= 3'b000;
-							wb <= 2'b10;
-							jump <= 0;
-						end
-					6'b100011:
-						begin
-							ex <= 4'b0001;
-							m <= 3'b010;
-							wb <= 2'b11;
-							jump <= 0;
-						end
-					6'b101011:
-						begin
-							ex <= 4'bX001;
-							m <= 3'b001;
-							wb <= 2'b0X;
-							jump <= 0;
-						end
-					6'b000100:
-						begin
-							ex <= 4'bX010;
-							m <= 3'b100;
-							wb <= 2'b0X;
-							jump <= 1;
-						end
-					default:
-						begin
-							ex <= 4'b0000;
-							m <= 4'b000;
-							wb <= 2'b00;
-							jump <= 0;
-						end
-					endcase
-				end
+			6'b100011:
+			begin
+				ex <= 4'b0001;
+				m <= 3'b010;
+				wb <= 2'b11;
+				jump <= 0;
+			end
+			6'b101011:
+			begin
+				ex <= 4'bX001;
+				m <= 3'b001;
+				wb <= 2'b0X;
+				jump <= 0;
+			end
+			6'b000100:
+			begin
+				ex <= 4'bX010;
+				m <= 3'b100;
+				wb <= 2'b0X;
+				jump <= 1;
+			end
+			default:
+			begin
+				ex <= 4'b0000;
+				m <= 4'b000;
+				wb <= 2'b00;
+				jump <= 0;
+			end
 		endcase
+		end
 	end
 	
 endmodule // End of module decode_CONTROL_UNIT
@@ -207,7 +204,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	
 	decode_CONTROL_UNIT control_UNIT ( inst_in, mux_ctrl_unit, exception, jump, old_wb, old_m, old_ex );
 	
-	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, m, mux_ctrl_unit, hold_pc, hold_if);
+	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, m[1], mux_ctrl_unit, hold_pc, hold_if);
 
 	
 	//------Code starts Here------//
