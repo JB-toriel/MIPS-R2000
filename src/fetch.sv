@@ -73,14 +73,12 @@ module fetch_MUX( inc_pc, pc_branch, br, except, new_pc );
 				endcase
 	  end
 
-		
-
 endmodule // End of Module fetch_MUX
 
 
 module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 
-	// Inputs Declaration
+	//Inputs Declaration
 	input clk;
 	input [31:0] pc;
 	/*
@@ -88,7 +86,7 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 	input read_en;
 	*/
 
-	// Ouputs Declaration
+	//Ouputs Declaration
 	output reg [31:0] inst;
 
 	//Variables declaration
@@ -111,23 +109,21 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 			$readmemh("memory.list", rom_code);
 		end
 
-
 endmodule // End of Module fetch_ROM
 
 
-module IF( clk, hold_if, pc_branch, br, except, pc_out, inst_out );
+module IF( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
-	// Inputs Declaration
-	input clk, hold_if;
+	//Inputs Declaration
+	input clk, hold_pc, hold_if;
 	input [31:0] pc_branch;
 	input br, except;
 
-	// Outputs Declaration
+	//Outputs Declaration
 	output reg [31:0] pc_out;
 	output reg [31:0] inst_out;
 
-	// Ports data types
-	reg hold_pc;
+	//Variables declaration
 	wire [31:0] pc;
 	reg [31:0] pc_4;
 	reg [31:0] old_inst_out;
@@ -165,9 +161,6 @@ module IF( clk, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 
 	//------Code starts Here------//
-  
-  	initial hold_pc=0; 	
-  
 	always_ff @( posedge clk )
 		begin
 			if ( hold_if==0 )
