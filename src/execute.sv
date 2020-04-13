@@ -29,7 +29,8 @@ endmodule
 	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
-module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb, forward_a, forward_b);
+
+module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb, forward_a, forward_b );
 
   //Inputs declaration
   input [4:0] rs_id, rt_id, rd_ex, rd_wb;
@@ -61,7 +62,7 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 endmodule // End of module forwarding_unit
 
 
-module execute_MUX_RTRD ( rt, rd, ex, write_register);
+module execute_MUX_RTRD ( rt, rd, ex, write_register );
 
 	//Inputs declaration
 	input [4:0] rt, rd;
@@ -176,7 +177,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 endmodule // End of module ALU
 
 
-module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/);
+module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
 
 	// Inputs declaration
 	input clk;
@@ -206,16 +207,8 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	reg [31:0] old_res;
 	reg [4:0] old_write_register_ex;
 
-
-	//------Code starts Here------//
-	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
-	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
-
-	assign op_1 	= forward_a==0 ? data_1 : (forward_a==1 ? write_data_ex : res);
-	assign op_21 	= forward_b==0 ? data_2 : (forward_b==1 ? write_data_ex : res);
-	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
-
-
+	
+	//------Modules Instantiation------//
 	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register_ex);
 
 	ALU_ctrl_unit alu_ctrl_unit(
@@ -238,6 +231,14 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	forwarding_unit fw_unit ( rs, rt, old_write_register_ex, wb_EX[0], write_register_ex, wb_MEM[0], forward_a, forward_b);
 
 
+	//------Code starts Here------//
+	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
+	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
+
+	assign op_1 	= forward_a==0 ? data_1 : (forward_a==1 ? write_data_ex : res);
+	assign op_21 	= forward_b==0 ? data_2 : (forward_b==1 ? write_data_ex : res);
+	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
+	
 	always_ff @ ( posedge clk ) begin
 		m_MEM <= m_EX;
 		wb_MEM <= wb_EX;
