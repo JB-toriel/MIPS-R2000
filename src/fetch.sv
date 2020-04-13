@@ -94,6 +94,8 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 
 
 	//------Code starts Here------//
+	assign rom_code[0]=0;
+	
 	always_ff @( posedge clk )
 		inst <= rom_code[pc/4];
 
