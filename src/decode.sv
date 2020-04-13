@@ -29,7 +29,8 @@ endmodule
 	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
-module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_pc, hold_if);
+
+module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_pc, hold_if );
   
 	//Inputs declaration
 	input [4:0] rt_id, rs_id, rt_ex;
@@ -79,12 +80,10 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 
 	//------Code starts Here------//
 	initial
-    begin
-      for(i = 0; i < 32; i = i + 1)
-        begin
-          registers[i]=i;
-        end
-  	end
+		begin
+			for(i = 0; i < 32; i = i + 1)
+				registers[i]=i;
+		end
 
 	assign data_1 = registers[rs];
 	assign data_2 = registers[rt];
@@ -95,7 +94,7 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 endmodule // End of module decode_REG_MAPP module
 
 
-module decode_CONTROL_UNIT (inst_in, mux_ctrl_unit, exception, jump, wb, m, ex);
+module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, exception, jump, wb, m, ex );
 
 	//Inputs declaration
 	input mux_ctrl_unit;
@@ -164,7 +163,7 @@ module decode_CONTROL_UNIT (inst_in, mux_ctrl_unit, exception, jump, wb, m, ex);
 endmodule // End of module decode_CONTROL_UNIT
 
 
-module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, wb, m, ex, br, pc_branch/*, ...*/);
+module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, wb, m, ex, br, pc_branch/*, ...*/ );
 
 	//Inputs declaration
 	input clk;
@@ -193,10 +192,13 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	reg [1:0] old_wb;
 	reg [31:0] old_data_1, old_data_2;
 
-
+	
+	//------Modules Instantiation------//
 	decode_REG_MAPP reg_MAPP ( old_rs, old_rt, write_register, write_data_reg, reg_write, old_data_1, old_data_2 );
+	
 	decode_CONTROL_UNIT control_UNIT ( inst_in, mux_ctrl_unit, exception, jump, old_wb, old_m, old_ex );
-	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, old_m, mux_ctrl_unit, hold_pc, hold_if);
+	
+	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, m, mux_ctrl_unit, hold_pc, hold_if);
 
 	
 	//------Code starts Here------//
