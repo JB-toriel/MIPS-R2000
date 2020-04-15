@@ -101,10 +101,10 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 endmodule // End of module decode_REG_MAPP module
 
 
-module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, exception, jump, wb, m, ex );
+module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, wb, m, ex );
 
 	//Inputs declaration
-	input mux_ctrl_unit;
+	input mux_ctrl_unit, flush_id;
 	input [31:0] inst_in;
 
 	//Outputs declaration
@@ -116,7 +116,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, exception, jump, wb, m, ex 
 
 	//------Code starts Here------//
 	always @ ( mux_ctrl_unit, inst_in ) begin
-		if (mux_ctrl_unit==1)
+		if ( mux_ctrl_unit || flush_id )
 			begin
 				ex <= 4'b0000;
 				m <= 3'b000;
@@ -190,7 +190,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	output reg [1:0] wb;
 
 	//Variables declaration
-	reg mux_ctrl_unit;
+	reg mux_ctrl_unit, flush_id;
 	reg [4:0] old_rs, old_rt, old_rd;
 	reg [31:0] old_imm;
 
@@ -202,9 +202,9 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 
 	//------Modules Instantiation------//
 	decode_REG_MAPP reg_MAPP ( old_rs, old_rt, write_register, write_data_reg, reg_write, old_data_1, old_data_2 );
-
-	decode_CONTROL_UNIT control_UNIT ( inst_in, mux_ctrl_unit, exception, jump, old_wb, old_m, old_ex );
-
+	
+	decode_CONTROL_UNIT control_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, old_wb, old_m, old_ex );
+	
 	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, m[1], mux_ctrl_unit, hold_pc, hold_if);
 
 

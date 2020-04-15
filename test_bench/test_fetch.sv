@@ -56,6 +56,7 @@ module test_fetch;
 		reg [3:0] ex;
 		reg [2:0] m;
 		reg [1:0] wb;
+		reg flush_ex;
 
 	//------For execute stage------//
 
@@ -86,7 +87,7 @@ module test_fetch;
 	ID instruction_decode ( .clk(clk), .pc(pc_out), .inst_in (inst_out), .write_register(write_register), .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
 	 			.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch), .br(br), .hold_pc(hold_pc), .hold_if(hold_if));
 
-	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
+	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, flush_ex, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
 	MEM memory ( clk, wb_MEM, m_MEM, zero, res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem );
 
