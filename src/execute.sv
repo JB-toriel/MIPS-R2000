@@ -179,7 +179,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 endmodule // End of module ALU
 
 
-module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
+module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
 
 	// Inputs declaration
 	input clk;
@@ -188,6 +188,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	input [3:0] ex;
 	input [2:0] m_EX;
 	input [1:0] wb_EX;
+	input flush_ex;
 
 	//Outputs declaration
 	output reg zero;
@@ -208,6 +209,9 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	reg old_zero;
 	reg [31:0] old_res;
 	reg [4:0] old_write_register_ex;
+	
+	wire [3:0] m_EX_mux; 
+	wire [2:0] wb_EX_mux;
 
 	
 	//------Modules Instantiation------//
@@ -241,9 +245,12 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, imm, zero, res, wr
 	assign op_21 	= forward_b==0 ? data_2 : (forward_b==1 ? write_data_ex : res);
 	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
 	
+	assign m_EX_mux = flush_ex ? 0 : m_EX;
+	assign wb_EX_mux = flush_ex ? 0 : wb_EX ;
+	
 	always_ff @ ( posedge clk ) begin
-		m_MEM <= m_EX;
-		wb_MEM <= wb_EX;
+		m_MEM <= m_EX_mux;
+		wb_MEM <= wb_EX_mux;
 		res <= old_res;
 		write_register_ex <= old_write_register_ex;
 		zero <= old_zero;
