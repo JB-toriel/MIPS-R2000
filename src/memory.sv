@@ -30,7 +30,7 @@ endmodule
 */
 
 
-module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, write_register_ex, wb, read_data, address_WB, write_register_mem/*, ...*/);
+module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, write_register_ex, wb, read_data, address_WB, write_register_mem/*, ...*/ );
 
 	//Inputs declaration
 	input clk;
@@ -46,32 +46,32 @@ module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, write_register_e
 	output reg [4:0] write_register_mem;
 
 	//Variables DECLARATION
-	reg [31:0] memory [0:31];
 	integer i;
+	reg [31:0] old_read_data, old_address_WB;
+	reg [31:0] memory [0:31];
+
+
+	//------Code starts Here------//
 	initial
-    begin
-      for(i = 0; i < 32; i = i + 1)
-        begin
-          memory[i]=i;
-        end
-  	end
-		reg [31:0] old_read_data, old_address_WB;
-
-
-	//Actual code
+		begin
+			for(i = 0; i < 32; i = i + 1)
+				memory[i]=i;
+		end
+		
 	assign old_address_WB = address_MEM;
 
-	always @ ( m ) begin
-		if (m[1]) old_read_data <= memory[address_MEM];
-		if (m[0]) memory[address_MEM] = write_data_mem;
-	end
+	always @ ( m ) 
+		begin
+			if (m[1]) old_read_data <= memory[address_MEM];
+			if (m[0]) memory[address_MEM] = write_data_mem;
+		end
 
-	always_ff @ ( posedge clk ) begin
-		wb <= wb_MEM;
-		write_register_mem <= write_register_ex;
-		address_WB <= old_address_WB;
-		read_data <= old_read_data;
-	end
-
+	always_ff @ ( posedge clk ) 
+		begin
+			wb <= wb_MEM;
+			write_register_mem <= write_register_ex;
+			address_WB <= old_address_WB;
+			read_data <= old_read_data;
+		end
 
 endmodule // End of MEM module
