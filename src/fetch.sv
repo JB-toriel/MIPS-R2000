@@ -52,7 +52,7 @@ endmodule // End of Module fetch_PC_REG
 module fetch_MUX( inc_pc, pc_branch, br, except, new_pc );
 
 	//Inputs Declaration
-	input [31:0] inc_pc;	//old_pc "+ 4"
+	input [31:0] inc_pc;
 	input [31:0] pc_branch;
 	input br, except;
 
@@ -87,15 +87,14 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 	*/
 
 	//Ouputs Declaration
-	output reg [31:0] inst;
+	output [31:0] inst;
 
 	//Variables declaration
 	reg [31:0] rom_code [0:10];
 
 
 	//------Code starts Here------//
-	always_ff @( posedge clk )
-		inst <= rom_code[pc/4];
+	inst = rom_code[pc/4];
 
 	/*
 	if (chip_en && read_en)
@@ -152,7 +151,7 @@ module IF( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 	fetch_ROM rom(
 
 		.clk	(	clk			 ),
-		.pc		(	pc_4		 ), // input	[31:0]
+		.pc		(	pc		 	 ), // input	[31:0]
 		/*.chip_en(	chip_en	), // input
 		.read_en(	read_en		), // input*/
 		.inst	(	old_inst_out )  // output	[31:0]

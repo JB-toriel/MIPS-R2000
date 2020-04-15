@@ -85,7 +85,7 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 
 
 	//------Code starts Here------//
-  	assign registers[0]=0;
+  	//assign registers[0]=0;
   
 	initial
 		begin
