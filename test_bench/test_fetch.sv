@@ -31,7 +31,7 @@ module test_fetch;
 	//------For fetch stage------//
 
 		// for pc registers
-  		reg hold_pc, hold_if;
+  	reg hold_pc, hold_if;
 		reg [31:0] pc_out;
 		reg [31:0] inst_out;
 
@@ -39,7 +39,7 @@ module test_fetch;
 		reg except;
 
 	//------For decode stage------//
-	
+
 		wire br;
 		// for register mapping
 		wire [31:0] write_data_reg;
@@ -50,7 +50,7 @@ module test_fetch;
 		reg [31:0] data_1, data_2;
 
 	//------For control unit------//
-	
+
 		logic jump;
 		logic exception;
 		reg [3:0] ex;
@@ -59,7 +59,7 @@ module test_fetch;
 		reg flush_ex;
 
 	//------For execute stage------//
-	
+
 		reg [2:0] m_MEM;
 		reg [1:0] wb_MEM;
 		reg [31:0] res;
@@ -68,18 +68,18 @@ module test_fetch;
 		reg [4:0] write_register_ex;
 
 	//------For memory stage------//
-	
+
 		reg [4:0] write_register_mem;
 		reg [1:0] wb_WB;
 		reg [31:0] address_WB, read_data;
 
 	//------For WriteBack stage------//
 
-	
+
 	// Clock definition
 	parameter CLK_PERIOD = 10;
 	always #(CLK_PERIOD/2.0) clk = ~clk;
-	
+
 
 	// Instantiation of design under test
 	IF instruction_fetch ( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );

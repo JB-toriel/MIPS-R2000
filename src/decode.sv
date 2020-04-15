@@ -31,23 +31,23 @@ endmodule
 
 
 module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_pc, hold_if );
-  
+
 	//Inputs declaration
 	input [4:0] rt_id, rs_id, rt_ex;
 	input mem_Read;
-  
+
 	//Outputs declaration
 	output reg  mux_ctrl_unit;
 	output reg hold_pc, hold_if;
-  
-  
+
+
 	//------Code starts Here------//
-  	initial 
-    	begin 
+  	initial
+    	begin
         	hold_pc=0;
-    		hold_if=0; 
+    		hold_if=0;
         end
-  
+
 	always @*
 		begin
 			if ( mem_Read && (rt_ex==rs_id || rt_ex==rt_id) )
@@ -56,7 +56,7 @@ module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_p
 					hold_if<=1;
 					mux_ctrl_unit<=1;
 				end
-				
+
 			else
 				begin
 					hold_pc<=0;
@@ -64,7 +64,7 @@ module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_p
 					mux_ctrl_unit<=0;
 				end
 		end
-  
+
 endmodule // End of module decode_HAZARD_UNIT
 
 
@@ -85,8 +85,7 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 
 
 	//------Code starts Here------//
-  	//assign registers[0]=0;
-  
+
 	initial
 		begin
 			for(i = 0; i < 32; i = i + 1)
@@ -95,8 +94,8 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 
 	assign data_1 = registers[rs];
 	assign data_2 = registers[rt];
-	
-	always @ ( * ) 
+
+	always @ ( * )
 		if (reg_write) registers[write_register] <= write_data_reg;
 
 endmodule // End of module decode_REG_MAPP module
@@ -153,6 +152,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				m <= 3'b100;
 				wb <= 2'b0X;
 				jump <= 1;
+				exception <= 0;
 			end
 			default:
 			begin
@@ -160,11 +160,12 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				m <= 4'b000;
 				wb <= 2'b00;
 				jump <= 0;
+				exception <= 1;
 			end
 		endcase
 		end
 	end
-	
+
 endmodule // End of module decode_CONTROL_UNIT
 
 
@@ -198,7 +199,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	reg [1:0] old_wb;
 	reg [31:0] old_data_1, old_data_2;
 
-	
+
 	//------Modules Instantiation------//
 	decode_REG_MAPP reg_MAPP ( old_rs, old_rt, write_register, write_data_reg, reg_write, old_data_1, old_data_2 );
 	
@@ -206,7 +207,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	
 	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, m[1], mux_ctrl_unit, hold_pc, hold_if);
 
-	
+
 	//------Code starts Here------//
 	always @ ( inst_in ) begin
 		old_rs <= inst_in[25:21];
