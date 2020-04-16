@@ -101,20 +101,23 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 endmodule // End of module decode_REG_MAPP module
 
 
-module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, wb, m, ex );
+module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, flush_ex, wb, m, ex );
 
 	//Inputs declaration
 	input mux_ctrl_unit, flush_id;
 	input [31:0] inst_in;
 
 	//Outputs declaration
-	output reg exception, jump;
+	output reg exception, jump, flush_ex;
 	output reg [3:0] ex;
 	output reg [2:0] m;
 	output reg [1:0] wb;
 
+	//Variables declaration
 
 	//------Code starts Here------//
+	assign flush_ex = flush_id;
+
 	always @ ( mux_ctrl_unit, inst_in ) begin
 		if ( mux_ctrl_unit || flush_id )
 			begin
@@ -169,17 +172,17 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 endmodule // End of module decode_CONTROL_UNIT
 
 
-module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, wb, m, ex, br, pc_branch, hold_pc, hold_if/*, ...*/ );
+module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, flush_id, wb, m, ex, br, pc_branch, hold_pc, hold_if, flush_ex/*, ...*/ );
 
 	//Inputs declaration
 	input clk;
 	input [31:0] inst_in, write_data_reg, pc;
-	input reg_write;
+	input reg_write, flush_id;
 	input [4:0] write_register;
 
 	//Outputs declaration
 	output reg hold_pc, hold_if;
-	output exception, jump;
+	output exception, jump, flush_ex;
 	output reg [4:0] rs, rt, rd;
 	output reg [31:0] imm, data_1, data_2;
 	output br;
@@ -190,7 +193,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	output reg [1:0] wb;
 
 	//Variables declaration
-	reg mux_ctrl_unit, flush_id;
+	reg mux_ctrl_unit;
 	reg [4:0] old_rs, old_rt, old_rd;
 	reg [31:0] old_imm;
 
@@ -202,9 +205,9 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 
 	//------Modules Instantiation------//
 	decode_REG_MAPP reg_MAPP ( old_rs, old_rt, write_register, write_data_reg, reg_write, old_data_1, old_data_2 );
-	
-	decode_CONTROL_UNIT control_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, old_wb, old_m, old_ex );
-	
+
+	decode_CONTROL_UNIT control_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, flush_ex, old_wb, old_m, old_ex );
+
 	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, m[1], mux_ctrl_unit, hold_pc, hold_if);
 
 
