@@ -98,8 +98,8 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter MUL = 4'b0111;
 	parameter DIV = 4'b1000;
 	parameter SRA = 4'b1001;
+  //parameter SLL = 4'b1010;
 
-	
 	//------Code starts Here------//
 	always @(ALU_op, fnc_code)
 		begin
@@ -131,14 +131,14 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 endmodule // End of module ALU_ctrl_unit
 
 
-module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
+module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, over, res );
 
 	//Inputs Declaration
 	input [3:0] ALU_ctrl;
 	input [31:0] op_1, sign_ext, op_2;
 
 	//Ouputs Declaration
-	output zero;
+	output zero, over;
 	output reg [31:0] res;
 
 	//Variables declaration
@@ -152,18 +152,23 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 	parameter MUL = 4'b0111;
 	parameter DIV = 4'b1000;
 	parameter SRA = 4'b1001;
+  //parameter SLL = 4'b1010;
 	//parameter JR = 4'b1010;
 	//parameter JALR = 4'b1100;
 
 
 	//------Code starts Here------//
 	assign zero = (res==0); // zero flag = 0 if the result is 0
+  assign over = (~(|ALU_ctrl[3:1])) ? (~ALU_ctrl[0] & (op_1 > 32'hFFFF_FFFF - op_2)) || (ALU_ctrl[0] & (op_1 < op_2)) : 0;
+
+  //$display("%b ? %b & %b" ~(|ALU_ctrl[3:1]), ALU_ctrl[0], (op_1 < op_2));
+
 
 	always @(ALU_ctrl, op_1, op_2)
 		begin
 			case(ALU_ctrl)
 				   AND: res <=   op_1 & op_2; 		  // AND
-					OR: res <=   op_1 | op_2; 		  // OR
+					 OR:  res <=   op_1 | op_2; 		  // OR
 				   ADD: res <=   op_1 + op_2; 		  // ADD
 				   SUB: res <=   op_1 - op_2; 		  // SUB
 				   XOR: res <= 	 op_1 ^ op_2;
@@ -171,7 +176,8 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 				   SLT: res <=   op_1 < op_2 ? 1 : 0; // Set on less than
 				   MUL: res <=	 op_1 * op_2;
 				   DIV: res <= 	 op_1 / op_2;
-				   SRA: res <=	 op_2 >>> op_1;
+           SRA: res <=	 op_2 >>> op_1;
+           //SLL: res <=	 op_2 << op_1;
 			   default: res <= 0;
 			endcase
 		end
@@ -179,7 +185,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, res );
 endmodule // End of module ALU
 
 
-module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zero, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
+module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
 
 	// Inputs declaration
 	input clk;
@@ -191,7 +197,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zer
 	input flush_ex;
 
 	//Outputs declaration
-	output reg zero;
+	output reg zero, over;
 	output reg [31:0] res;
 	output reg [4:0] write_register_ex;
 	output reg [2:0] m_MEM;
@@ -209,11 +215,11 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zer
 	reg old_zero;
 	reg [31:0] old_res;
 	reg [4:0] old_write_register_ex;
-	
-	wire [3:0] m_EX_mux; 
+
+	wire [3:0] m_EX_mux;
 	wire [2:0] wb_EX_mux;
 
-	
+
 	//------Modules Instantiation------//
 	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register_ex);
 
@@ -231,6 +237,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zer
 		.op_2 	  (	op_2  		), // output [31:0]
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
 		.zero 	  (	old_zero	), // output
+    .over 	  (	over	), // output
 		.res 	  (	old_res		)  // output [31:0]
 	);
 
@@ -244,10 +251,10 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zer
 	assign op_1 	= forward_a==0 ? data_1 : (forward_a==1 ? write_data_ex : res);
 	assign op_21 	= forward_b==0 ? data_2 : (forward_b==1 ? write_data_ex : res);
 	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
-	
+
 	assign m_EX_mux = flush_ex ? 0 : m_EX;
 	assign wb_EX_mux = flush_ex ? 0 : wb_EX ;
-	
+
 	always_ff @ ( posedge clk ) begin
 		m_MEM <= m_EX_mux;
 		wb_MEM <= wb_EX_mux;
