@@ -62,23 +62,25 @@
 00611022 //sub v0 v1 at v0 <- v1 - at = h2
 00611022 //sub v0 v1 at v0 <- v1 - at = h2
 */
-	/* Read and Write 1st op */
+	/* Read and Write 1st op o*/
     
 //01094820 //add t1 t0 t1 t1 <- t0 + t1 = h11
 
-	/* Read and Write 2nd op */
+	/* Read and Write 2nd op o*/
 //01284820 //add t1 t1 t0 t1 <- t0 + t1 = h19
 
 	/* Read and Write 1st and 2nd op o*/
 //01294820 //add t1 t1 t1 t1 <- t0 + t1 = h32
-
-//01294820 //add t1 t1 t1 t1 <- t1 + t1 = h12
-//01294820 //add t1 t1 t1 t1 <- t1 + t1 = h18
-//01294820 //add t1 t1 t1 t1 <- t1 + t1 = h30
 
 	/* Read and Write o*/
 /*
 012A4020 //add t0 t1 t2 t0 <- t2 + t1 = h13
 010B4822 //sub t1 t0 t3 t1 <- t0 - t3 = h8
 01094820 //add t1 t0 t1 t1 <- t0 + t1 = h1b
+*/
+
+/*
+01294820 //add t1 t1 t1 t1 <- t1 + t1 = h12
+01294820 //add t1 t1 t1 t1 <- t1 + t1 = h24
+01294820 //add t1 t1 t1 t1 <- t1 + t1 = h48
 */
