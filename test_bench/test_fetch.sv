@@ -53,7 +53,7 @@ module test_fetch;
 
 		logic jump;
 		logic exception;
-		reg [3:0] ex;
+		reg [5:0] ex;
 		reg [2:0] m;
 		reg [1:0] wb;
 		reg flush_ex;
@@ -66,6 +66,7 @@ module test_fetch;
 		reg zero;
 		reg [31:0] write_data_ex;
 		reg [4:0] write_register_ex;
+		wire over;
 
 	//------For memory stage------//
 
@@ -100,7 +101,7 @@ module test_fetch;
 		begin
 			except = 0;
 			clk = 1;
-			#200
+			#500
 			$display( "End of simulation time is %d", $time );
 			$stop;
 		end

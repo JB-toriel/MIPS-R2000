@@ -90,7 +90,7 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 	output reg [31:0] inst;
 
 	//Variables declaration
-	reg [31:0] rom_code [0:16];
+	reg [31:0] rom_code [0:50];
 
 
 	//------Code starts Here------//
