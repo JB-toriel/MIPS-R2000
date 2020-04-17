@@ -221,7 +221,8 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	wire [5:0] fnc_code;
 	wire [31:0] op_1, op_2, op_21;
 
-	reg old_zero;
+	output reg zero;
+  	output over;
 	reg [31:0] old_res;
 	reg [4:0] old_write_register_ex;
 
