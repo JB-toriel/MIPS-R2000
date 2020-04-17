@@ -51,14 +51,13 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 			fw_a<=2;
       	if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rs_id && rd_wb==rs_id )
 			fw_a<=1;
-
 		if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rt_id) )
 			fw_b<=2;
       	if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rt_id && rd_wb==rt_id )
 			fw_b<=1;
 
     end
-	
+
 	assign forward_a = fw_a;
 	assign forward_b = fw_b;
 
@@ -200,7 +199,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	input [1:0] wb_EX, wb_WB;
 	input flush_ex;
   	input [31:0] write_data_reg;
-  	
+
 	//Outputs declaration
 	output reg zero;
   	output over;
