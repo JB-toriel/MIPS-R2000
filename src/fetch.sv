@@ -68,7 +68,7 @@ module fetch_MUX( inc_pc, pc_branch, br, except, new_pc );
 				case ({br,except})
 					0: new_pc = inc_pc + 4;
 					1: new_pc = 32'h8000_0180;
-					2: new_pc = pc_branch;
+					2: new_pc = pc_branch - 4;
 					default: new_pc = inc_pc + 4;
 				endcase
 	  end
