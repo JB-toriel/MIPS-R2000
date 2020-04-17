@@ -109,11 +109,24 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 
 	//Outputs declaration
 	output reg exception, jump, flush_ex;
-	output reg [3:0] ex;
+	output reg [5:0] ex;
 	output reg [2:0] m;
 	output reg [1:0] wb;
 
 	//Variables declaration
+	parameter R = 6'b000000;
+	parameter ADDI = 6'b001000;
+	parameter ADDIU = 6'b001001;
+	parameter ANDI = 6'b001100;
+	parameter BEQ = 6'b000100;
+	parameter BGEZ = 6'b000001;
+	parameter XOR = 6'b0100;
+	parameter NOR = 6'b0101;
+	parameter SLT = 6'b0110;
+	parameter MUL = 6'b0111;
+	parameter DIV = 6'b1000;
+	parameter SRA = 6'b1001;
+	//parameter SLL = 4'b1010;
 
 	//------Code starts Here------//
 	assign flush_ex = flush_id;
@@ -121,45 +134,81 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	always @ ( mux_ctrl_unit, inst_in ) begin
 		if ( mux_ctrl_unit || flush_id )
 			begin
-				ex <= 4'b0000;
+				ex <= 6'b000000;
 				m <= 3'b000;
 				wb <= 2'b00;
 				jump <= 0;
+				exception <= 0;
 			end
 		else begin
 		case (inst_in[31:26])
-			0:
+			R:
 			begin
-				ex <= 4'b1100;
+				ex <= 6'b100100;
 				m <= 3'b000;
 				wb <= 2'b10;
 				jump <= 0;
+				exception <= 0;
 			end
-			6'b100011:
+			ADDI:
 			begin
-				ex <= 4'b0001;
-				m <= 3'b010;
-				wb <= 2'b11;
+				ex <= 6'b000001;
+				m <= 3'b000;
+				wb <= 2'b10;
 				jump <= 0;
+				exception <= 0;
 			end
-			6'b101011:
+			ADDIU:
 			begin
-				ex <= 4'bX001;
-				m <= 3'b001;
-				wb <= 2'b0X;
+				ex <= 6'b000001;
+				m <= 3'b000;
+				wb <= 2'b10;
 				jump <= 0;
+				exception <= 0;
 			end
-			6'b000100:
+			ANDI:
 			begin
-				ex <= 4'bX010;
+				ex <= 6'b000111;
+				m <= 3'b000;
+				wb <= 2'b10;
+				jump <= 0;
+				exception <= 0;
+			end
+			BEQ:
+			begin
+				ex <= 6'bX00010;
 				m <= 3'b100;
 				wb <= 2'b0X;
 				jump <= 1;
 				exception <= 0;
 			end
+			BGEZ:
+			begin
+				ex <= 6'bX00100;
+				m <= 3'b100;
+				wb <= 2'b0X;
+				jump <= 1;
+				exception <= 0;
+			end
+			6'b100011:
+			begin
+				ex <= 6'b000001;
+				m <= 3'b010;
+				wb <= 2'b11;
+				jump <= 0;
+				exception <= 0;
+			end
+			6'b101011:
+			begin
+				ex <= 6'bX00001;
+				m <= 3'b001;
+				wb <= 2'b0X;
+				jump <= 0;
+				exception <= 0;
+			end
 			default:
 			begin
-				ex <= 4'b0000;
+				ex <= 6'b000000;
 				m <= 4'b000;
 				wb <= 2'b00;
 				jump <= 0;
@@ -185,10 +234,10 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	output exception, jump, flush_ex;
 	output reg [4:0] rs, rt, rd;
 	output reg [31:0] imm, data_1, data_2;
-	output br;
+	output reg br;
 	output [31:0] pc_branch;
 
-	output reg [3:0] ex;
+	output reg [5:0] ex;
 	output reg [2:0] m;
 	output reg [1:0] wb;
 
@@ -197,7 +246,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	reg [4:0] old_rs, old_rt, old_rd;
 	reg [31:0] old_imm;
 
-	reg [3:0] old_ex;
+	reg [5:0] old_ex;
 	reg [2:0] old_m;
 	reg [1:0] old_wb;
 	reg [31:0] old_data_1, old_data_2;
@@ -219,8 +268,14 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 		old_imm <= {16'h0000, inst_in[15:0]};
 	end
 
-	assign br = (old_data_1 == old_data_2) & jump;
-	assign pc_branch = pc + (old_imm << 2);
+	assign pc_branch = {pc[31:6], pc[5:0] + (old_imm[5:0] << 2)};
+	always @ ( * ) begin
+		case (old_ex)
+			6'bX00010: br <= (old_data_1 == old_data_2) & jump;
+			6'bX00100: br <= (old_data_1 >= 5'b10000) & jump;
+			default: br <= 0;
+		endcase
+	end
 
 	always_ff @ ( posedge clk ) begin
 		ex <= old_ex;
