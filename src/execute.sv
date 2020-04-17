@@ -72,14 +72,14 @@ module execute_MUX_RTRD ( rt, rd, ex, write_register );
 
 	//Inputs declaration
 	input [4:0] rt, rd;
-	input [3:0] ex;
+	input [5:0] ex;
 
 	//Outputs declaration
 	output reg [4:0] write_register;
 
 
 	//------Code starts Here------//
-	assign write_register = ex[3] ? rd : rt;
+	assign write_register = ex[5] ? rd : rt;
 
 endmodule // End of module execute_MUX_RTRD
 
@@ -87,7 +87,7 @@ endmodule // End of module execute_MUX_RTRD
 module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 
 	//Inputs Declaration
-	input [2:0] ALU_op;
+	input [3:0] ALU_op;
 	input [5:0] fnc_code;
 
 	//Ouputs Declaration
@@ -113,24 +113,25 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
             0: ALU_ctrl <= ADD;
             1: ALU_ctrl <= SUB;
             2: begin
-					case(fnc_code)
-						 /*0: ALU_ctrl <= SLL; // Shift left logical
-						 2: ALU_ctrl <= SRL; // rigth*/
-						 3: ALU_ctrl <= SRA; // Arithmetic
-						32: ALU_ctrl <= ADD; // ADD
-						34: ALU_ctrl <= SUB; // SUB
-						36: ALU_ctrl <= AND; // AND
-						37: ALU_ctrl <= OR;  // OR
-						38: ALU_ctrl <= XOR;
-						39: ALU_ctrl <= NOR; // NOR
-						42: ALU_ctrl <= SLT; // Set on less than
+					  case(fnc_code)
+						  /*0: ALU_ctrl <= SLL; // Shift left logical
+						  2: ALU_ctrl <= SRL; // rigth*/
+						  3: ALU_ctrl <= SRA; // Arithmetic
+              32: ALU_ctrl <= ADD; // ADD
+              6'b100001: ALU_ctrl <= ADD; // ADDU
+						  34: ALU_ctrl <= SUB; // SUB
+						  36: ALU_ctrl <= AND; // AND
+						  37: ALU_ctrl <= OR;  // OR
+						  38: ALU_ctrl <= XOR;
+						  39: ALU_ctrl <= NOR; // NOR
+						  42: ALU_ctrl <= SLT; // Set on less than
 					 5'h18: ALU_ctrl <= MUL;
 					 5'h1a: ALU_ctrl <= DIV;
-						default: ALU_ctrl <= 4'b1111;
-					endcase
+					  	default: ALU_ctrl <= 4'b1111;
+					  endcase
                 end
-                //3: ALU_ctrl <= AND;
-                default: ALU_ctrl <= 4'b1111;
+            3: ALU_ctrl <= AND;
+            default: ALU_ctrl <= 4'b1111;
 			endcase
 		end
 
@@ -165,7 +166,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, over, res );
 
 	//------Code starts Here------//
 	assign zero = (res==0); // zero flag = 0 if the result is 0
-  assign over = (~(|ALU_ctrl[3:1])) ? (~ALU_ctrl[0] & (op_1 > 32'hFFFF_FFFF - op_2)) || (ALU_ctrl[0] & (op_1 < op_2)) : 0;
+  assign over = ((sign_ext[5:0] == 32) & (op_1 > 32'hFFFF_FFFF - op_2)) || ((sign_ext[5:0] == 34) & (op_1 < op_2));
 
   //$display("%b ? %b & %b" ~(|ALU_ctrl[3:1]), ALU_ctrl[0], (op_1 < op_2));
 
@@ -173,16 +174,16 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, over, res );
 	always @(ALU_ctrl, op_1, op_2)
 		begin
 			case(ALU_ctrl)
-				   AND: res <=   op_1 & op_2; 		  // AND
-					OR:  res <=   op_1 | op_2; 		  // OR
-				   ADD: res <=   op_1 + op_2; 		  // ADD
-				   SUB: res <=   op_1 - op_2; 		  // SUB
-				   XOR: res <= 	 op_1 ^ op_2;
-				   NOR: res <= ~(op_1 | op_2); 	   	  // NOR
-				   SLT: res <=   op_1 < op_2 ? 1 : 0; // Set on less than
-				   MUL: res <=	 op_1 * op_2;
-				   DIV: res <= 	 op_1 / op_2;
-           SRA: res <=	 op_2 >>> op_1;
+				AND: res <=   op_1 & op_2; 	   	  	// AND
+				OR:  res <=   op_1 | op_2; 	  	  	// OR
+				ADD: res <=   op_1 + op_2; 		  	// ADD
+				SUB: res <=   op_1 - op_2; 		 	 // SUB
+				XOR: res <= 	 op_1 ^ op_2;
+				NOR: res <= ~(op_1 | op_2); 	   	// NOR
+				SLT: res <=   op_1 < op_2 ? 1 : 0;  // Set on less than
+				MUL: res <=	 op_1 * op_2;
+				DIV: res <= 	 op_1 / op_2;
+				SRA: res <=	 op_2 >>> op_1;
            //SLL: res <=	 op_2 << op_1;
 			   default: res <= 0;
 			endcase
@@ -197,7 +198,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	input clk;
 	input [4:0] rs, rt, rd, rd_WB;
 	input [31:0] imm, data_1, data_2;
-	input [3:0] ex;
+	input [5:0] ex;
 	input [2:0] m_EX;
 	input [1:0] wb_EX, wb_WB;
 	input flush_ex;
@@ -215,7 +216,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	//Variables declaration
 	wire op_21_mem;
 	wire [1:0] forward_a, forward_b;
-	wire [2:0] ALU_op;
+	wire [3:0] ALU_op;
 	wire [3:0] ALU_ctrl;
 	wire [5:0] fnc_code;
 	wire [31:0] op_1, op_2, op_21;
@@ -253,7 +254,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 
 
 	//------Code starts Here------//
-	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
+	assign ALU_op 	= ex[4:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
 	assign op_1 	= (forward_a==0) ? data_1 : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : 2'hx);
@@ -263,6 +264,9 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 
 	assign m_EX_mux = flush_ex ? 0 : m_EX;
 	assign wb_EX_mux = flush_ex ? 0 : wb_EX ;
+
+  assign overflow = over;
+
 
 	always_ff @ ( posedge clk ) begin
 		m_MEM <= m_EX_mux;
