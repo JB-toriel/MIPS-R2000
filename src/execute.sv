@@ -43,23 +43,20 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 
 
   //------Code starts Here------//
-	always_comb
+  always @(rs_id, rt_id, rd_ex, rd_wb,reg_write_ex, reg_write_wb)
     begin
+      	fw_a<=0;
+      	fw_b<=0;
 		if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rs_id) )
-			fw_a=2;
-		else if ( reg_write_wb && (rd_wb!=0) && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
-			fw_a=1;
-		else 
-			fw_a=0;
-    end
-  	always_comb
-    begin		
+			fw_a<=2;
+      	if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rs_id && rd_wb==rs_id )
+			fw_a<=1;
+
 		if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rt_id) )
-			fw_b=2;
-      else if ( reg_write_wb && (rd_wb!=0) && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rt_id )
-			fw_b=1;
-      	else
-			fw_b=0;
+			fw_b<=2;
+      	if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rt_id && rd_wb==rt_id )
+			fw_b<=1;
+
     end
 	
 	assign forward_a = fw_a;
@@ -275,33 +272,3 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	end
 
 endmodule // End of module EX
-
-/*if ( reg_write_ex && rd_ex!=0)
-			begin
-				if ( rd_ex==rs_id )
-					forward_a<=2;
-				else	
-					forward_a<=0;
-				if ( rd_ex==rt_id )
-					forward_b<=2;
-				else	
-					forward_b<=0;
-			end
-		// MEM/WB hazard			
-		else if ( reg_write_wb && rd_wb!=0 )
-			begin
-				if ( ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
-					forward_a=1;		
-				else	
-					forward_a=0;
-				if ( ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rt_id )
-					forward_b<=1;
-				else 
-					forward_b<=0;
-			end
-			
-		else	
-			begin
-				forward_a<=0;
-				forward_b<=0;
-			end	*/
