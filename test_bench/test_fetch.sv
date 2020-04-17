@@ -67,7 +67,6 @@ module test_fetch;
 		reg zero;
 		reg [31:0] write_data_ex;
 		reg [4:0] write_register_ex;
-		wire over;
 
 	//------For memory stage------//
 
