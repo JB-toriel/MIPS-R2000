@@ -1,3 +1,19 @@
+/* Registers number */
+/*
+zero = 0
+at = 1
+v0-v1 =2-3
+a0-a3 = 4-7
+t0-t7 = 8- 15
+s0-s7 = 16-23
+t8-t9 = 24-25
+k0-k1 = 26-27
+gp = 28
+sp = 29
+fp = 30
+ra = 31
+*/
+
 /* Test for Hazard detection unit o*/
 /*
 8C220014 //lw $2 h14($1) $2 <- h15
@@ -7,7 +23,6 @@
 */
 
 /* Test for forwarding unit */ 
-	/* data hazrd */ 
     
 	/* read before write 1st and 2nd op o*/
 /*
