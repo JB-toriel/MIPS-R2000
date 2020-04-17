@@ -272,7 +272,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	always @ ( * ) begin
 		case (old_ex)
 			6'bX00010: br <= (old_data_1 == old_data_2) & jump;
-			6'bX00100: br <= (old_data_1 >= 5'b10000) & jump;
+			6'bX00100: br <= (old_data_1 <= 5'b10000) & jump;
 			default: br <= 0;
 		endcase
 	end
