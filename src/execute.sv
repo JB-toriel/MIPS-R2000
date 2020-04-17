@@ -39,25 +39,31 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
   //Outputs declaration
   output reg [1:0] forward_a, forward_b;
 
+	  reg [1:0] fw_a, fw_b;
+
 
   //------Code starts Here------//
-  always_comb
+	always_comb
     begin
-		if ( reg_write_ex && rd_ex!=0 && rd_ex==rs_id )
-			forward_a=2;
-		else if ( reg_write_wb && rd_wb!=0 && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
-			forward_a=1;
-		else if ( ~reg_write_ex )
-			forward_a=0;
-      	else forward_a=0;
-		if ( reg_write_wb && rd_wb!=0 && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rs_id )
-			forward_b=2;
-      	else if ( reg_write_wb && rd_wb!=0 && rd_wb==rs_id )
-			forward_b=1;
-      else if ( ~reg_write_wb )
-			forward_b=0;
-      else forward_b=0;
+		if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rs_id) )
+			fw_a=2;
+		else if ( reg_write_wb && (rd_wb!=0) && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
+			fw_a=1;
+		else 
+			fw_a=0;
     end
+  	always_comb
+    begin		
+		if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rt_id) )
+			fw_b=2;
+      else if ( reg_write_wb && (rd_wb!=0) && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rt_id )
+			fw_b=1;
+      	else
+			fw_b=0;
+    end
+	
+	assign forward_a = fw_a;
+	assign forward_b = fw_b;
 
 endmodule // End of module forwarding_unit
 
@@ -168,7 +174,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, over, res );
 		begin
 			case(ALU_ctrl)
 				   AND: res <=   op_1 & op_2; 		  // AND
-					 OR:  res <=   op_1 | op_2; 		  // OR
+					OR:  res <=   op_1 | op_2; 		  // OR
 				   ADD: res <=   op_1 + op_2; 		  // ADD
 				   SUB: res <=   op_1 - op_2; 		  // SUB
 				   XOR: res <= 	 op_1 ^ op_2;
@@ -185,17 +191,18 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, over, res );
 endmodule // End of module ALU
 
 
-module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
+module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
 
 	// Inputs declaration
 	input clk;
-	input [4:0] rs, rt, rd;
+	input [4:0] rs, rt, rd, rd_WB;
 	input [31:0] imm, data_1, data_2;
 	input [3:0] ex;
 	input [2:0] m_EX;
-	input [1:0] wb_EX;
+	input [1:0] wb_EX, wb_WB;
 	input flush_ex;
-
+  	input [31:0] write_data_reg;
+  	
 	//Outputs declaration
 	output reg zero, over;
 	output reg [31:0] res;
@@ -206,6 +213,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zer
 
 
 	//Variables declaration
+	wire op_21_mem;
 	wire [1:0] forward_a, forward_b;
 	wire [2:0] ALU_op;
 	wire [3:0] ALU_ctrl;
@@ -237,20 +245,21 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zer
 		.op_2 	  (	op_2  		), // output [31:0]
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
 		.zero 	  (	old_zero	), // output
-    .over 	  (	over	), // output
+		.over 	  (	over		), // output
 		.res 	  (	old_res		)  // output [31:0]
 	);
 
-	forwarding_unit fw_unit ( rs, rt, old_write_register_ex, wb_EX[0], write_register_ex, wb_MEM[0], forward_a, forward_b);
+  forwarding_unit fw_unit ( rs, rt, write_register_ex, wb_MEM[1], rd_WB, wb_WB[1], forward_a, forward_b);
 
 
 	//------Code starts Here------//
 	assign ALU_op 	= ex[2:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
-	assign op_1 	= forward_a==0 ? data_1 : (forward_a==1 ? write_data_ex : res);
-	assign op_21 	= forward_b==0 ? data_2 : (forward_b==1 ? write_data_ex : res);
+	assign op_1 	= (forward_a==0) ? data_1 : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : 2'hx);
+	assign op_21 	= (forward_b==0) ? data_2 : (forward_b==1 ? write_data_reg : (forward_b==2) ? res : 2'hx);
 	assign op_2 	= ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
+	assign op_21_mem = op_21;
 
 	assign m_EX_mux = flush_ex ? 0 : m_EX;
 	assign wb_EX_mux = flush_ex ? 0 : wb_EX ;
@@ -261,7 +270,37 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, flush_ex, imm, zer
 		res <= old_res;
 		write_register_ex <= old_write_register_ex;
 		zero <= old_zero;
-		write_data_ex <= data_2;
+		write_data_ex <= op_21_mem;
 	end
 
 endmodule // End of module EX
+
+/*if ( reg_write_ex && rd_ex!=0)
+			begin
+				if ( rd_ex==rs_id )
+					forward_a<=2;
+				else	
+					forward_a<=0;
+				if ( rd_ex==rt_id )
+					forward_b<=2;
+				else	
+					forward_b<=0;
+			end
+		// MEM/WB hazard			
+		else if ( reg_write_wb && rd_wb!=0 )
+			begin
+				if ( ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
+					forward_a=1;		
+				else	
+					forward_a=0;
+				if ( ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rt_id )
+					forward_b<=1;
+				else 
+					forward_b<=0;
+			end
+			
+		else	
+			begin
+				forward_a<=0;
+				forward_b<=0;
+			end	*/
