@@ -205,7 +205,8 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
   	input [31:0] write_data_reg;
   	
 	//Outputs declaration
-	output reg zero, over;
+	output reg zero;
+  	output over;
 	output reg [31:0] res;
 	output reg [4:0] write_register_ex;
 	output reg [2:0] m_MEM;
@@ -221,8 +222,6 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	wire [5:0] fnc_code;
 	wire [31:0] op_1, op_2, op_21;
 
-	output reg zero;
-  	output over;
 	reg [31:0] old_res;
 	reg [4:0] old_write_register_ex;
 
@@ -265,9 +264,6 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 
 	assign m_EX_mux = flush_ex ? 0 : m_EX;
 	assign wb_EX_mux = flush_ex ? 0 : wb_EX ;
-
-  assign overflow = over;
-
 
 	always_ff @ ( posedge clk ) begin
 		m_MEM <= m_EX_mux;
