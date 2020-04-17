@@ -49,11 +49,11 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 			fw_a=2;
 		else if ( reg_write_wb && (rd_wb!=0) && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
 			fw_a=1;
-		else 
+		else
 			fw_a=0;
     end
   	always_comb
-    begin		
+    begin
 		if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rt_id) )
 			fw_b=2;
       else if ( reg_write_wb && (rd_wb!=0) && ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rt_id )
@@ -61,7 +61,7 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
       	else
 			fw_b=0;
     end
-	
+
 	assign forward_a = fw_a;
 	assign forward_b = fw_b;
 
@@ -203,7 +203,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	input [1:0] wb_EX, wb_WB;
 	input flush_ex;
   	input [31:0] write_data_reg;
-  	
+
 	//Outputs declaration
 	output reg zero, over;
 	output reg [31:0] res;
@@ -265,8 +265,6 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	assign m_EX_mux = flush_ex ? 0 : m_EX;
 	assign wb_EX_mux = flush_ex ? 0 : wb_EX ;
 
-  assign overflow = over;
-
 
 	always_ff @ ( posedge clk ) begin
 		m_MEM <= m_EX_mux;
@@ -283,27 +281,27 @@ endmodule // End of module EX
 			begin
 				if ( rd_ex==rs_id )
 					forward_a<=2;
-				else	
+				else
 					forward_a<=0;
 				if ( rd_ex==rt_id )
 					forward_b<=2;
-				else	
+				else
 					forward_b<=0;
 			end
-		// MEM/WB hazard			
+		// MEM/WB hazard
 		else if ( reg_write_wb && rd_wb!=0 )
 			begin
 				if ( ~(reg_write_ex && rd_ex!=0 && rd_ex!=rs_id) && rd_wb==rs_id )
-					forward_a=1;		
-				else	
+					forward_a=1;
+				else
 					forward_a=0;
 				if ( ~(reg_write_ex && rd_ex!=0 && rd_ex!=rt_id) && rd_wb==rt_id )
 					forward_b<=1;
-				else 
+				else
 					forward_b<=0;
 			end
-			
-		else	
+
+		else
 			begin
 				forward_a<=0;
 				forward_b<=0;
