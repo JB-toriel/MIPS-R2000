@@ -47,7 +47,8 @@ module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, write_register_e
 
 	//Variables DECLARATION
 	integer i;
-	reg [31:0] old_read_data, old_address_WB;
+	wire [31:0] old_address_WB;
+	reg [31:0] old_read_data;
 	reg [31:0] memory [0:31];
 
 
@@ -56,18 +57,17 @@ module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, write_register_e
 		begin
 			for(i = 0; i < 32; i = i + 1)
 				memory[i]=i;
-			memory[31] = 32'hFFFF_FFFF;
 		end
-
+		
 	assign old_address_WB = address_MEM;
 
-	always @ ( m )
+	always @ ( m ) 
 		begin
 			if (m[1]) old_read_data <= memory[address_MEM];
 			if (m[0]) memory[address_MEM] = write_data_mem;
 		end
 
-	always_ff @ ( posedge clk )
+	always_ff @ ( posedge clk ) 
 		begin
 			wb <= wb_MEM;
 			write_register_mem <= write_register_ex;
