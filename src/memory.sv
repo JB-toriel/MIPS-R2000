@@ -30,14 +30,13 @@ endmodule
 */
 
 
-module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, write_register_ex, wb, read_data, address_WB, write_register_mem/*, ...*/ );
+module MEM ( clk, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb, read_data, address_WB, write_register_mem/*, ...*/ );
 
 	//Inputs declaration
 	input clk;
-	input [2:0] m;
+	input [1:0] m;
 	input [1:0] wb_MEM;
 	input [4:0] write_register_ex;
-	input zero;
 	input [31:0] address_MEM, write_data_mem;
 
 	//Outputs declaration
