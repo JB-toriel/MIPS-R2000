@@ -76,10 +76,9 @@ module fetch_MUX ( inc_pc, pc_branch, br, except, new_pc );
 endmodule // End of Module fetch_MUX
 
 
-module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
+module fetch_ROM ( pc/*, chip_en, read_en*/, inst );
 
 	//Inputs Declaration
-	input clk;
 	input [31:0] pc;
 	/*
 	input chip_en;
@@ -101,7 +100,7 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
   	else
 		assign inst = 32'hFFFF_FFFF;
 	*/
-	
+
 	initial
 		begin
 			$readmemh( "memory.list", rom_code );
@@ -150,12 +149,11 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
 
 	fetch_ROM rom(
 
-		.clk	(	clk			 ),
 		.pc		(	pc			 ), // input	[31:0]
 		/*.chip_en(	chip_en	), // input
 		.read_en(	read_en		), // input*/
 		.inst	(	old_inst_out )  // output	[31:0]
-		
+
 	);
 
 	//------Code starts Here------//
@@ -169,5 +167,5 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
                     inst_out <= old_inst_out;
                 end
         end
-  
+
 endmodule // End of Module IF
