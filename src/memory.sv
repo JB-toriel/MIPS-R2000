@@ -61,13 +61,13 @@ module MEM ( clk, wb_MEM, m, zero, address_MEM, write_data_mem, write_register_e
 		
 	assign old_address_WB = address_MEM;
 
-	always @ ( m ) 
+	always @( m ) 
 		begin
 			if (m[1]) old_read_data <= memory[address_MEM];
 			if (m[0]) memory[address_MEM] = write_data_mem;
 		end
 
-	always_ff @ ( posedge clk ) 
+	always_ff @( posedge clk ) 
 		begin
 			wb <= wb_MEM;
 			write_register_mem <= write_register_ex;
