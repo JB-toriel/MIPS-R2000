@@ -252,8 +252,8 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	assign ALU_op 	= ex[4:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
-	assign op_1 	 = (forward_a==0) ? data_1 : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : 2'hx);
-	assign op_21 	 = (forward_b==0) ? data_2 : (forward_b==1 ? write_data_reg : (forward_b==2) ? res : 2'hx);
+	assign op_1 	 = (forward_a==0) ? data_1 : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : data_1 );
+	assign op_21 	 = (forward_b==0) ? data_2 : (forward_b==1 ? write_data_reg : (forward_b==2) ? res : data_2 );
 	assign op_2 	 = ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
 	assign op_21_mem = op_21;
 
