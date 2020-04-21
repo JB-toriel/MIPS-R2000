@@ -68,14 +68,14 @@ module execute_MUX_RTRD ( rt, rd, ex, write_register );
 
 	//Inputs declaration
 	input [4:0] rt, rd;
-	input [5:0] ex;
+	input ex;
 
 	//Outputs declaration
 	output [4:0] write_register;
 
 
 	//------Code starts Here------//
-	assign write_register = ex[5] ? rd : rt;
+	assign write_register = ex ? rd : rt;
 
 endmodule // End of module execute_MUX_RTRD
 
@@ -134,11 +134,12 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 endmodule // End of module ALU_ctrl_unit
 
 
-module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, over, res );
+module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 
 	//Inputs Declaration
 	input [3:0] ALU_ctrl;
-	input [31:0] op_1, sign_ext, op_2;
+	input [5:0] fnc_code;
+	input [31:0] op_1, op_2;
 
 	//Ouputs Declaration
 	output zero, over;
@@ -162,7 +163,7 @@ module ALU ( op_1, sign_ext, op_2, ALU_ctrl, zero, over, res );
 
 	//------Code starts Here------//
 	assign zero = (res==0); // zero flag = 0 if the result is 0
-	assign over = ((sign_ext[5:0] == 32) & (op_1 > 32'hFFFF_FFFF - op_2)) || ((sign_ext[5:0] == 34) & (op_1 < op_2));
+	assign over = ((fnc_code == 32) & (op_1 > 32'hFFFF_FFFF - op_2)) || ((fnc_code == 34) & (op_1 < op_2));
 
   //$display("%b ? %b & %b" ~(|ALU_ctrl[3:1]), ALU_ctrl[0], (op_1 < op_2));
 
@@ -225,7 +226,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 
 
 	//------Modules Instantiation------//
-	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register_ex);
+	execute_MUX_RTRD mux_RTRD ( rt, rd, ex[5], old_write_register_ex);
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
@@ -237,7 +238,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	ALU alu(
 
 		.op_1 	  (	op_1		), // input	 [31:0]
-		.sign_ext (	imm   		), // input	 [31:0]
+		.fnc_code (	imm[5:0]   	), // input	 [31:0]
 		.op_2 	  (	op_2  		), // output [31:0]
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
 		.zero 	  (	old_zero	), // output
