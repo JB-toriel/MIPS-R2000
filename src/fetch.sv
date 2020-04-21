@@ -155,22 +155,23 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
 		.inst	(	old_inst_out )  // output	[31:0]
 
 	);
-
+	
+	
 	//------Code starts Here------//
 	always @( * )
-	        begin
-	            case( br )
-	                1: old_inst_out_mux <= 0;
-	                0: old_inst_out_mux <= old_inst_out;
-	                default: old_inst_out_mux <= old_inst_out;
-	            endcase
-	        end
-
-	 always_ff @( posedge clk )
-	   begin
-	     if ( hold_if==0 )
-	       pc_out <= pc;
-				 inst_out <= old_inst_out_mux;
-	     end
+		begin
+			case( br )
+				1: old_inst_out_mux <= 0;
+				0: old_inst_out_mux <= old_inst_out;
+				default: old_inst_out_mux <= old_inst_out;
+            endcase
+		end
+		
+	always_ff @( posedge clk )
+    begin
+      if ( hold_if==0 )
+				inst_out <= old_inst_out_mux;
+      pc_out <= pc;
+    end
 
 endmodule // End of Module IF
