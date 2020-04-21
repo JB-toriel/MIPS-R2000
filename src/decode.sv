@@ -271,7 +271,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 		assign old_rd = inst_in[15:11];
 		assign old_imm = {16'h0000, inst_in[15:0]};
 
-	assign pc_branch = {pc[31:6], pc[5:0] + (old_imm[5:0] << 2)};
+	assign pc_branch = {pc[31:16], pc[15:0] + (inst_in[5:0] << 2)};
 
 	always @ ( * ) begin
 		case (old_ex)
