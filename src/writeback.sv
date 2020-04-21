@@ -30,10 +30,9 @@ endmodule
 */
 
 
-module WB ( clk, wb, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write/*, ...*/ );
+module WB ( wb, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write/*, ...*/ );
 
 	//Inputs declaration
-	input clk;
 	input [31:0] read_data, address_WB;
 	input [1:0] wb;
 	input [4:0] write_register_mem;
@@ -46,7 +45,7 @@ module WB ( clk, wb, read_data, address_WB, write_register_mem, write_data_reg, 
 
 	//------Code starts Here------//
 	assign reg_write = wb[1];
-	assign write_data_reg = wb[0] ? read_data : address_WB; 
+	assign write_data_reg = wb[0] ? read_data : address_WB;
 	assign write_register = write_register_mem;
 
 endmodule // End of WB module

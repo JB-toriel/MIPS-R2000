@@ -63,7 +63,6 @@ module test_fetch;
 		reg [2:0] m_MEM;
 		reg [1:0] wb_MEM;
 		reg [31:0] res;
-		reg zero;
 		reg [31:0] write_data_ex;
 		reg [4:0] write_register_ex;
 
@@ -93,9 +92,9 @@ module test_fetch;
 
 	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, wb_WB[1], write_register_mem, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
-	MEM memory ( clk, wb_MEM, m_MEM, zero, res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem );
+	MEM memory ( clk, wb_MEM, m_MEM[1:0], res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem );
 
-	WB writeback ( clk, wb_WB, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write );
+	WB writeback ( wb_WB, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write );
 
 
 
