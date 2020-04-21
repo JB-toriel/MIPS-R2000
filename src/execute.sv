@@ -165,9 +165,6 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	assign zero = (res==0); // zero flag = 0 if the result is 0
 	assign over = ((fnc_code == 32) & (op_1 > 32'hFFFF_FFFF - op_2)) || ((fnc_code == 34) & (op_1 < op_2));
 
-  //$display("%b ? %b & %b" ~(|ALU_ctrl[3:1]), ALU_ctrl[0], (op_1 < op_2));
-
-
 	always @( ALU_ctrl, op_1, op_2 )
 		begin
 			case(ALU_ctrl)
@@ -203,7 +200,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 
 	//Outputs declaration
 	output reg zero;
-  	output over;
+  output over;
 	output reg [31:0] res;
 	output reg [4:0] write_register_ex;
 	output reg [2:0] m_MEM;
@@ -230,20 +227,21 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
-  		.ALU_op 	(	ALU_op	  ), // input	 [2:0]
+  		.ALU_op   	(	ALU_op	  ), // input	 [2:0]
   		.fnc_code   (	fnc_code  ), // input	 [5:0]
   		.ALU_ctrl  	(	ALU_ctrl  )  // input	 [3:0]
 	);
 
 	ALU alu(
 
-		.op_1 	  (	op_1		), // input	 [31:0]
-		.fnc_code (	imm[5:0]   	), // input	 [31:0]
+		.op_1 	  (	op_1		  ), // input	 [31:0]
+		.fnc_code (	imm[5:0]	), // input	 [31:0]
 		.op_2 	  (	op_2  		), // output [31:0]
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
 		.zero 	  (	old_zero	), // output
-		.over 	  (	over		), // output
-		.res 	  (	old_res		)  // output [31:0]
+		.over 	  (	over	    ), // output
+		.res 	  (	old_res		  )  // output [31:0]
+    
 	);
 
 	forwarding_unit fw_unit ( rs, rt, write_register_ex, wb_MEM[1], rd_WB, wb_WB[1], forward_a, forward_b );
