@@ -91,7 +91,7 @@ module test_fetch;
 							.hold_if(hold_if), .flush_ex(flush_ex)
 						  );
 
-	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, wb_WB, write_register_mem, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
+	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, wb_WB[1], write_register_mem, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
 	MEM memory ( clk, wb_MEM, m_MEM, zero, res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem );
 
