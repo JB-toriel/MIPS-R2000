@@ -30,19 +30,21 @@ endmodule
 */
 
 
-module fetch_PC_REG ( clk, hold_pc, old_pc, new_pc );
+module fetch_PC_REG ( clk, rst, hold_pc, old_pc, new_pc );
 
 	//Inputs Declaration
-	input clk, hold_pc;
+	input clk, rst, hold_pc;
 	input [31:0] new_pc;
 
 	//Ouputs Declaration
 	output reg [31:0] old_pc;
 
 	//------Code starts Here------//
-	always_ff @(posedge clk)
+	always_ff @(posedge clk, posedge rst)
 		begin
-			if (hold_pc==0)
+			if (rst)
+				old_pc <= 0;
+			else if (hold_pc==0)
 				old_pc <= new_pc;
 		end
 
@@ -61,9 +63,7 @@ module fetch_MUX( inc_pc, pc_branch, br, except, new_pc );
 
 
 	//------Code starts Here------//
-	initial new_pc = 0;
-
-	always @( br or except or inc_pc )
+	always @( br, except, inc_pc, pc_branch )
       begin
 				case ({br,except})
 					0: new_pc = inc_pc + 4;
@@ -110,10 +110,10 @@ module fetch_ROM ( clk, pc/*, chip_en, read_en*/, inst );
 endmodule // End of Module fetch_ROM
 
 
-module IF( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
+module IF( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 	//Inputs Declaration
-	input clk, hold_pc, hold_if;
+	input clk, rst, hold_pc, hold_if;
 	input [31:0] pc_branch;
 	input br, except;
 
@@ -131,7 +131,8 @@ module IF( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 	fetch_PC_REG pc_REG(
 
       	.clk    	(	clk   	  ), // input
-      	.hold_pc    (	hold_pc   ), // input
+				.rst    (	rst   	), // input
+      	.hold_pc  (	hold_pc   ), // input
       	.old_pc 	(	pc    	  ), // input	[31:0]
       	.new_pc 	(	pc_4  	  )  // output	[31:0]
 
@@ -154,21 +155,19 @@ module IF( clk, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 		/*.chip_en(	chip_en	), // input
 		.read_en(	read_en		), // input*/
 		.inst	(	old_inst_out )  // output	[31:0]
-
+		
 	);
 
-
 	//------Code starts Here------//
-	always_ff @( posedge clk )
-		begin
-			if ( hold_if==0 )
-				begin
-					pc_out <= pc_4;
-					inst_out <= old_inst_out;
-				end
-			if (br) begin
-				inst_out <= 0;
-			end
-		end
+	always_ff @( posedge clk, posedge br )
+        begin
+          if ( br )
+            inst_out<=0;
+           else if ( hold_if==0 )
+                begin
+                    pc_out <= pc_4;
+                    inst_out <= old_inst_out;
+                end
+        end
 
 endmodule // End of Module IF
