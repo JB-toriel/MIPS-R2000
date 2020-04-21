@@ -79,7 +79,7 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 	//Outputs declaration
 	output [31:0] data_1, data_2;
 
-	//Variables DECLARATION
+	//Variables declaration
 	reg [31:0] registers [0:31];
 	integer i;
 
@@ -88,7 +88,7 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 
 	initial
 		begin
-			for(i = 0; i < 32; i = i + 1)
+			for( i = 0; i < 32; i = i + 1 )
 				registers[i]=i;
 		end
 
@@ -108,7 +108,8 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	input [31:0] inst_in; /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Utilise ton tous les bits ?@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 	//Outputs declaration
-	output reg exception, jump, flush_ex;
+	output flush_ex;
+	output reg exception, jump;
 	output reg [5:0] ex;
 	output reg [2:0] m;
 	output reg [1:0] wb;
@@ -265,14 +266,16 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 
 
 	//------Code starts Here------//
-	always @ ( inst_in ) begin
-		old_rs <= inst_in[25:21];
-		old_rt <= inst_in[20:16];
-		old_rd <= inst_in[15:11];
-		old_imm <= {16'h0000, inst_in[15:0]};
-	end
+	always @( inst_in ) 
+		begin
+			old_rs <= inst_in[25:21];
+			old_rt <= inst_in[20:16];
+			old_rd <= inst_in[15:11];
+			old_imm <= {16'h0000, inst_in[15:0]};
+		end
 
 	assign pc_branch = {pc[31:6], pc[5:0] + (old_imm[5:0] << 2)};
+
 	always @ ( * ) begin
 		case (old_ex)
 			6'b?00010: br <= (old_data_1 == old_data_2) & jump;
@@ -281,16 +284,18 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 		endcase
 	end
 
-	always_ff @ ( posedge clk ) begin
-		ex <= old_ex;
-		m <= old_m;
-		wb <= old_wb;
-		imm <= old_imm;
-		rs <= old_rs;
-		rt <= old_rt;
-		rd <= old_rd;
-		data_1 <= old_data_1;
-		data_2 <= old_data_2;
-	end
+
+	always_ff @( posedge clk ) 
+		begin
+			ex <= old_ex;
+			m <= old_m;
+			wb <= old_wb;
+			imm <= old_imm;
+			rs <= old_rs;
+			rt <= old_rt;
+			rd <= old_rd;
+			data_1 <= old_data_1;
+			data_2 <= old_data_2;
+		end
 
 endmodule // End of ID module
