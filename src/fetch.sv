@@ -131,7 +131,7 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
 
       	.clk    	(	clk   	  ), // input
       	.rst    	(	rst   	  ), // input
-      	.hold_pc  (	hold_pc   ), // input
+      	.hold_pc  	(	hold_pc   ), // input
       	.old_pc 	(	pc    	  ), // input	[31:0]
       	.new_pc 	(	pc_4  	  )  // output	[31:0]
 
@@ -139,11 +139,11 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
 
 	fetch_MUX mux(
 
-		.inc_pc   	(	pc			  ), // input	[31:0]
+		.inc_pc   	(	pc			), // input	[31:0]
 		.pc_branch  (	pc_branch	), // input	[31:0]
-		.br  		    (	br   		  ), // input
-		.except 	  (	except  	), // input
-		.new_pc 	  (	pc_4    	)  // output	[31:0]
+		.br  		(	br   		), // input
+		.except 	(	except  	), // input
+		.new_pc 	(	pc_4    	)  // output	[31:0]
 
 	);
 

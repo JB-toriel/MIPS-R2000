@@ -248,8 +248,8 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 
 	//Variables declaration
 	reg mux_ctrl_unit;
-	reg [4:0] old_rs, old_rt, old_rd;
-	reg [31:0] old_imm;
+	wire [4:0] old_rs, old_rt, old_rd;
+	wire [31:0] old_imm;
 
 	reg [5:0] old_ex;
 	reg [2:0] old_m;
@@ -266,13 +266,10 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 
 
 	//------Code starts Here------//
-	always @( inst_in ) 
-		begin
-			old_rs <= inst_in[25:21];
-			old_rt <= inst_in[20:16];
-			old_rd <= inst_in[15:11];
-			old_imm <= {16'h0000, inst_in[15:0]};
-		end
+		assign old_rs = inst_in[25:21];
+		assign old_rt = inst_in[20:16];
+		assign old_rd = inst_in[15:11];
+		assign old_imm = {16'h0000, inst_in[15:0]};
 
 	assign pc_branch = {pc[31:6], pc[5:0] + (old_imm[5:0] << 2)};
 
@@ -283,7 +280,6 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 			default: br <= 0;
 		endcase
 	end
-
 
 	always_ff @( posedge clk ) 
 		begin
