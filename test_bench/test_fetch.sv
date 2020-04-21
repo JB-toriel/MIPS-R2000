@@ -103,6 +103,9 @@ module test_fetch;
 	initial
 		begin
 			except = 0;
+			rst=1;
+			#5
+			rst=0;
 			clk = 1;
 			#500
 			$display( "End of simulation time is %d", $time );
