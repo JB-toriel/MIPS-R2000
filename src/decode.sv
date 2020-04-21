@@ -271,17 +271,17 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 		assign old_rd = inst_in[15:11];
 		assign old_imm = {16'h0000, inst_in[15:0]};
 
-	assign pc_branch = {pc[31:16], pc[15:0] + (inst_in[5:0] << 2)};
+	assign pc_branch = {pc[31:16], pc[15:0] + (inst_in[15:0] << 2)};
 
 	always @ ( * ) begin
-		case (old_ex)
-			6'b?00010: br <= (old_data_1 == old_data_2) & jump;
-			6'b?00100: br <= (old_data_1 != old_data_2) & jump;
+		case (old_ex[4:0])
+			5'b00010: br <= (old_data_1 == old_data_2) & jump;
+			5'b00100: br <= (old_data_1 != old_data_2) & jump;
 			default: br <= 0;
 		endcase
 	end
 
-	always_ff @( posedge clk ) 
+	always_ff @( posedge clk )
 		begin
 			ex <= old_ex;
 			m <= old_m;

@@ -65,12 +65,12 @@ module fetch_MUX ( inc_pc, pc_branch, br, except, new_pc );
 	//------Code starts Here------//
 	always @( br, except, inc_pc, pc_branch )
 		begin
-		case ( {br,except} )
-			0: new_pc = inc_pc + 4;
-			1: new_pc = 32'h8000_0180;
-			2: new_pc = pc_branch;
-			default: new_pc = inc_pc + 4;
-		endcase
+      case ( {br,except} )
+        0: new_pc = inc_pc + 4;
+				1: new_pc = 32'h8000_0180;
+				2: new_pc = pc_branch;
+				default: new_pc = inc_pc + 4;
+			endcase
 		end
 
 endmodule // End of Module fetch_MUX
@@ -122,8 +122,8 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
 
 	//Variables declaration
 	wire [31:0] pc;
-	reg [31:0] pc_4, old_inst_out_mux;
-	reg [31:0] old_inst_out;
+	reg [31:0] pc_4;
+	reg [31:0] old_inst_out, old_inst_out_mux;
 
 
 	//------Modules Instantiation------//
@@ -131,7 +131,7 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
 
       	.clk    	(	clk   	  ), // input
       	.rst    	(	rst   	  ), // input
-      	.hold_pc  	(	hold_pc   ), // input
+      	.hold_pc  (	hold_pc   ), // input
       	.old_pc 	(	pc    	  ), // input	[31:0]
       	.new_pc 	(	pc_4  	  )  // output	[31:0]
 
@@ -168,10 +168,10 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
 		end
 		
 	always_ff @( posedge clk )
-        begin
-			if ( hold_if==0 )
-                pc_out <= pc;
+    begin
+      if ( hold_if==0 )
 				inst_out <= old_inst_out_mux;
-        end
+      pc_out <= pc;
+    end
 
 endmodule // End of Module IF
