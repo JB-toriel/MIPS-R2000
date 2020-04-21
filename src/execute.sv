@@ -194,7 +194,8 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	input [31:0] imm, data_1, data_2;
 	input [5:0] ex;
 	input [2:0] m_EX;
-	input [1:0] wb_EX, wb_WB;
+	input wb_WB;
+	input [1:0] wb_EX;
 	input flush_ex;
   	input [31:0] write_data_reg;
 
@@ -244,7 +245,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
     
 	);
 
-	forwarding_unit fw_unit ( rs, rt, write_register_ex, wb_MEM[1], rd_WB, wb_WB[1], forward_a, forward_b );
+	forwarding_unit fw_unit ( rs, rt, write_register_ex, wb_MEM[1], rd_WB, wb_WB, forward_a, forward_b );
 
 
 	//------Code starts Here------//
