@@ -95,7 +95,7 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 	assign data_1 = registers[rs];
 	assign data_2 = registers[rt];
 
-	always @ ( * )
+	always @ ( reg_write, write_data_reg, write_register)
 		if (reg_write) registers[write_register] <= write_data_reg;
 
 endmodule // End of module decode_REG_MAPP module
@@ -105,7 +105,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 
 	//Inputs declaration
 	input mux_ctrl_unit, flush_id;
-	input [31:0] inst_in;
+	input [31:0] inst_in; /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Utilise ton tous les bits ?@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 	//Outputs declaration
 	output reg exception, jump, flush_ex;
@@ -119,19 +119,15 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	parameter ADDIU = 6'b001001;
 	parameter ANDI = 6'b001100;
 	parameter BEQ = 6'b000100;
-	parameter BGEZ = 6'b000001;
-	parameter XOR = 6'b0100;
-	parameter NOR = 6'b0101;
-	parameter SLT = 6'b0110;
-	parameter MUL = 6'b0111;
-	parameter DIV = 6'b1000;
-	parameter SRA = 6'b1001;
+	parameter BNE = 6'b000101;
+	parameter J = 6'b000010;
+
 	//parameter SLL = 4'b1010;
 
 	//------Code starts Here------//
 	assign flush_ex = flush_id;
 
-	always @ ( mux_ctrl_unit, inst_in ) begin
+	always @ ( mux_ctrl_unit, inst_in, flush_id ) begin
 		if ( mux_ctrl_unit || flush_id )
 			begin
 				ex <= 6'b000000;
@@ -176,17 +172,25 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 			end
 			BEQ:
 			begin
-				ex <= 6'bX00010;
+				ex <= 6'b?00010;
 				m <= 3'b100;
-				wb <= 2'b0X;
+				wb <= 2'b0?;
 				jump <= 1;
 				exception <= 0;
 			end
-			BGEZ:
+			BNE:
 			begin
-				ex <= 6'bX00100;
+				ex <= 6'b?00100;
 				m <= 3'b100;
-				wb <= 2'b0X;
+				wb <= 2'b0?;
+				jump <= 1;
+				exception <= 0;
+			end
+			J:
+			begin
+				ex <= 6'b000000;
+				m <= 3'b000;
+				wb <= 2'b00;
 				jump <= 1;
 				exception <= 0;
 			end
@@ -200,9 +204,9 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 			end
 			6'b101011:
 			begin
-				ex <= 6'bX00001;
+				ex <= 6'b?00001;
 				m <= 3'b001;
-				wb <= 2'b0X;
+				wb <= 2'b0?;
 				jump <= 0;
 				exception <= 0;
 			end
@@ -271,8 +275,8 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 	assign pc_branch = {pc[31:6], pc[5:0] + (old_imm[5:0] << 2)};
 	always @ ( * ) begin
 		case (old_ex)
-			6'bX00010: br <= (old_data_1 == old_data_2) & jump;
-			6'bX00100: br <= (old_data_1 <= 5'b10000) & jump;
+			6'b?00010: br <= (old_data_1 == old_data_2) & jump;
+			6'b?00100: br <= (old_data_1 != old_data_2) & jump;
 			default: br <= 0;
 		endcase
 	end
