@@ -52,15 +52,9 @@ module MEM ( clk, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb,
 
 
 	//------Code starts Here------//
-	initial
-		begin
-			for(i = 0; i < 32; i = i + 1)
-				memory[i]=i;
-		end
-
 	assign old_address_WB = address_MEM;
 
-	always @ ( m, address_MEM, write_data_mem )
+	always_comb
 		begin
 			if (m[1]) old_read_data = memory[address_MEM];
 			if (m[0]) memory[address_MEM] = write_data_mem;
