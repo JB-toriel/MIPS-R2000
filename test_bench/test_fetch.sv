@@ -23,15 +23,10 @@ TACHES ET FONCTIONS
 endmodule
 */
 
-`include "decode.sv"
-`include "execute.sv"
-`include "memory.sv"
-`include "writeback.sv"
-`include "design.sv"
 
 module test_fetch;
 
-	reg clk, rst;
+		reg clk, rst;
 
 	//------For fetch stage------//
 
@@ -53,6 +48,8 @@ module test_fetch;
 		wire [4:0] rs, rt, rd;
 		wire [31:0] imm, pc_branch;
 		reg [31:0] data_1, data_2;
+		// ROM
+  		reg [31:0] rom_code [0:50];
 
 	//------For control unit------//
 
@@ -72,16 +69,18 @@ module test_fetch;
 		reg [4:0] write_register_ex;
 
 	//------For memory stage------//
-
+		
 		reg [4:0] write_register_mem;
 		reg [1:0] wb_WB;
 		reg [31:0] address_WB, read_data;
+		// RAM
+  		reg [31:0] ram [31:0];
+ 		reg [31:0] ram_data;
+  		reg [31:0] ram_adr;
+  
+	//------For WriteBack stage------//	
 
-	//------For WriteBack stage------//
-	
-	
-	//------ROM------//
-	reg [31:0] rom_code [0:50];
+  	
 
 	// Clock definition
 	parameter CLK_PERIOD = 10;
@@ -100,11 +99,15 @@ module test_fetch;
 
 	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, wb_WB[1], write_register_mem, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
-	MEM memory ( clk, ram, wb_MEM, m_MEM[1:0], res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem );
+	MEM memory ( clk, ram, wb_MEM, m_MEM[1:0], res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem, ram_data, ram_adr );
 
 	WB writeback ( wb_WB, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write );
 
 
+  always @(m[0], ram_data, ram_adr) begin
+    if(m[0])
+    	ram[ram_adr] <= ram_data;
+  end
 
 	// Test bench starts Here
 	initial
