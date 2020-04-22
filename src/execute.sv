@@ -44,18 +44,19 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 
 
 	//------Code starts Here------//
-	always @( rs_id, rt_id, rd_ex, rd_wb,reg_write_ex, reg_write_wb )
+	always_comb
 		begin
-			fw_a<=0;
-			fw_b<=0;
+			fw_a = 0;
+			fw_b = 0;
+			
 			if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rs_id) )
-				fw_a<=2;
+				fw_a = 2;
 			if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rs_id && rd_wb==rs_id )
-				fw_a<=1;
+				fw_a = 1;
 			if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rt_id) )
-				fw_b<=2;
+				fw_b = 2;
 			if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rt_id && rd_wb==rt_id )
-				fw_b<=1;
+				fw_b = 1;
 		end
 
 	assign forward_a = fw_a;
@@ -102,32 +103,33 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter SRA = 4'b1001;
   //parameter SLL = 4'b1010;
 
+
 	//------Code starts Here------//
-	always @( ALU_op, fnc_code )
+	always_comb
 		begin
         	case( ALU_op )
-				0: ALU_ctrl <= ADD;
-				1: ALU_ctrl <= SUB;
+				0: ALU_ctrl = ADD;
+				1: ALU_ctrl = SUB;
 				2: begin
 						case(fnc_code)
 							/*0: ALU_ctrl <= SLL; // Shift left logical
 							2: ALU_ctrl <= SRL; // rigth*/
-							3: ALU_ctrl <= SRA; // Arithmetic
-							32: ALU_ctrl <= ADD; // ADD
-							6'b100001: ALU_ctrl <= ADD; // ADDU
-							34: ALU_ctrl <= SUB; // SUB
-							36: ALU_ctrl <= AND; // AND
-							37: ALU_ctrl <= OR;  // OR
-							38: ALU_ctrl <= XOR;
-							39: ALU_ctrl <= NOR; // NOR
-							42: ALU_ctrl <= SLT; // Set on less than
-							6'h18: ALU_ctrl <= MUL;
-							6'h1a: ALU_ctrl <= DIV;
-							default: ALU_ctrl <= 4'b1111;
+							3: ALU_ctrl = SRA; // Arithmetic
+							32: ALU_ctrl = ADD; // ADD
+							6'b100001: ALU_ctrl = ADD; // ADDU
+							34: ALU_ctrl = SUB; // SUB
+							36: ALU_ctrl = AND; // AND
+							37: ALU_ctrl = OR;  // OR
+							38: ALU_ctrl = XOR;
+							39: ALU_ctrl = NOR; // NOR
+							42: ALU_ctrl = SLT; // Set on less than
+							6'h18: ALU_ctrl = MUL;
+							6'h1a: ALU_ctrl = DIV;
+							default: ALU_ctrl = 4'b1111;
 						endcase
 					end
-				3: ALU_ctrl <= AND;
-				default: ALU_ctrl <= 4'b1111;
+				3: ALU_ctrl = AND;
+				default: ALU_ctrl = 4'b1111;
 			endcase
 		end
 
@@ -165,21 +167,21 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	assign zero = (res==0); // zero flag = 0 if the result is 0
 	assign over = ((fnc_code == 32) & (op_1 > 32'hFFFF_FFFF - op_2)) || ((fnc_code == 34) & (op_1 < op_2));
 
-	always @( ALU_ctrl, op_1, op_2 )
+	always_comb
 		begin
 			case(ALU_ctrl)
-				AND: res <=   op_1 & op_2; 	   	  	
-				OR:  res <=   op_1 | op_2; 	  	  	
-				ADD: res <=   op_1 + op_2; 		  	
-				SUB: res <=   op_1 - op_2; 		 	
-				XOR: res <= 	 op_1 ^ op_2;
-				NOR: res <= ~(op_1 | op_2); 	   	
-				SLT: res <=   op_1 < op_2 ? 1 : 0;  // Set on less than
-				MUL: res <=	 op_1 * op_2;
-				DIV: res <= 	 op_1 / op_2;
-				SRA: res <=	 op_2 >>> op_1;
-           //SLL: res <=	 op_2 << op_1;
-			   default: res <= 0;
+				AND: res =   	op_1 & op_2; 	   	  	
+				OR:  res =   	op_1 | op_2; 	  	  	
+				ADD: res =   	op_1 + op_2; 		  	
+				SUB: res =   	op_1 - op_2; 		 	
+				XOR: res = 		op_1 ^ op_2;
+				NOR: res =    ~(op_1 | op_2); 	   	
+				SLT: res =   	op_1 < op_2 ? 1 : 0;  // Set on less than
+				MUL: res =	 	op_1 * op_2;
+				DIV: res = 		op_1 / op_2;
+				SRA: res =	 	op_2 >>> op_1;
+			  //SLL: res <=	 op_2 << op_1;
+			   default: res = 0;
 			endcase
 		end
 
