@@ -58,9 +58,10 @@ module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_p
 endmodule // End of module decode_HAZARD_UNIT
 
 
-module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data_1, data_2 );
+module decode_REG_MAPP ( clk, rst, rs, rt, write_register, write_data_reg, reg_write, data_1, data_2 );
 
 	//Inputs declaration
+	input clk, rst;
 	input [4:0] rs, rt;
 	input reg_write;
 	input [4:0] write_register;
@@ -70,23 +71,27 @@ module decode_REG_MAPP ( rs, rt, write_register, write_data_reg, reg_write, data
 	output [31:0] data_1, data_2;
 
 	//Variables declaration
-	reg [31:0] registers [0:31];
+	reg [31:0] reg_file [0:31];
 	integer i;
 
 
 	//------Code starts Here------//
 
-	initial
-		begin
-			for( i = 0; i < 32; i = i + 1 )
-				registers[i]=i;
+	assign data_1 = reg_file[rs];//Read process
+	assign data_2 = reg_file[rt];
+
+	always_ff @ (posedge clk, posedge rst) begin //Write process
+		if (rst) begin
+			for (int i = 0; i < 31; i++) begin
+				reg_file[i] = 0;
+			end
 		end
-
-	assign data_1 = registers[rs];
-	assign data_2 = registers[rt];
-
-	always @ ( reg_write, write_data_reg, write_register)
-		if (reg_write) registers[write_register] <= write_data_reg;
+		else if (~rst) begin
+			if (reg_write) begin
+				reg_file[write_register] <= write_data_reg;
+			end
+		end
+	end
 
 endmodule // End of module decode_REG_MAPP module
 
@@ -129,7 +134,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					exception = 0;
 				end
 			else begin
-			case (inst_in[31:26])
+			casex (inst_in[31:26])
 				R:
 				begin
 					ex = 6'b100100;
@@ -164,17 +169,17 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				end
 				BEQ:
 				begin
-					ex = 6'b?00010;
+					ex = 6'bX00010;
 					m = 3'b100;
-					wb = 2'b0?;
+					wb = 2'b0X;
 					jump = 1;
 					exception = 0;
 				end
 				BNE:
 				begin
-					ex = 6'b?00100;
+					ex = 6'bX00100;
 					m = 3'b100;
-					wb = 2'b0?;
+					wb = 2'b0X;
 					jump = 1;
 					exception = 0;
 				end
@@ -196,9 +201,9 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				end
 				6'b101011:
 				begin
-					ex = 6'b?00001;
+					ex = 6'bX00001;
 					m = 3'b001;
-					wb = 2'b0?;
+					wb = 2'b0X;
 					jump = 0;
 					exception = 0;
 				end
@@ -217,10 +222,10 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 endmodule // End of module decode_CONTROL_UNIT
 
 
-module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, flush_id, wb, m, ex, br, pc_branch, hold_pc, hold_if, flush_ex/*, ...*/ );
+module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, flush_id, wb, m, ex, br, pc_branch, hold_pc, hold_if, flush_ex/*, ...*/ );
 
 	//Inputs declaration
-	input clk;
+	input clk, rst;
 	input [31:0] inst_in, write_data_reg, pc;
 	input reg_write, flush_id;
 	input [4:0] write_register;
@@ -249,7 +254,7 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 
 
 	//------Modules Instantiation------//
-	decode_REG_MAPP reg_MAPP ( old_rs, old_rt, write_register, write_data_reg, reg_write, old_data_1, old_data_2 );
+	decode_REG_MAPP reg_MAPP ( clk, rst, old_rs, old_rt, write_register, write_data_reg, reg_write, old_data_1, old_data_2 );
 
 	decode_CONTROL_UNIT control_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, flush_ex, old_wb, old_m, old_ex );
 
