@@ -30,7 +30,7 @@ endmodule
 */
 
 
-module MEM ( clk, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb, read_data, address_WB, write_register_mem/*, ...*/ );
+module MEM ( clk, ram, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb, read_data, address_WB, write_register_mem/*, ...*/ );
 
 	//Inputs declaration
 	input clk;
@@ -38,6 +38,7 @@ module MEM ( clk, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb,
 	input [1:0] wb_MEM;
 	input [4:0] write_register_ex;
 	input [31:0] address_MEM, write_data_mem;
+	input reg [31:0] ram [0:31];
 
 	//Outputs declaration
 	output reg [31:0] read_data, address_WB;
@@ -48,7 +49,6 @@ module MEM ( clk, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb,
 	integer i;
 	wire [31:0] old_address_WB;
 	reg [31:0] old_read_data;
-	reg [31:0] memory [0:31];
 
 
 	//------Code starts Here------//
@@ -56,8 +56,8 @@ module MEM ( clk, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb,
 
 	always_comb
 		begin
-			if (m[1]) old_read_data = memory[address_MEM];
-			if (m[0]) memory[address_MEM] = write_data_mem;
+			if (m[1]) old_read_data = ram[address_MEM];
+			if (m[0]) ram[address_MEM] = write_data_mem;
 		end
 
 	always_ff @ ( posedge clk )
