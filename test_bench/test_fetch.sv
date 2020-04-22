@@ -23,6 +23,11 @@ TACHES ET FONCTIONS
 endmodule
 */
 
+`include "decode.sv"
+`include "execute.sv"
+`include "memory.sv"
+`include "writeback.sv"
+`include "design.sv"
 
 module test_fetch;
 
@@ -73,7 +78,10 @@ module test_fetch;
 		reg [31:0] address_WB, read_data;
 
 	//------For WriteBack stage------//
-
+	
+	
+	//------ROM------//
+	reg [31:0] rom_code [0:50];
 
 	// Clock definition
 	parameter CLK_PERIOD = 10;
@@ -81,7 +89,7 @@ module test_fetch;
 
 
 	// Instantiation of design under test
-	IF instruction_fetch ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
+  IF instruction_fetch ( clk, rst, rom_code, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 	ID instruction_decode ( .clk(clk), .rst(rst), .pc(pc_out), .inst_in (inst_out), .write_register(write_register),
 							.write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
@@ -101,6 +109,7 @@ module test_fetch;
 	// Test bench starts Here
 	initial
 		begin
+			$readmemh( "memory.list", rom_code );
 			$readmemh( "ram.txt", ram );
 			except = 0;
 			rst = 1;
