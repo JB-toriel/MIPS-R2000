@@ -83,13 +83,11 @@ module decode_REG_MAPP ( clk, rst, rs, rt, write_register, write_data_reg, reg_w
 	always_ff @ (posedge clk, posedge rst) begin //Write process
 		if (rst) begin
 			for (int i = 0; i < 31; i++) begin
-				reg_file[i] = 0;
+				reg_file[i] <= 0;
 			end
 		end
-		else if (~rst) begin
-			if (reg_write) begin
+		else if (reg_write) begin
 				reg_file[write_register] <= write_data_reg;
-			end
 		end
 	end
 
