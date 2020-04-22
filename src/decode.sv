@@ -37,31 +37,21 @@ module decode_HAZARD_UNIT ( rt_id, rs_id, rt_ex, mem_Read, mux_ctrl_unit, hold_p
 	input mem_Read;
 
 	//Outputs declaration
-	output reg  mux_ctrl_unit;
+	output reg mux_ctrl_unit;
 	output reg hold_pc, hold_if;
 
-
 	//------Code starts Here------//
-  	initial
-    	begin
-        	hold_pc=0;
-    		hold_if=0;
-        end
-
-	always @*
+	always_comb
 		begin
+			hold_pc = 0;
+			hold_if = 0;
+			mux_ctrl_unit = 0;
+
 			if ( mem_Read && (rt_ex==rs_id || rt_ex==rt_id) )
 				begin
-					hold_pc<=1;
-					hold_if<=1;
-					mux_ctrl_unit<=1;
-				end
-
-			else
-				begin
-					hold_pc<=0;
-					hold_if<=0;
-					mux_ctrl_unit<=0;
+					hold_pc = 1;
+					hold_if = 1;
+					mux_ctrl_unit = 1;
 				end
 		end
 
@@ -128,98 +118,99 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	//------Code starts Here------//
 	assign flush_ex = flush_id;
 
-	always @ ( mux_ctrl_unit, inst_in, flush_id ) begin
-		if ( mux_ctrl_unit || flush_id )
-			begin
-				ex <= 6'b000000;
-				m <= 3'b000;
-				wb <= 2'b00;
-				jump <= 0;
-				exception <= 0;
-			end
-		else begin
-		case (inst_in[31:26])
-			R:
-			begin
-				ex <= 6'b100100;
-				m <= 3'b000;
-				wb <= 2'b10;
-				jump <= 0;
-				exception <= 0;
-			end
-			ADDI:
-			begin
-				ex <= 6'b000001;
-				m <= 3'b000;
-				wb <= 2'b10;
-				jump <= 0;
-				exception <= 0;
-			end
-			ADDIU:
-			begin
-				ex <= 6'b000001;
-				m <= 3'b000;
-				wb <= 2'b10;
-				jump <= 0;
-				exception <= 0;
-			end
-			ANDI:
-			begin
-				ex <= 6'b000111;
-				m <= 3'b000;
-				wb <= 2'b10;
-				jump <= 0;
-				exception <= 0;
-			end
-			BEQ:
-			begin
-				ex <= 6'b?00010;
-				m <= 3'b100;
-				wb <= 2'b0?;
-				jump <= 1;
-				exception <= 0;
-			end
-			BNE:
-			begin
-				ex <= 6'b?00100;
-				m <= 3'b100;
-				wb <= 2'b0?;
-				jump <= 1;
-				exception <= 0;
-			end
-			J:
-			begin
-				ex <= 6'b000000;
-				m <= 3'b000;
-				wb <= 2'b00;
-				jump <= 1;
-				exception <= 0;
-			end
-			6'b100011:
-			begin
-				ex <= 6'b000001;
-				m <= 3'b010;
-				wb <= 2'b11;
-				jump <= 0;
-				exception <= 0;
-			end
-			6'b101011:
-			begin
-				ex <= 6'b?00001;
-				m <= 3'b001;
-				wb <= 2'b0?;
-				jump <= 0;
-				exception <= 0;
-			end
-			default:
-			begin
-				ex <= 6'b000000;
-				m <= 4'b000;
-				wb <= 2'b00;
-				jump <= 0;
-				exception <= 1;
-			end
-		endcase
+	always_comb
+		begin
+			if ( mux_ctrl_unit || flush_id )
+				begin
+					ex = 6'b000000;
+					m = 3'b000;
+					wb = 2'b00;
+					jump = 0;
+					exception = 0;
+				end
+			else begin
+			case (inst_in[31:26])
+				R:
+				begin
+					ex = 6'b100100;
+					m = 3'b000;
+					wb = 2'b10;
+					jump = 0;
+					exception = 0;
+				end
+				ADDI:
+				begin
+					ex = 6'b000001;
+					m = 3'b000;
+					wb = 2'b10;
+					jump = 0;
+					exception = 0;
+				end
+				ADDIU:
+				begin
+					ex = 6'b000001;
+					m = 3'b000;
+					wb = 2'b10;
+					jump = 0;
+					exception = 0;
+				end
+				ANDI:
+				begin
+					ex = 6'b000111;
+					m = 3'b000;
+					wb = 2'b10;
+					jump = 0;
+					exception = 0;
+				end
+				BEQ:
+				begin
+					ex = 6'b?00010;
+					m = 3'b100;
+					wb = 2'b0?;
+					jump = 1;
+					exception = 0;
+				end
+				BNE:
+				begin
+					ex = 6'b?00100;
+					m = 3'b100;
+					wb = 2'b0?;
+					jump = 1;
+					exception = 0;
+				end
+				J:
+				begin
+					ex = 6'b000000;
+					m = 3'b000;
+					wb = 2'b00;
+					jump = 1;
+					exception = 0;
+				end
+				6'b100011:
+				begin
+					ex = 6'b000001;
+					m = 3'b010;
+					wb = 2'b11;
+					jump = 0;
+					exception = 0;
+				end
+				6'b101011:
+				begin
+					ex = 6'b?00001;
+					m = 3'b001;
+					wb = 2'b0?;
+					jump = 0;
+					exception = 0;
+				end
+				default:
+				begin
+					ex = 6'b000000;
+					m = 4'b000;
+					wb = 2'b00;
+					jump = 0;
+					exception = 1;
+				end
+			endcase
 		end
 	end
 
@@ -273,13 +264,14 @@ module ID ( clk, pc, inst_in, write_register, write_data_reg, reg_write, excepti
 
 	assign pc_branch = {pc[31:16], pc[15:0] + (inst_in[15:0] << 2)};
 
-	always @ ( * ) begin
-		case (old_ex[4:0])
-			5'b00010: br <= (old_data_1 == old_data_2) & jump;
-			5'b00100: br <= (old_data_1 != old_data_2) & jump;
-			default: br <= 0;
-		endcase
-	end
+	always_comb
+		begin
+			case (old_ex[4:0])
+				5'b00010: br = (old_data_1 == old_data_2) & jump;
+				5'b00100: br = (old_data_1 != old_data_2) & jump;
+				default: br = 0;
+			endcase
+		end
 
 	always_ff @( posedge clk )
 		begin
