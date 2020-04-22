@@ -43,7 +43,7 @@ module fetch_PC_REG ( clk, rst, hold_pc, old_pc, new_pc );
 	always_ff @( posedge clk, posedge rst )
 		begin
 			if (rst)
-				old_pc<=0;
+				old_pc <= 0;
 			else if ( hold_pc==0 )
 				old_pc <= new_pc;
 		end
@@ -63,10 +63,10 @@ module fetch_MUX ( inc_pc, pc_branch, br, except, new_pc );
 
 
 	//------Code starts Here------//
-	always @( br, except, inc_pc, pc_branch )
+	always_comb
 		begin
-      case ( {br,except} )
-        0: new_pc = inc_pc + 4;
+			case ( {br,except} )
+				0: new_pc = inc_pc + 4;
 				1: new_pc = 32'h8000_0180;
 				2: new_pc = pc_branch;
 				default: new_pc = inc_pc + 4;
@@ -158,20 +158,21 @@ module IF ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out 
 	
 	
 	//------Code starts Here------//
-	always @( * )
+	always_comb
 		begin
 			case( br )
-				1: old_inst_out_mux <= 0;
-				0: old_inst_out_mux <= old_inst_out;
-				default: old_inst_out_mux <= old_inst_out;
+				1: old_inst_out_mux = 0;
+				0: old_inst_out_mux = old_inst_out;
+				default: old_inst_out_mux = old_inst_out;
             endcase
 		end
 		
 	always_ff @( posedge clk )
-    begin
-      if ( hold_if==0 )
+		begin
+			if ( hold_if==0 )
 				inst_out <= old_inst_out_mux;
-      pc_out <= pc;
-    end
+					
+			pc_out <= pc;
+		end
 
 endmodule // End of Module IF
