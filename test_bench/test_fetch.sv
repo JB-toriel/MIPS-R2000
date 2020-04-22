@@ -23,11 +23,6 @@ TACHES ET FONCTIONS
 endmodule
 */
 
-`include "decode.sv"
-`include "execute.sv"
-`include "memory.sv"
-`include "writeback.sv"
-`include "design.sv"
 
 module test_fetch;
 
