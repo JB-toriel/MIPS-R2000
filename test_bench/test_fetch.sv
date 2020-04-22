@@ -26,12 +26,12 @@ endmodule
 
 module test_fetch;
 
-	reg clk;
+	reg clk, rst;
 
 	//------For fetch stage------//
 
 		// for pc registers
-		reg hold_pc, hold_if, rst;
+		reg hold_pc, hold_if;
 		reg [31:0] pc_out;
 		reg [31:0] inst_out;
 
@@ -83,7 +83,7 @@ module test_fetch;
 	// Instantiation of design under test
 	IF instruction_fetch ( clk, rst, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
-	ID instruction_decode ( .clk(clk), .pc(pc_out), .inst_in (inst_out), .write_register(write_register),
+	ID instruction_decode ( .clk(clk), .rst(rst), .pc(pc_out), .inst_in (inst_out), .write_register(write_register),
 							.write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
 							.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2),
 							.flush_id(over), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch), .br(br), .hold_pc(hold_pc),
@@ -92,7 +92,7 @@ module test_fetch;
 
 	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, wb_WB[1], write_register_mem, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
-	MEM memory ( clk, wb_MEM, m_MEM[1:0], res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem );
+	MEM memory ( clk, ram, wb_MEM, m_MEM[1:0], res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem );
 
 	WB writeback ( wb_WB, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write );
 
@@ -101,6 +101,7 @@ module test_fetch;
 	// Test bench starts Here
 	initial
 		begin
+			$readmemh( "ram.txt", ram );
 			except = 0;
 			rst = 1;
 			#5
