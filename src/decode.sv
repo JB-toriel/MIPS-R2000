@@ -129,7 +129,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					exception = 0;
 				end
 			else begin
-			case (inst_in[31:26])
+			casex (inst_in[31:26])
 				R:
 				begin
 					ex = 6'b100100;
@@ -164,17 +164,17 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				end
 				BEQ:
 				begin
-					ex = 6'b?00010;
+					ex = 6'bX00010;
 					m = 3'b100;
-					wb = 2'b0?;
+					wb = 2'b0X;
 					jump = 1;
 					exception = 0;
 				end
 				BNE:
 				begin
-					ex = 6'b?00100;
+					ex = 6'bX00100;
 					m = 3'b100;
-					wb = 2'b0?;
+					wb = 2'b0X;
 					jump = 1;
 					exception = 0;
 				end
@@ -196,9 +196,9 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				end
 				6'b101011:
 				begin
-					ex = 6'b?00001;
+					ex = 6'bX00001;
 					m = 3'b001;
-					wb = 2'b0?;
+					wb = 2'b0X;
 					jump = 0;
 					exception = 0;
 				end
