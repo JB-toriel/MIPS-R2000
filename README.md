@@ -17,14 +17,14 @@ Design of a 5 stages pipeline MIPS R2000.
 
 ## Directories:
 
-##### Modules:
+#### Modules:
 - **./src/** : Contains all the modules of stages
     + **IF/ID satge** ----------->  *./fetch.sv/*
     + **ID/EX stage** ----------> *./decode.sv/* 
     + **EX/MEM stage** ------> *./execute.sv/* 
     + **MEM/WB stage** ------> *./memory.sv/* 
     + **WB** ----------------------->./writeback.sv/
- ##### Test Bench:
+ #### Test Bench:
  * **./test_bench/** : Contains all the test benches
     + ./test_bench.sv/
  
