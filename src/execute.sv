@@ -38,7 +38,7 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 
 	//Outputs declaration
 	output [1:0] forward_a, forward_b;
-	
+
 	//Variables declaration
 	reg [1:0] fw_a, fw_b;
 
@@ -48,7 +48,7 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 		begin
 			fw_a = 0;
 			fw_b = 0;
-			
+
 			if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rs_id) )
 				fw_a = 2;
 			if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rs_id && rd_wb==rs_id )
@@ -170,12 +170,12 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	always_comb
 		begin
 			case(ALU_ctrl)
-				AND: res =   	op_1 & op_2; 	   	  	
-				OR:  res =   	op_1 | op_2; 	  	  	
-				ADD: res =   	op_1 + op_2; 		  	
-				SUB: res =   	op_1 - op_2; 		 	
+				AND: res =   	op_1 & op_2;
+				OR:  res =   	op_1 | op_2;
+				ADD: res =   	op_1 + op_2;
+				SUB: res =   	op_1 - op_2;
 				XOR: res = 		op_1 ^ op_2;
-				NOR: res =    ~(op_1 | op_2); 	   	
+				NOR: res =    ~(op_1 | op_2);
 				SLT: res =   	op_1 < op_2 ? 1 : 0;  // Set on less than
 				MUL: res =	 	op_1 * op_2;
 				DIV: res = 		op_1 / op_2;
@@ -220,13 +220,13 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	wire [31:0] op_1, op_2, op_21;
 	wire [3:0] m_EX_mux;
 	wire [2:0] wb_EX_mux;
-	
+
 	reg [31:0] old_res;
 	reg [4:0] old_write_register_ex;
 
 
 	//------Modules Instantiation------//
-	execute_MUX_RTRD mux_RTRD ( rt, rd, ex[5], old_write_register_ex);
+	execute_MUX_RTRD mux_RTRD ( rt, rd, ex[5], old_write_register_ex );
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
@@ -243,8 +243,8 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
 		.zero 	  (	old_zero	), // output
 		.over 	  (	over	    ), // output
-		.res 	  (	old_res		  )  // output [31:0]
-    
+		.res 	  	(	old_res		)  // output [31:0]
+
 	);
 
 	forwarding_unit fw_unit ( rs, rt, write_register_ex, wb_MEM[1], rd_WB, wb_WB, forward_a, forward_b );
@@ -262,7 +262,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	assign m_EX_mux  = flush_ex ? 0 : m_EX;
 	assign wb_EX_mux = flush_ex ? 0 : wb_EX ;
 
-	always_ff @( posedge clk ) 
+	always_ff @( posedge clk )
 		begin
 			m_MEM <= m_EX_mux;
 			wb_MEM <= wb_EX_mux;
