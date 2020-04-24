@@ -76,29 +76,29 @@ module fetch_MUX ( inc_pc, pc_branch, br, except, new_pc );
 endmodule // End of Module fetch_MUX
 
 
-module fetch_ROM ( pc, rom_code, inst );
+module fetch_ROM ( pc, rom, inst );
 
 	//Inputs Declaration
 	input [31:0] pc;
-	input reg [31:0] rom_code [0:50];
+	input [31:0] rom [0:50];
 
 	//Ouputs Declaration
 	output [31:0] inst;
 
 
 	//------Code starts Here------//
-	assign inst = rom_code[pc/4];
+	assign inst = rom[pc/4];
 
 endmodule // End of Module fetch_ROM
 
 
-module IF ( clk, rst, rom_code, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
+module IF ( clk, rst, rom, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 	//Inputs Declaration
 	input clk, rst, hold_pc, hold_if;
 	input [31:0] pc_branch;
 	input br, except;
-	input reg [31:0] rom_code [0:50];
+	input [31:0] rom [0:50];
 
 	//Outputs Declaration
 	output reg [31:0] pc_out;
@@ -123,39 +123,38 @@ module IF ( clk, rst, rom_code, hold_pc, hold_if, pc_branch, br, except, pc_out,
 
 	fetch_MUX mux(
 
-		.inc_pc   	(	pc			), // input	[31:0]
+		.inc_pc   	(	pc				), // input	[31:0]
 		.pc_branch  (	pc_branch	), // input	[31:0]
-		.br  		(	br   		), // input
-		.except 	(	except  	), // input
-		.new_pc 	(	pc_4    	)  // output	[31:0]
+		.br  				(	br   			), // input
+		.except 		(	except  	), // input
+		.new_pc 		(	pc_4    	)  // output	[31:0]
 
 	);
 
 	fetch_ROM rom(
 
-		.pc			(	pc				), // input	[31:0]
-		.rom_code	(	rom_code		),
-		.inst		(	old_inst_out 	)  // output	[31:0]
+		.pc				(	pc						), // input	[31:0]
+		.rom	(	rom			),
+		.inst			(	old_inst_out 	)  // output	[31:0]
 
 	);
-	
-	
+
+
 	//------Code starts Here------//
 	always_comb
 		begin
 			case( br )
-				1: old_inst_out_mux = 0;
-				0: old_inst_out_mux = old_inst_out;
-				default: old_inst_out_mux = old_inst_out;
-            endcase
+					1: old_inst_out_mux = 0;
+					0: old_inst_out_mux = old_inst_out;
+					default: old_inst_out_mux = old_inst_out;
+      endcase
 		end
-		
+
 	always_ff @( posedge clk )
 		begin
+			pc_out <= pc;
 			if ( hold_if==0 )
 				inst_out <= old_inst_out_mux;
-					
-			pc_out <= pc;
 		end
 
 endmodule // End of Module IF
