@@ -79,7 +79,7 @@ module decode_REG_MAPP ( clk, rst, rs, rt, write_register, write_data_reg, reg_w
 	assign data_1 = reg_file[rs];//Read process
 	assign data_2 = reg_file[rt];
 
-	always_ff @( posedge clk, posedge rst ) //Write process
+	always_ff @( negedge clk, posedge rst ) //Write process
 		begin
 			if ( rst )
 				begin
