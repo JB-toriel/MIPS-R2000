@@ -24,7 +24,7 @@ endmodule
 */
 
 
-module test_fetch;
+module test_bench;
 
 		reg clk, rst;
 
