@@ -100,8 +100,9 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter SLT = 4'b0110;
 	parameter MUL = 4'b0111;
 	parameter DIV = 4'b1000;
-	parameter SRA = 4'b1001;
-  //parameter SLL = 4'b1010;
+	parameter SLL = 4'b1010;
+	parameter SRL = 4'b1011;
+	parameter LUI = 4'b1100;
 
 
 	//------Code starts Here------//
@@ -112,9 +113,9 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 				1: ALU_ctrl = SUB;
 				2: begin
 						case(fnc_code)
-							/*0: ALU_ctrl <= SLL; // Shift left logical
-							2: ALU_ctrl <= SRL; // rigth*/
-							3: ALU_ctrl = SRA; // Arithmetic
+							0: ALU_ctrl <= SLL; // Shift left logical
+							2: ALU_ctrl <= SRL; // rigth
+							//3: ALU_ctrl = SRA; // Arithmetic
 							32: ALU_ctrl = ADD; // ADD
 							6'b100001: ALU_ctrl = ADD; // ADDU
 							34: ALU_ctrl = SUB; // SUB
@@ -129,6 +130,9 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 						endcase
 					end
 				3: ALU_ctrl = AND;
+				4: ALU_ctrl = OR;
+				5: ALU_ctrl = SLT;
+				6: ALU_ctrl = LUI;
 				default: ALU_ctrl = 4'b1111;
 			endcase
 		end
@@ -157,10 +161,12 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	parameter SLT = 4'b0110;
 	parameter MUL = 4'b0111;
 	parameter DIV = 4'b1000;
-	parameter SRA = 4'b1001;
-	//parameter SLL = 4'b1010;
+	parameter SRL = 4'b1011;
+	parameter SLL = 4'b1010;
 	//parameter JR = 4'b1010;
 	//parameter JALR = 4'b1100;
+	parameter LUI = 4'b1100;
+
 
 
 	//------Code starts Here------//
@@ -179,8 +185,10 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 				SLT: res =   	op_1 < op_2 ? 1 : 0;  // Set on less than
 				MUL: res =	 	op_1 * op_2;
 				DIV: res = 		op_1 / op_2;
-				SRA: res =	 	op_2 >>> op_1;
-			  //SLL: res <=	 op_2 << op_1;
+				SLL: res =	  op_2 << op_1;
+				//SRA: res =	 	op_2 >>> op_1;
+				SRL: res =	 	op_2 >> op_1;
+				LUI: res = 		op_2 << 16;
 			   default: res = 0;
 			endcase
 		end
@@ -199,7 +207,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	input wb_WB;
 	input [1:0] wb_EX;
 	input flush_ex;
-  	input [31:0] write_data_reg;
+  input [31:0] write_data_reg;
 
 	//Outputs declaration
 	output reg zero;
@@ -254,7 +262,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	assign ALU_op 	= ex[4:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
-	assign op_1 	 = (forward_a==0) ? data_1 : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : data_1 );
+	assign op_1 	 = (forward_a==0) ? ((ex == 6'b100100 & fnc_code <= 3) ? imm[10:6] : data_1) : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : data_1 );
 	assign op_21 	 = (forward_b==0) ? data_2 : (forward_b==1 ? write_data_reg : (forward_b==2) ? res : data_2 );
 	assign op_2 	 = ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
 	assign op_21_mem = op_21;

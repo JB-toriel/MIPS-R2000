@@ -114,8 +114,9 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	parameter BEQ = 6'b000100;
 	parameter BNE = 6'b000101;
 	parameter J = 6'b000010;
-
-	//parameter SLL = 4'b1010;
+	parameter ORI = 6'b001101;
+	parameter LUI = 6'b001111;
+	parameter SLTI = 6'b001010;
 
 	//------Code starts Here------//
 	assign flush_ex = flush_id;
@@ -182,10 +183,34 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				end
 				J:
 				begin
-					ex = 6'b000000;
+					ex = 6'b000110;
 					m = 3'b000;
 					wb = 2'b00;
 					jump = 1;
+					exception = 0;
+				end
+				ORI:
+				begin
+					ex = 6'b001001;
+					m = 3'b000;
+					wb = 2'b10;
+					jump = 0;
+					exception = 0;
+				end
+				LUI:
+				begin
+					ex = 6'b001101;
+					m = 3'b000;
+					wb = 2'b10;
+					jump = 0;
+					exception = 0;
+				end
+				SLTI:
+				begin
+					ex = 6'b001011;
+					m = 3'b000;
+					wb = 2'b10;
+					jump = 0;
 					exception = 0;
 				end
 				6'b100011:
@@ -233,7 +258,7 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	output reg [4:0] rs, rt, rd;
 	output reg [31:0] imm, data_1, data_2;
 	output reg br;
-	output [31:0] pc_branch;
+	output reg [31:0] pc_branch;
 
 	output reg [5:0] ex;
 	output reg [2:0] m;
@@ -264,15 +289,19 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	assign old_rd = inst_in[15:11];
 	assign old_imm = {16'h0000, inst_in[15:0]};
 
-	assign pc_branch = {pc[31:16], pc[15:0] + (inst_in[15:0] << 2)};
 
 	always_comb
 		begin
+			pc_branch = {pc[31:16], pc[15:0] + (inst_in[15:0] << 2)};
 			case ( old_ex[4:0] )
 				5'b00010: br = (old_data_1 == old_data_2) & jump;
 				5'b00100: br = (old_data_1 != old_data_2) & jump;
+				5'b00110: br = jump;
 				default: br = 0;
 			endcase
+			if (old_ex == 6'b000110) begin
+				pc_branch = (pc & 32'hf0000000) | (inst_in[25:0] << 2);
+			end
 		end
 
 	always_ff @( posedge clk )
