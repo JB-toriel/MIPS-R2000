@@ -55,10 +55,16 @@ module MEM ( clk, ram, wb_MEM, m, address_MEM, write_data_mem, write_register_ex
 	//------Code starts Here------//
 	assign old_address_WB = address_MEM;
 
-	always @( posedge clk )
+  always_comb
 		begin
 			if (m[1])
-				old_read_data <= ram[address_MEM];
+				old_read_data = ram[address_MEM];
+      else
+				old_read_data = 32'hcacababa;
+		end
+
+  always @( posedge clk )
+		begin
       if (m[0])
 				begin
         	ram_data <= write_data_mem;
@@ -66,7 +72,7 @@ module MEM ( clk, ram, wb_MEM, m, address_MEM, write_data_mem, write_register_ex
       	end
 		end
 
-	always_ff @ ( posedge clk )
+  always_ff @ ( posedge clk )
 		begin
 			wb <= wb_MEM;
 			write_register_mem <= write_register_ex;
