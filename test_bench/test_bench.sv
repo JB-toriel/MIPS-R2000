@@ -49,7 +49,7 @@ module test_fetch;
 		wire [31:0] imm, pc_branch;
 		reg [31:0] data_1, data_2;
 		// ROM
-  		reg [31:0] rom_code [0:50];
+  	reg [31:0] rom [0:50];
 
 	//------For control unit------//
 
@@ -69,18 +69,18 @@ module test_fetch;
 		reg [4:0] write_register_ex;
 
 	//------For memory stage------//
-		
+
 		reg [4:0] write_register_mem;
 		reg [1:0] wb_WB;
 		reg [31:0] address_WB, read_data;
 		// RAM
-  		reg [31:0] ram [31:0];
+  	reg [31:0] ram [0:31];
  		reg [31:0] ram_data;
-  		reg [31:0] ram_adr;
-  
-	//------For WriteBack stage------//	
+  	reg [31:0] ram_adr;
 
-  	
+	//------For WriteBack stage------//
+
+
 
 	// Clock definition
 	parameter CLK_PERIOD = 10;
@@ -88,7 +88,7 @@ module test_fetch;
 
 
 	// Instantiation of design under test
-  IF instruction_fetch ( clk, rst, rom_code, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
+  IF instruction_fetch ( clk, rst, rom, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
 
 	ID instruction_decode ( .clk(clk), .rst(rst), .pc(pc_out), .inst_in (inst_out), .write_register(write_register),
 							.write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
@@ -104,15 +104,16 @@ module test_fetch;
 	WB writeback ( wb_WB, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write );
 
 
-  always @(m[0], ram_data, ram_adr) begin
-    if(m[0])
-    	ram[ram_adr] <= ram_data;
-  end
+  always @( posedge clk )
+		begin
+	    if(m[0])
+	    	ram[ram_adr] <= ram_data;
+	  end
 
 	// Test bench starts Here
 	initial
 		begin
-			$readmemh( "memory.list", rom_code );
+			$readmemh( "ROM.list", rom );
 			$readmemh( "ram.txt", ram );
 			except = 0;
 			rst = 1;

@@ -76,20 +76,19 @@ module decode_REG_MAPP ( clk, rst, rs, rt, write_register, write_data_reg, reg_w
 
 
 	//------Code starts Here------//
-
 	assign data_1 = reg_file[rs];//Read process
 	assign data_2 = reg_file[rt];
 
-	always_ff @ (posedge clk, posedge rst) begin //Write process
-		if (rst) begin
-			for (int i = 0; i < 31; i++) begin
-				reg_file[i] <= 0;
-			end
-		end
-		else if (reg_write) begin
+	always_ff @( negedge clk, posedge rst ) //Write process
+		begin
+			if ( rst )
+				begin
+					for ( i = 0; i < 32; i++ )
+						reg_file[i] <= 0;
+				end
+			else if ( reg_write )
 				reg_file[write_register] <= write_data_reg;
 		end
-	end
 
 endmodule // End of module decode_REG_MAPP module
 
@@ -132,7 +131,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					exception = 0;
 				end
 			else begin
-			casex (inst_in[31:26])
+			case (inst_in[31:26])
 				R:
 				begin
 					ex = 6'b100100;
@@ -167,17 +166,17 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				end
 				BEQ:
 				begin
-					ex = 6'bX00010;
+					ex = 6'b000010;//
 					m = 3'b100;
-					wb = 2'b0X;
+					wb = 2'b00;
 					jump = 1;
 					exception = 0;
 				end
 				BNE:
 				begin
-					ex = 6'bX00100;
+					ex = 6'b000100;//
 					m = 3'b100;
-					wb = 2'b0X;
+					wb = 2'b00;
 					jump = 1;
 					exception = 0;
 				end
@@ -199,16 +198,16 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				end
 				6'b101011:
 				begin
-					ex = 6'bX00001;
+					ex = 6'b000001;//
 					m = 3'b001;
-					wb = 2'b0X;
+					wb = 2'b00;
 					jump = 0;
 					exception = 0;
 				end
 				default:
 				begin
 					ex = 6'b000000;
-					m = 4'b000;
+					m = 3'b000;
 					wb = 2'b00;
 					jump = 0;
 					exception = 1;
@@ -260,16 +259,16 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 
 
 	//------Code starts Here------//
-		assign old_rs = inst_in[25:21];
-		assign old_rt = inst_in[20:16];
-		assign old_rd = inst_in[15:11];
-		assign old_imm = {16'h0000, inst_in[15:0]};
+	assign old_rs = inst_in[25:21];
+	assign old_rt = inst_in[20:16];
+	assign old_rd = inst_in[15:11];
+	assign old_imm = {16'h0000, inst_in[15:0]};
 
 	assign pc_branch = {pc[31:16], pc[15:0] + (inst_in[15:0] << 2)};
 
 	always_comb
 		begin
-			case (old_ex[4:0])
+			case ( old_ex[4:0] )
 				5'b00010: br = (old_data_1 == old_data_2) & jump;
 				5'b00100: br = (old_data_1 != old_data_2) & jump;
 				default: br = 0;
