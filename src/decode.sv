@@ -109,6 +109,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	//Variables declaration
 	parameter R = 6'b000000;
 	parameter J = 6'b000010;
+	parameter JAL = 6'b000011;
 	parameter BEQ = 6'b000100;
 	parameter BNE = 6'b000101;
 	parameter ADDI = 6'b001000;
@@ -193,6 +194,14 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					jump = 1;
 					exception = 0;
 				end
+				JAL:
+				begin
+					ex = 6'b001110;
+					m = 3'b000;
+					wb = 2'b10;
+					jump = 1;
+					exception = 0;
+				end
 				ORI:
 				begin
 					ex = 6'b001001;
@@ -248,7 +257,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 endmodule // End of module decode_CONTROL_UNIT
 
 
-module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, flush_id, wb, m, ex, br, pc_branch, hold_pc, hold_if, flush_ex/*, ...*/ );
+module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, flush_id, wb, m, ex, br, pc_branch, hold_pc, hold_if, flush_ex, pc_ex/*, ...*/ );
 
 	//Inputs declaration
 	input clk, rst;
@@ -257,6 +266,7 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	input [4:0] write_register;
 
 	//Outputs declaration
+	output reg [31:0] pc_ex;
 	output reg hold_pc, hold_if;
 	output exception, jump, flush_ex;
 	output reg [4:0] rs, rt, rd;
@@ -290,7 +300,7 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	//------Code starts Here------//
 	assign old_rs = inst_in[25:21];
 	assign old_rt = inst_in[20:16];
-	assign old_rd = inst_in[15:11];
+	assign old_rd = ( old_ex == 6'b001110 ) ? 31 : inst_in[15:11];
 	assign old_imm = {16'h0000, inst_in[15:0]};
 
 
@@ -300,10 +310,10 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 			case ( old_ex[4:0] )
 				5'b00010: br = (old_data_1 == old_data_2) & jump;
 				5'b00100: br = (old_data_1 != old_data_2) & jump;
-				5'b00110: br = jump;
+				5'b00110, 5'b01110: br = jump;
 				default: br = 0;
 			endcase
-			if (old_ex == 6'b000110) begin
+			if (old_ex == 6'b000110 || old_ex == 6'b001110 ) begin
 				pc_branch = (pc & 32'hf0000000) | (inst_in[25:0] << 2);
 			end
 		end
@@ -319,6 +329,7 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 			rd <= old_rd;
 			data_1 <= old_data_1;
 			data_2 <= old_data_2;
+			pc_ex <= pc;
 		end
 
 endmodule // End of ID module

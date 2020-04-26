@@ -69,14 +69,14 @@ module execute_MUX_RTRD ( rt, rd, ex, write_register );
 
 	//Inputs declaration
 	input [4:0] rt, rd;
-	input ex;
+	input [5:0] ex;
 
 	//Outputs declaration
 	output [4:0] write_register;
 
 
 	//------Code starts Here------//
-	assign write_register = ex ? rd : rt;
+	assign write_register = ( ex == 6'b001110 ) ? rd : (ex[5] ? rd : rt);
 
 endmodule // End of module execute_MUX_RTRD
 
@@ -98,8 +98,6 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter XOR = 4'b0100;
 	parameter NOR = 4'b0101;
 	parameter SLT = 4'b0110;
-	parameter MUL = 4'b0111;
-	parameter DIV = 4'b1000;
 	parameter SLL = 4'b1010;
 	parameter SRL = 4'b1011;
 	parameter SRA = 4'b1100;
@@ -128,16 +126,15 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 							38: ALU_ctrl = XOR;
 							39: ALU_ctrl = NOR; // NOR
 							42: ALU_ctrl = SLT; // Set on less than
-							6'h18: ALU_ctrl = MUL;
-							6'h1a: ALU_ctrl = DIV;
-							default: ALU_ctrl = 4'b0111;
+							default: ALU_ctrl = 4'b1111;
 						endcase
 					end
 				3: ALU_ctrl = AND;
 				4: ALU_ctrl = OR;
 				5: ALU_ctrl = SLT;
 				6: ALU_ctrl = LUI;
-				default: ALU_ctrl = 4'b1101;
+				7: ALU_ctrl = ADD;
+				default: ALU_ctrl = 4'b1111;
 			endcase
 		end
 
@@ -164,8 +161,6 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	parameter XOR = 4'b0100;
 	parameter NOR = 4'b0101;
 	parameter SLT = 4'b0110;
-	parameter MUL = 4'b0111;
-	parameter DIV = 4'b1000;
 	parameter SLL = 4'b1010;
 	parameter SRL = 4'b1011;
 	parameter SRA = 4'b1100;
@@ -184,18 +179,16 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 				ADD:
 					begin
 						res = op_1 + op_2;
-						over = (op_1[31] == op_2[31]) && (res[31] == ~op_1[31]);
+						over = fnc_code==32 ? ( (op_1[31] == op_2[31]) && (res[31] == ~op_1[31]) ) : 0;
 					end
 				SUB:
 					begin
 						res = op_1 - op_2;
-						over = (op_1[31] == ~op_2[31]) && (res[31] == ~op_1[31]);
+						over = fnc_code==34 ? ( (op_1[31] == ~op_2[31]) && (res[31] == ~op_1[31]) ) : 0;
 					end
 				XOR: res = 		op_1 ^ op_2;
 				NOR: res =    ~(op_1 | op_2);
 				SLT: res =   	op_1 < op_2 ? 1 : 0;  // Set on less than
-				MUL: res =	 	op_1 * op_2;
-				DIV: res = 		op_1 / op_2;
 				SLL: res =	  op_2 << op_1;
 				SRA: res =	 	op_2 >>> op_1;
 				SRL: res =	 	op_2 >> op_1;
@@ -207,10 +200,11 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 endmodule // End of module ALU
 
 
-module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
+module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
 
 	// Inputs declaration
 	input clk;
+	input [31:0] pc;
 	input [4:0] rs, rt, rd, rd_WB;
 	input [31:0] imm, data_1, data_2;
 	input [5:0] ex;
@@ -236,7 +230,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	wire [3:0] ALU_op;
 	wire [3:0] ALU_ctrl;
 	wire [5:0] fnc_code;
-	wire [31:0] op_1, op_2, op_21;
+	reg [31:0] op_1, op_2, op_21;
 	wire [3:0] m_EX_mux;
 	wire [2:0] wb_EX_mux;
 
@@ -245,7 +239,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 
 
 	//------Modules Instantiation------//
-	execute_MUX_RTRD mux_RTRD ( rt, rd, ex[5], old_write_register_ex );
+	execute_MUX_RTRD mux_RTRD ( rt, rd, ex, old_write_register_ex );
 
 	ALU_ctrl_unit alu_ctrl_unit(
 
@@ -273,13 +267,42 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	assign ALU_op 	= ex[4:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
-	assign op_1 	 = (ex == 6'b100100 & fnc_code <= 3) ? imm[10:6] : ((forward_a==0) ? data_1 : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : data_1 ));
-	assign op_21 	 = (forward_b==0) ? data_2 : (forward_b==1 ? write_data_reg : (forward_b==2) ? res : data_2 );
-	assign op_2 	 = ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
+	always_comb
+		begin
+			if ( ex == 6'b001110 ) begin
+				op_1 = pc;
+				op_2 = 8;
+			end
+			else
+				begin
+					if ( ex == 6'b100100 && fnc_code <= 3 )
+						op_1 = imm[10:6];
+					else
+						begin
+							case(forward_a)
+								0: op_1 = data_1;
+								1: op_1 = write_data_reg;
+								2: op_1 = res;
+								default: op_1 = data_1;
+							endcase
+						end
+					case(forward_b)
+						0: op_21 = data_2;
+						1: op_21 = write_data_reg;
+						2: op_21 = res;
+						default: op_1 = data_2;
+					endcase
+					case(ex[0])
+						1: op_2 = imm;
+						0: op_2 = op_21;
+						default: op_2 = op_21;
+					endcase
+				end
+			end
 	assign op_21_mem = op_21;
 
 	assign m_EX_mux  = flush_ex ? 0 : m_EX;
-	assign wb_EX_mux = flush_ex ? 0 : wb_EX ;
+	assign wb_EX_mux = flush_ex ? 0 : wb_EX;
 
 	always_ff @( posedge clk )
 		begin
