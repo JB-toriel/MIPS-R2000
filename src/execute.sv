@@ -176,16 +176,8 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 			case(ALU_ctrl)
 				AND: res =   	op_1 & op_2;
 				OR:  res =   	op_1 | op_2;
-				ADD:
-					begin
-						res = op_1 + op_2;
-						over = fnc_code==32 ? ( (op_1[31] == op_2[31]) && (res[31] == ~op_1[31]) ) : 0;
-					end
-				SUB:
-					begin
-						res = op_1 - op_2;
-						over = fnc_code==34 ? ( (op_1[31] == ~op_2[31]) && (res[31] == ~op_1[31]) ) : 0;
-					end
+				ADD: res = 		op_1 + op_2;
+				SUB: res = 		op_1 - op_2;
 				XOR: res = 		op_1 ^ op_2;
 				NOR: res =    ~(op_1 | op_2);
 				SLT: res =   	op_1 < op_2 ? 1 : 0;  // Set on less than
@@ -195,6 +187,10 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 				LUI: res = 		op_2 << 16;
 			   default: res = 0;
 			endcase
+			if( fnc_code==32 || fnc_code==34 )
+				over = (op_1[31] == op_2[31]) && (res[31] == ~op_1[31]);
+			else
+				over = 0;
 		end
 
 endmodule // End of module ALU
@@ -225,6 +221,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 
 
 	//Variables declaration
+	wire overflow;
 	wire op_21_mem;
 	wire [1:0] forward_a, forward_b;
 	wire [3:0] ALU_op;
@@ -255,7 +252,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 		.op_2 	  (	op_2  		), // output [31:0]
 		.ALU_ctrl (	ALU_ctrl	), // output [3:0]
 		.zero 	  (	old_zero	), // output
-		.over 	  (	over	    ), // output
+		.over 	  (	overflow	    ), // output
 		.res 	  	(	old_res		)  // output [31:0]
 
 	);
@@ -264,6 +261,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 
 
 	//------Code starts Here------//
+	assign over = ex==6'b100100 ? overflow : 0;
 	assign ALU_op 	= ex[4:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
@@ -271,7 +269,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 		begin
 			if ( ex == 6'b001110 ) begin
 				op_1 = pc;
-				op_2 = 8;
+				op_21 = 8;
 			end
 			else
 				begin
@@ -290,14 +288,14 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 						0: op_21 = data_2;
 						1: op_21 = write_data_reg;
 						2: op_21 = res;
-						default: op_1 = data_2;
+						default: op_21 = data_2;
 					endcase
-					case(ex[0])
+				end
+				case(ex[0])
 						1: op_2 = imm;
 						0: op_2 = op_21;
 						default: op_2 = op_21;
 					endcase
-				end
 			end
 	assign op_21_mem = op_21;
 
