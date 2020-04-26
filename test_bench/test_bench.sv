@@ -1,7 +1,7 @@
 //-----------------------------------------------------
 	// This is the test bench of the fetch and decode stage design
-	// Design Name : test_fetch
-	// File Name   : test_fetch.sv
+	// Design Name : test_bench
+	// File Name   : test_bench.sv
 	// Function    :
 	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
 //-----------------------------------------------------
@@ -113,17 +113,24 @@ module test_bench;
 	// Test bench starts Here
 	initial
 		begin
-			$readmemh( "ROM.list", rom );
-			$readmemh( "ram.txt", ram );
-			except = 0;
-			rst = 1;
-			#5
-			rst = 0;
-			clk = 1;
-			#500
+
+    	init("ROM.list", "RAM.list");
+			#200
+
 			$display( "End of simulation time is %d", $time );
 			$stop;
 		end
 
+		task init;
+    	input string ROM;
+    	input string RAM;
+    	$readmemh( ROM, rom );
+    	$readmemh( RAM, ram );
+    	except = 0;
+			rst = 1;
+			#5
+			rst = 0;
+			clk = 1;
+		endtask
 
-endmodule // End of Module test_fetch
+endmodule // End of Module test_bench
