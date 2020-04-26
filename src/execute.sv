@@ -102,7 +102,8 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 	parameter DIV = 4'b1000;
 	parameter SLL = 4'b1010;
 	parameter SRL = 4'b1011;
-	parameter LUI = 4'b1100;
+	parameter SRA = 4'b1100;
+	parameter LUI = 4'b1101;
 
 
 	//------Code starts Here------//
@@ -113,9 +114,12 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 				1: ALU_ctrl = SUB;
 				2: begin
 						case(fnc_code)
-							0: ALU_ctrl <= SLL; // Shift left logical
-							2: ALU_ctrl <= SRL; // rigth
-							//3: ALU_ctrl = SRA; // Arithmetic
+							0: ALU_ctrl = SLL; // Shift left logical
+							2: ALU_ctrl = SRL; // rigth
+							3: ALU_ctrl = SRA; // Arithmetic
+							4: ALU_ctrl = SLL; // Shift left logical
+							6: ALU_ctrl = SRL; // rigth
+							7: ALU_ctrl = SRA; // Arithmetic
 							32: ALU_ctrl = ADD; // ADD
 							6'b100001: ALU_ctrl = ADD; // ADDU
 							34: ALU_ctrl = SUB; // SUB
@@ -126,14 +130,14 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 							42: ALU_ctrl = SLT; // Set on less than
 							6'h18: ALU_ctrl = MUL;
 							6'h1a: ALU_ctrl = DIV;
-							default: ALU_ctrl = 4'b1111;
+							default: ALU_ctrl = 4'b0111;
 						endcase
 					end
 				3: ALU_ctrl = AND;
 				4: ALU_ctrl = OR;
 				5: ALU_ctrl = SLT;
 				6: ALU_ctrl = LUI;
-				default: ALU_ctrl = 4'b1111;
+				default: ALU_ctrl = 4'b1101;
 			endcase
 		end
 
@@ -148,7 +152,8 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	input [31:0] op_1, op_2;
 
 	//Ouputs Declaration
-	output zero, over;
+	output zero;
+	output reg over;
 	output reg [31:0] res;
 
 	//Variables declaration
@@ -161,32 +166,38 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	parameter SLT = 4'b0110;
 	parameter MUL = 4'b0111;
 	parameter DIV = 4'b1000;
-	parameter SRL = 4'b1011;
 	parameter SLL = 4'b1010;
-	//parameter JR = 4'b1010;
-	//parameter JALR = 4'b1100;
-	parameter LUI = 4'b1100;
+	parameter SRL = 4'b1011;
+	parameter SRA = 4'b1100;
+	parameter LUI = 4'b1101;
 
 
 
 	//------Code starts Here------//
 	assign zero = (res==0); // zero flag = 0 if the result is 0
-	assign over = ((fnc_code == 32) & (op_1 > 32'hFFFF_FFFF - op_2)) || ((fnc_code == 34) & (op_1 < op_2));
 
 	always_comb
 		begin
 			case(ALU_ctrl)
 				AND: res =   	op_1 & op_2;
 				OR:  res =   	op_1 | op_2;
-				ADD: res =   	op_1 + op_2;
-				SUB: res =   	op_1 - op_2;
+				ADD:
+					begin
+						res = op_1 + op_2;
+						over = (op_1[31] == op_2[31]) && (res[31] == ~op_1[31]);
+					end
+				SUB:
+					begin
+						res = op_1 - op_2;
+						over = (op_1[31] == ~op_2[31]) && (res[31] == ~op_1[31]);
+					end
 				XOR: res = 		op_1 ^ op_2;
 				NOR: res =    ~(op_1 | op_2);
 				SLT: res =   	op_1 < op_2 ? 1 : 0;  // Set on less than
 				MUL: res =	 	op_1 * op_2;
 				DIV: res = 		op_1 / op_2;
 				SLL: res =	  op_2 << op_1;
-				//SRA: res =	 	op_2 >>> op_1;
+				SRA: res =	 	op_2 >>> op_1;
 				SRL: res =	 	op_2 >> op_1;
 				LUI: res = 		op_2 << 16;
 			   default: res = 0;
@@ -262,7 +273,7 @@ module EX ( clk, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flus
 	assign ALU_op 	= ex[4:1];		  // 2 bits to select which operation to do with the ALU
 	assign fnc_code = imm[5:0]; 	  // function code of R-type instructions
 
-	assign op_1 	 = (forward_a==0) ? ((ex == 6'b100100 & fnc_code <= 3) ? imm[10:6] : data_1) : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : data_1 );
+	assign op_1 	 = (ex == 6'b100100 & fnc_code <= 3) ? imm[10:6] : ((forward_a==0) ? data_1 : (forward_a==1 ? write_data_reg : (forward_a==2) ? res : data_1 ));
 	assign op_21 	 = (forward_b==0) ? data_2 : (forward_b==1 ? write_data_reg : (forward_b==2) ? res : data_2 );
 	assign op_2 	 = ex[0] ? imm : op_21; // Mux to chose between "data_2" or the immediate sign extended
 	assign op_21_mem = op_21;
