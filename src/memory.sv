@@ -49,21 +49,14 @@ module MEM ( clk, ram, wb_MEM, m, address_MEM, write_data_mem, write_register_ex
 
 	//Variables DECLARATION
 	wire [31:0] old_address_WB;
-	reg [31:0] old_read_data;
+	wire [31:0] old_read_data;
 
 
 	//------Code starts Here------//
 	assign old_address_WB = address_MEM;
+	assign old_read_data = m[1] ? ram[address_MEM] : 0;
 
-  always_comb
-		begin
-			if (m[1])
-				old_read_data = ram[address_MEM];
-      else
-				old_read_data = 32'hcacababa;
-		end
-
-  always @( posedge clk )
+  always @( posedge clk ) //write
 		begin
       if (m[0])
 				begin
