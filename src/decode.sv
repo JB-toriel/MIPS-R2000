@@ -97,7 +97,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 
 	//Inputs declaration
 	input mux_ctrl_unit, flush_id;
-	input [31:0] inst_in; /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Utilise ton tous les bits ?@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+	input [31:26] inst_in;
 
 	//Outputs declaration
 	output flush_ex;
@@ -108,15 +108,19 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 
 	//Variables declaration
 	parameter R = 6'b000000;
-	parameter ADDI = 6'b001000;
-	parameter ADDIU = 6'b001001;
-	parameter ANDI = 6'b001100;
+	parameter J = 6'b000010;
 	parameter BEQ = 6'b000100;
 	parameter BNE = 6'b000101;
-	parameter J = 6'b000010;
-	parameter ORI = 6'b001101;
-	parameter LUI = 6'b001111;
+	parameter ADDI = 6'b001000;
+	parameter ADDIU = 6'b001001;
 	parameter SLTI = 6'b001010;
+	parameter SLTIU = 6'b001011;
+	parameter ANDI = 6'b001100;
+	parameter ORI = 6'b001101;
+	parameter XORI = 6'b001110;
+	parameter LUI = 6'b001111;
+	parameter LW = 6'b100011;
+	parameter SW = 6'b101011;
 
 	//------Code starts Here------//
 	assign flush_ex = flush_id;
@@ -213,7 +217,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					jump = 0;
 					exception = 0;
 				end
-				6'b100011:
+				LW:
 				begin
 					ex = 6'b000001;
 					m = 3'b010;
@@ -221,7 +225,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					jump = 0;
 					exception = 0;
 				end
-				6'b101011:
+				SW:
 				begin
 					ex = 6'b000001;//
 					m = 3'b001;
@@ -278,7 +282,7 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	//------Modules Instantiation------//
 	decode_REG_MAPP reg_MAPP ( clk, rst, old_rs, old_rt, write_register, write_data_reg, reg_write, old_data_1, old_data_2 );
 
-	decode_CONTROL_UNIT control_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, flush_ex, old_wb, old_m, old_ex );
+	decode_CONTROL_UNIT control_UNIT ( inst_in[31:26], mux_ctrl_unit, flush_id, exception, jump, flush_ex, old_wb, old_m, old_ex );
 
 	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, m[1], mux_ctrl_unit, hold_pc, hold_if);
 
