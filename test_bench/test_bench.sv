@@ -110,29 +110,27 @@ module test_bench;
 	    	ram[ram_adr] <= ram_data;
 	  end
 
-		// Test bench starts Here
-		initial
-			begin
-      	for ( int i=0; i<32; i++ )
-      		ram[i]=i;
+	// Test bench starts Here
+	initial
+		begin
 
-      	init("ROM.list", "RAM.list");
-				#200
+    	init("ROM.list", "RAM.list");
+			#200
 
-				$display( "End of simulation time is %d", $time );
-				$stop;
-			end
+			$display( "End of simulation time is %d", $time );
+			$stop;
+		end
 
-  		task init;
-      	input string ROM;
-      	input string RAM;
-      	$readmemh( ROM, rom_code );
-      	$readmemh( RAM, ram );
-      	except = 0;
-				rst = 1;
-				#5
-				rst = 0;
-				clk = 1;
-  		endtask
+		task init;
+    	input string ROM;
+    	input string RAM;
+    	$readmemh( ROM, rom );
+    	$readmemh( RAM, ram );
+    	except = 0;
+			rst = 1;
+			#5
+			rst = 0;
+			clk = 1;
+		endtask
 
 endmodule // End of Module test_bench
