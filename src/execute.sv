@@ -113,8 +113,8 @@ module ALU_ctrl_unit ( ALU_op, fnc_code, ALU_ctrl );
 				1: ALU_ctrl = SUB;
 				2: begin
 						case(fnc_code)
-							0: ALU_ctrl <= SLL; // Shift left logical
-							2: ALU_ctrl <= SRL; // rigth
+							0: ALU_ctrl = SLL; // Shift left logical
+							2: ALU_ctrl = SRL; // rigth
 							//3: ALU_ctrl = SRA; // Arithmetic
 							32: ALU_ctrl = ADD; // ADD
 							6'b100001: ALU_ctrl = ADD; // ADDU
