@@ -41,6 +41,7 @@ module test_bench;
 	//------For decode stage------//
 
 		wire br;
+		reg [31:0] pc_ex;
 		// for register mapping
 		wire [31:0] write_data_reg;
 		wire reg_write;
@@ -94,10 +95,10 @@ module test_bench;
 							.write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
 							.jump(jump), .rs(rs), .rt(rt), .rd(rd), .imm(imm), .data_1(data_1), .data_2(data_2),
 							.flush_id(over), .wb(wb), .m(m), .ex(ex), .pc_branch(pc_branch), .br(br), .hold_pc(hold_pc),
-							.hold_if(hold_if), .flush_ex(flush_ex)
+							.hold_if(hold_if), .flush_ex(flush_ex), .pc_ex(pc_ex)
 						  );
 
-	EX execute ( clk, data_1, data_2, rs, rt, rd, ex, m, wb, wb_WB[1], write_register_mem, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
+	EX execute ( clk, pc_ex, data_1, data_2, rs, rt, rd, ex, m, wb, wb_WB[1], write_register_mem, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
 	MEM memory ( clk, ram, wb_MEM, m_MEM[1:0], res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem, ram_data, ram_adr );
 
@@ -114,8 +115,8 @@ module test_bench;
 	initial
 		begin
 
-    	init("ROM.list", "RAM.list");
-			#200
+    	init("ROM.list", "ram.txt");
+			#300
 
 			$display( "End of simulation time is %d", $time );
 			$stop;
