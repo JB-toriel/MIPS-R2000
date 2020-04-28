@@ -26,7 +26,7 @@ endmodule
 
 module test_bench;
 
-		input clk, rst;
+		reg clk, rst;
 
 	//------For fetch stage------//
 
