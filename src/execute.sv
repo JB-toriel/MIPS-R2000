@@ -221,7 +221,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 
 
 	//Variables declaration
-	wire overflow;
+	wire overflow, old_zero;
 	wire op_21_mem;
 	wire [1:0] forward_a, forward_b;
 	wire [3:0] ALU_op;
