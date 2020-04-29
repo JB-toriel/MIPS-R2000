@@ -68,6 +68,7 @@ module test_bench;
 		reg [31:0] res;
 		reg [31:0] write_data_ex;
 		reg [4:0] write_register_ex;
+		wire zero, over;
 
 	//------For memory stage------//
 
