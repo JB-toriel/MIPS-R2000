@@ -76,38 +76,48 @@ module fetch_MUX ( inc_pc, pc_branch, br, except, new_pc );
 endmodule // End of Module fetch_MUX
 
 
-module fetch_ROM ( pc, rom_code, inst );
+module fetch_ROM ( rst, pc, inst );
 
 	//Inputs Declaration
+	input rst;
 	input [31:0] pc;
-	input [31:0] rom_code [0:50];
 
 	//Ouputs Declaration
 	output [31:0] inst;
+
+	reg [31:0] rom_code [0:1];
 
 
 	//------Code starts Here------//
 	assign inst = rom_code[pc/4];
 
+	always @( posedge rst )
+		begin
+			for ( int i = 0; i < 2; i++ )
+				rom_code[i] <= 0;
+
+		end
+
 endmodule // End of Module fetch_ROM
 
 
-module IF ( clk, rst, rom_code, hold_pc, hold_if, pc_branch, br, except, pc_out, inst_out );
+module IF ( clk, inst_rom, rst, hold_pc, hold_if, pc_branch, br, except, pc_rom, pc_out, inst_out );
 
 	//Inputs Declaration
 	input clk, rst, hold_pc, hold_if;
 	input [31:0] pc_branch;
+	input [31:0] inst_rom;
 	input br, except;
-	input [31:0] rom_code [0:50];
 
 	//Outputs Declaration
+	output [31:0] pc_rom;
 	output reg [31:0] pc_out;
 	output reg [31:0] inst_out;
 
 	//Variables declaration
 	wire [31:0] pc;
 	reg [31:0] pc_4;
-	reg [31:0] old_inst_out, old_inst_out_mux;
+	reg [31:0] inst_out_mux;
 
 
 	//------Modules Instantiation------//
@@ -131,22 +141,16 @@ module IF ( clk, rst, rom_code, hold_pc, hold_if, pc_branch, br, except, pc_out,
 
 	);
 
-	fetch_ROM rom(
-
-		.pc				(	pc						), // input	[31:0]
-		.rom_code	(	rom_code			),
-		.inst			(	old_inst_out 	)  // output	[31:0]
-
-	);
-
 
 	//------Code starts Here------//
+	assign pc_rom = pc;
+
 	always_comb
 		begin
 			case( br )
-					1: old_inst_out_mux = 0;
-					0: old_inst_out_mux = old_inst_out;
-					default: old_inst_out_mux = old_inst_out;
+					1: inst_out_mux = 0;
+					0: inst_out_mux = inst_rom;
+					default: inst_out_mux = inst_rom;
       endcase
 		end
 
@@ -154,7 +158,7 @@ module IF ( clk, rst, rom_code, hold_pc, hold_if, pc_branch, br, except, pc_out,
 		begin
 			pc_out <= pc;
 			if ( hold_if==0 )
-				inst_out <= old_inst_out_mux;
+				inst_out <= inst_out_mux;
 		end
 
 endmodule // End of Module IF
