@@ -76,31 +76,6 @@ module fetch_MUX ( inc_pc, pc_branch, br, except, new_pc );
 endmodule // End of Module fetch_MUX
 
 
-module fetch_ROM ( rst, pc, inst );
-
-	//Inputs Declaration
-	input rst;
-	input [31:0] pc;
-
-	//Ouputs Declaration
-	output [31:0] inst;
-
-	reg [31:0] rom_code [0:1];
-
-
-	//------Code starts Here------//
-	assign inst = rom_code[pc/4];
-
-	always @( posedge rst )
-		begin
-			for ( int i = 0; i < 2; i++ )
-				rom_code[i] <= 0;
-
-		end
-
-endmodule // End of Module fetch_ROM
-
-
 module IF ( clk, inst_rom, rst, hold_pc, hold_if, pc_branch, br, except, pc_rom, pc_out, inst_out );
 
 	//Inputs Declaration
