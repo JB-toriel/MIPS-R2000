@@ -14,7 +14,6 @@ module MIPS (clk, rst, pc_rom, inst_rom, address_WB, read_data, ram_read, ram_wr
     reg [31:0] inst_out;
 
     // for pc mux
-    reg except;
 
   //------For decode stage------//
 
@@ -28,7 +27,6 @@ module MIPS (clk, rst, pc_rom, inst_rom, address_WB, read_data, ram_read, ram_wr
     wire [31:0] imm, pc_branch;
     reg [31:0] data_1, data_2;
     // ROM
-    reg [31:0] rom [0:50];
 
   //------For control unit------//
 
@@ -64,7 +62,7 @@ module MIPS (clk, rst, pc_rom, inst_rom, address_WB, read_data, ram_read, ram_wr
 
 
   // Instantiation of design under test
-  IF instruction_fetch ( clk, inst_rom, rst, hold_pc, hold_if, pc_branch, br, except, pc_rom, pc_out, inst_out );
+  IF instruction_fetch ( clk, inst_rom, rst, hold_pc, hold_if, pc_branch, br, exception, pc_rom, pc_out, inst_out );
 
   ID instruction_decode ( .clk(clk), .rst(rst), .pc(pc_out), .inst_in (inst_out), .write_register(write_register),
               .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
