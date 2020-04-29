@@ -222,7 +222,6 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 
 	//Variables declaration
 	wire overflow, old_zero;
-	wire op_21_mem;
 	wire [1:0] forward_a, forward_b;
 	wire [3:0] ALU_op;
 	wire [3:0] ALU_ctrl;
@@ -297,7 +296,6 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 						default: op_2 = op_21;
 					endcase
 			end
-	assign op_21_mem = op_21;
 
 	assign m_EX_mux  = flush_ex ? 0 : m_EX;
 	assign wb_EX_mux = flush_ex ? 0 : wb_EX;
@@ -309,7 +307,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 			res <= old_res;
 			write_register_ex <= old_write_register_ex;
 			zero <= old_zero;
-			write_data_ex <= op_21_mem;
+			write_data_ex <= op_21;
 		end
 
 endmodule // End of module EX
