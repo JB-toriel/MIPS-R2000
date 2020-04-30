@@ -1,4 +1,4 @@
-module MIPS (clk, rst, pc_rom, inst_rom, address_WB, read_data, ram_read, ram_write, ram_data, ram_word, ram_adr);
+module MIPS (clk, rst, pc_rom, inst_rom, ram_read, ram_write, ram_data, ram_word, ram_adr);
 
     input clk, rst;
 
@@ -50,7 +50,7 @@ module MIPS (clk, rst, pc_rom, inst_rom, address_WB, read_data, ram_read, ram_wr
 
     reg [4:0] write_register_mem;
     reg [1:0] wb_WB;
-    output reg [31:0] address_WB, read_data;
+    reg [31:0] address_WB, read_data;
     // RAM
     output ram_read, ram_write;
     output [31:0] ram_data;
