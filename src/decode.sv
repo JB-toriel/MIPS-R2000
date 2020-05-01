@@ -7,26 +7,17 @@
 //-----------------------------------------------------
 
 /*
-module NOM (LISTE DES PORTS);
+module NAME (PORTS LIST);
 
-DECLARATION DES PORTS
-DECLARATION DES PARAMETRES
+	PORTS DECLARATION
+	VARIABLES DECLARATION
 
-`include "NOM DE FICHIER";
-
-DECLARATIONS DE VARIABLES
-AFFECTATIONS
-INSTANCIATIONS DE SOUS-MODULES
-BLOCS initial ET always
-TACHES ET FONCTIONS
+	MODULES INSTANTIATION
+	ASSIGNMENT
+	initial AND always BLOCS
+	TASKS AND FUNCTIONS
 
 endmodule
-*/
-
-/*
-	Inputs : internally must always be of type net, externally the inputs can be connected to a variable of type reg or net.
-	Outputs : internally can be of type net or reg, externally the outputs must be connected to a variable of type net.
-	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
 
@@ -248,7 +239,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					m = 3'b000;
 					wb = 2'b00;
 					jump = 0;
-					exception = 1;
+					exception = 0;
 				end
 			endcase
 		end
@@ -257,7 +248,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 endmodule // End of module decode_CONTROL_UNIT
 
 
-module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, flush_id, wb, m, ex, br, pc_branch, hold_pc, hold_if, flush_ex, pc_ex/*, ...*/ );
+module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, exception, jump, rs, rt, rd, imm, data_1, data_2, flush_id, wb, m, ex, br, pc_branch, hold_pc, hold_if, flush_ex, pc_ex );
 
 	//Inputs declaration
 	input clk, rst;
