@@ -7,30 +7,21 @@
 //-----------------------------------------------------
 
 /*
-module NOM (LISTE DES PORTS);
+module NAME (PORTS LIST);
 
-DECLARATION DES PORTS
-DECLARATION DES PARAMETRES
+	PORTS DECLARATION
+	VARIABLES DECLARATION
 
-`include "NOM DE FICHIER";
-
-DECLARATIONS DE VARIABLES
-AFFECTATIONS
-INSTANCIATIONS DE SOUS-MODULES
-BLOCS initial ET always
-TACHES ET FONCTIONS
+	MODULES INSTANTIATION
+	ASSIGNMENT
+	initial AND always BLOCS
+	TASKS AND FUNCTIONS
 
 endmodule
 */
 
-/*
-	Inputs : internally must always be of type net, externally the inputs can be connected to a variable of type reg or net.
-	Outputs : internally can be of type net or reg, externally the outputs must be connected to a variable of type net.
-	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
-*/
 
-
-module WB ( wb, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write/*, ...*/ );
+module WB ( wb, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write );
 
 	//Inputs declaration
 	input [31:0] read_data, address_WB;

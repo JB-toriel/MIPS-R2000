@@ -7,26 +7,17 @@
 //-----------------------------------------------------
 
 /*
-module NOM (LISTE DES PORTS);
+module NAME (PORTS LIST);
 
-DECLARATION DES PORTS
-DECLARATION DES PARAMETRES
+	PORTS DECLARATION
+	VARIABLES DECLARATION
 
-`include "NOM DE FICHIER";
-
-DECLARATIONS DE VARIABLES
-AFFECTATIONS
-INSTANCIATIONS DE SOUS-MODULES
-BLOCS initial ET always
-TACHES ET FONCTIONS
+	MODULES INSTANTIATION
+	ASSIGNMENT
+	initial AND always BLOCS
+	TASKS AND FUNCTIONS
 
 endmodule
-*/
-
-/*
-	Inputs : internally must always be of type net, externally the inputs can be connected to a variable of type reg or net.
-	Outputs : internally can be of type net or reg, externally the outputs must be connected to a variable of type net.
-	Inouts : internally or externally must always be type net, can only be connected to a variable net type.
 */
 
 
@@ -51,11 +42,11 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 
 			if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rs_id) )
 				fw_a = 2;
-			if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rs_id && rd_wb==rs_id )
+          if ( (reg_write_wb && (rd_wb!=0)) && !(reg_write_ex && rd_ex!=0 && rd_ex==rs_id) && (rd_wb==rs_id) )
 				fw_a = 1;
 			if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rt_id) )
 				fw_b = 2;
-			if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rt_id && rd_wb==rt_id )
+          if ( (reg_write_wb && (rd_wb!=0)) && !(reg_write_ex && rd_ex!=0 && rd_ex==rt_id) && (rd_wb==rt_id) )
 				fw_b = 1;
 		end
 
@@ -196,7 +187,7 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 endmodule // End of module ALU
 
 
-module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM/*, ...*/ );
+module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
 	// Inputs declaration
 	input clk;

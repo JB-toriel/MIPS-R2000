@@ -1,70 +1,98 @@
-module MIPS (clk, rst, pc_rom, inst_rom, address_WB, read_data, ram_read, ram_write, ram_data, ram_word, ram_adr);
+//-----------------------------------------------------
+	// This is the TOP level design of the processor
+	// Design Name : MIPS
+	// File Name   : MIPS.sv
+	// Function    :
+	// Authors     : de Sainte Marie Nils - Edde Jean-Baptiste
+//-----------------------------------------------------
 
+/*
+module NAME (PORTS LIST);
+
+	PORTS DECLARATION
+	VARIABLES DECLARATION
+
+	MODULES INSTANTIATION
+	ASSIGNMENT
+	initial AND always BLOCS
+	TASKS AND FUNCTIONS
+
+endmodule
+*/
+
+
+module MIPS (clk, rst, pc_rom, inst_rom, ram_read, ram_write, ram_data, ram_word, ram_adr);
+
+
+  //Inputs Declaration
     input clk, rst;
+    //ROM
+    input [31:0] inst_rom;
+    //RAM
+    input [31:0] ram_word;
 
-  //------For fetch stage------//
-
+  //Outputs Declaration
     //ROM
     output [31:0] pc_rom;
-    input [31:0] inst_rom;
-
-    // for pc registers
-    reg hold_pc, hold_if;
-    reg [31:0] pc_out;
-    reg [31:0] inst_out;
-
-    // for pc mux
-    reg except;
-
-  //------For decode stage------//
-
-    wire br;
-    reg [31:0] pc_ex;
-    // for register mapping
-    wire [31:0] write_data_reg;
-    wire reg_write;
-    reg [4:0] write_register;
-    wire [4:0] rs, rt, rd;
-    wire [31:0] imm, pc_branch;
-    reg [31:0] data_1, data_2;
-    // ROM
-    reg [31:0] rom [0:50];
-
-  //------For control unit------//
-
-    logic jump;
-    logic exception;
-    reg [5:0] ex;
-    reg [2:0] m;
-    reg [1:0] wb;
-    reg flush_ex;
-
-  //------For execute stage------//
-
-    reg [2:0] m_MEM;
-    reg [1:0] wb_MEM;
-    reg [31:0] res;
-    reg [31:0] write_data_ex;
-    reg [4:0] write_register_ex;
-    wire zero, over;
-
-  //------For memory stage------//
-
-    reg [4:0] write_register_mem;
-    reg [1:0] wb_WB;
-    output reg [31:0] address_WB, read_data;
-    // RAM
+    //RAM
     output ram_read, ram_write;
     output [31:0] ram_data;
-    input [31:0] ram_word;
     output [31:0] ram_adr;
 
-  //------For WriteBack stage------//
+  //Variables declaration
+
+    //------For fetch stage------//
+
+
+    //------For memory stage-----//
+
+      // for pc registers
+      reg hold_pc, hold_if;
+      reg [31:0] pc_out;
+      reg [31:0] inst_out;
+
+    //------For decode stage------//
+
+      wire br;
+      reg [31:0] pc_ex;
+      // for register mapping
+      wire [31:0] write_data_reg;
+      wire reg_write;
+      reg [4:0] write_register;
+      wire [4:0] rs, rt, rd;
+      wire [31:0] imm, pc_branch;
+      reg [31:0] data_1, data_2;
+
+    //------For control unit------//
+
+      reg jump;
+      reg exception;
+      reg [5:0] ex;
+      reg [2:0] m;
+      reg [1:0] wb;
+      reg flush_ex;
+
+    //------For execute stage------//
+
+      reg [2:0] m_MEM;
+      reg [1:0] wb_MEM;
+      reg [31:0] res;
+      reg [31:0] write_data_ex;
+      reg [4:0] write_register_ex;
+      wire zero, over;
+
+    //------For memory stage------//
+
+      reg [4:0] write_register_mem;
+      reg [1:0] wb_WB;
+      reg [31:0] address_WB, read_data;
+
+    //------For WriteBack stage------//
 
 
 
-  // Instantiation of design under test
-  IF instruction_fetch ( clk, inst_rom, rst, hold_pc, hold_if, pc_branch, br, except, pc_rom, pc_out, inst_out );
+  //------Modules Instantiation------//
+  IF instruction_fetch ( clk, inst_rom, rst, hold_pc, hold_if, pc_branch, br, exception, pc_rom, pc_out, inst_out );
 
   ID instruction_decode ( .clk(clk), .rst(rst), .pc(pc_out), .inst_in (inst_out), .write_register(write_register),
               .write_data_reg(write_data_reg), .reg_write(reg_write), .exception(exception),
