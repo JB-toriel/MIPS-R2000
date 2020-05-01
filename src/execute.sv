@@ -42,11 +42,11 @@ module forwarding_unit ( rs_id, rt_id, rd_ex, reg_write_ex, rd_wb, reg_write_wb,
 
 			if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rs_id) )
 				fw_a = 2;
-			if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rs_id && rd_wb==rs_id )
+          if ( (reg_write_wb && (rd_wb!=0)) && !(reg_write_ex && rd_ex!=0 && rd_ex==rs_id) && (rd_wb==rs_id) )
 				fw_a = 1;
 			if ( reg_write_ex && (rd_ex!=0) && (rd_ex==rt_id) )
 				fw_b = 2;
-			if ( reg_write_wb && (rd_wb!=0) && rd_ex!=rt_id && rd_wb==rt_id )
+          if ( (reg_write_wb && (rd_wb!=0)) && !(reg_write_ex && rd_ex!=0 && rd_ex==rt_id) && (rd_wb==rt_id) )
 				fw_b = 1;
 		end
 
