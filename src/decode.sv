@@ -94,7 +94,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	output flush_ex;
 	output reg exception, jump;
 	output reg [5:0] ex;
-	output reg [2:0] m;
+	output reg [3:0] m;
 	output reg [1:0] wb;
 
 	//Variables declaration
@@ -111,7 +111,11 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	parameter ORI = 6'b001101;
 	parameter XORI = 6'b001110;
 	parameter LUI = 6'b001111;
+	parameter LB = 6'b100000;
 	parameter LW = 6'b100011;
+	parameter LHU = 6'b100101;
+	parameter SB = 6'b101000;
+	parameter SH = 6'b101001;
 	parameter SW = 6'b101011;
 
 	//------Code starts Here------//
@@ -122,7 +126,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 			if ( mux_ctrl_unit || flush_id )
 				begin
 					ex = 6'b000000;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b00;
 					jump = 0;
 					exception = 0;
@@ -132,7 +136,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				R:
 				begin
 					ex = 6'b100100;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b10;
 					jump = 0;
 					exception = 0;
@@ -140,7 +144,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				ADDI:
 				begin
 					ex = 6'b000001;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b10;
 					jump = 0;
 					exception = 0;
@@ -148,7 +152,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				ADDIU:
 				begin
 					ex = 6'b000001;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b10;
 					jump = 0;
 					exception = 0;
@@ -156,7 +160,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				ANDI:
 				begin
 					ex = 6'b000111;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b10;
 					jump = 0;
 					exception = 0;
@@ -164,7 +168,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				BEQ:
 				begin
 					ex = 6'b000010;//
-					m = 3'b100;
+					m = 4'b0000;
 					wb = 2'b00;
 					jump = 1;
 					exception = 0;
@@ -172,7 +176,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				BNE:
 				begin
 					ex = 6'b000100;//
-					m = 3'b100;
+					m = 4'b0000;
 					wb = 2'b00;
 					jump = 1;
 					exception = 0;
@@ -180,7 +184,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				J:
 				begin
 					ex = 6'b000110;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b00;
 					jump = 1;
 					exception = 0;
@@ -188,7 +192,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				JAL:
 				begin
 					ex = 6'b001110;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b10;
 					jump = 1;
 					exception = 0;
@@ -196,7 +200,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				ORI:
 				begin
 					ex = 6'b001001;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b10;
 					jump = 0;
 					exception = 0;
@@ -204,7 +208,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				LUI:
 				begin
 					ex = 6'b001101;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b10;
 					jump = 0;
 					exception = 0;
@@ -212,23 +216,55 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				SLTI:
 				begin
 					ex = 6'b001011;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b10;
+					jump = 0;
+					exception = 0;
+				end
+				LB:
+				begin
+					ex = 6'b000001;
+					m = 4'b0110;
+					wb = 2'b11;
 					jump = 0;
 					exception = 0;
 				end
 				LW:
 				begin
 					ex = 6'b000001;
-					m = 3'b010;
+					m = 4'b0010;
 					wb = 2'b11;
+					jump = 0;
+					exception = 0;
+				end
+				LHU:
+				begin
+					ex = 6'b000001;
+					m = 4'b1010;
+					wb = 2'b11;
+					jump = 0;
+					exception = 0;
+				end
+				SB:
+				begin
+					ex = 6'b000001;//
+					m = 4'b0101;
+					wb = 2'b00;
+					jump = 0;
+					exception = 0;
+				end
+				SH:
+				begin
+					ex = 6'b000001;//
+					m = 4'b1001;
+					wb = 2'b00;
 					jump = 0;
 					exception = 0;
 				end
 				SW:
 				begin
 					ex = 6'b000001;//
-					m = 3'b001;
+					m = 4'b0001;
 					wb = 2'b00;
 					jump = 0;
 					exception = 0;
@@ -236,7 +272,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 				default:
 				begin
 					ex = 6'b000000;
-					m = 3'b000;
+					m = 4'b0000;
 					wb = 2'b00;
 					jump = 0;
 					exception = 0;
@@ -266,7 +302,7 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	output reg [31:0] pc_branch;
 
 	output reg [5:0] ex;
-	output reg [2:0] m;
+	output reg [3:0] m;
 	output reg [1:0] wb;
 
 	//Variables declaration
@@ -275,7 +311,7 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	wire [31:0] old_imm;
 
 	reg [5:0] old_ex;
-	reg [2:0] old_m;
+	reg [3:0] old_m;
 	reg [1:0] old_wb;
 	reg [31:0] old_data_1, old_data_2;
 
@@ -287,12 +323,15 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 
 	decode_HAZARD_UNIT hazard_unit ( old_rt, old_rs, rt, m[1], mux_ctrl_unit, hold_pc, hold_if);
 
-
+	parameter ADDIU = 6'b001001;
+	parameter SLTIU = 6'b001011;
+	parameter LUI = 6'b001111;
+	parameter LHU = 6'b100101;
 	//------Code starts Here------//
 	assign old_rs = inst_in[25:21];
 	assign old_rt = inst_in[20:16];
 	assign old_rd = ( old_ex == 6'b001110 ) ? 31 : inst_in[15:11];
-	assign old_imm = {16'h0000, inst_in[15:0]};
+	assign old_imm = (ADDIU || SLTIU || LUI || LHU ) ? {16'h0000, inst_in[15:0]} : ({inst_in[15:0], 16'h0000} >>> 16);
 
 
 	always_comb
