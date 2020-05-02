@@ -117,6 +117,7 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 	parameter SB = 6'b101000;
 	parameter SH = 6'b101001;
 	parameter SW = 6'b101011;
+	parameter LBU = 6'b100100;
 
 	//------Code starts Here------//
 	assign flush_ex = flush_id;
@@ -245,6 +246,14 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					jump = 0;
 					exception = 0;
 				end
+				LBU:
+				begin
+					ex = 6'b000001;
+					m = 4'b1110;
+					wb = 2'b11;
+					jump = 0;
+					exception = 0;
+				end
 				SB:
 				begin
 					ex = 6'b000001;//
@@ -327,11 +336,13 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	parameter SLTIU = 6'b001011;
 	parameter LUI = 6'b001111;
 	parameter LHU = 6'b100101;
+	parameter LBU = 6'b100100;
+
 	//------Code starts Here------//
 	assign old_rs = inst_in[25:21];
 	assign old_rt = inst_in[20:16];
 	assign old_rd = ( old_ex == 6'b001110 ) ? 31 : inst_in[15:11];
-	assign old_imm = (ADDIU || SLTIU || LUI || LHU ) ? {16'h0000, inst_in[15:0]} : ({inst_in[15:0], 16'h0000} >>> 16);
+	assign old_imm = (ADDIU || SLTIU || LUI || LHU || LBU ) ? {16'h0000, inst_in[15:0]} : $signed(({inst_in[15:0], 16'h0000} >>> 16));
 
 
 	always_comb
