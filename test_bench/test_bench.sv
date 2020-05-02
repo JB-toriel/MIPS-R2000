@@ -49,7 +49,7 @@ module test_bench;
 	MIPS mips ( clk, rst, pc_rom, inst_rom, ram_size, ram_read, ram_write, ram_data, ram_word, ram_adr );
 
 	//RAM
-  always @( ram_write, ram_adr, ram_data, ram_read  )
+  always @( ram_write, ram_adr, ram_data, ram_read, ram_size  )
 		begin
 	    if(ram_write)
 				begin
@@ -70,10 +70,12 @@ module test_bench;
 				end
 			if(ram_read)
 				begin
+					$display("%h %h %h", (ram[ram_adr/4][ram_adr%4]), {ram[ram_adr/4][ram_adr%4], 24'h00_0000}, ({ram[ram_adr/4][ram_adr%4], 24'h00_0000} >>> 24));
 					case (ram_size)
 						0:	ram_word <= {ram[ram_adr/4][0], ram[ram_adr/4][1], ram[ram_adr/4][2], ram[ram_adr/4][3]}; // 12345678 00 00 00 00
-						1:	ram_word <= {24'h0000_00, ram[ram_adr/4][ram_adr%4]};
-						2:	ram_word <= {16'h0000, ram[ram_adr/4][(ram_adr %2)-1], ram[ram_adr/4][ram_adr %2]};
+						1:	ram_word <= $signed({ram[ram_adr/4][ram_adr%4], 24'h00_0000}) >>> 24; //LB
+						2:	ram_word <= {16'h0000, ram[ram_adr/4][(ram_adr %2)-1], ram[ram_adr/4][ram_adr %2]}; //LHU
+						3:  ram_word <= {24'h00A0_00, ram[ram_adr/4][ram_adr%4]};	//LBU
 						default:	ram_word <= {ram[ram_adr/4][0], ram[ram_adr/4][1], ram[ram_adr/4][2], ram[ram_adr/4][3]};
 					endcase
 				end
@@ -97,6 +99,7 @@ module test_bench;
 						else ram[i][j] <= 0;
 				end
 			end
+			ram[2][2] <= 8'haa;
 			#1000
 			$stop;
 			$display( "End of simulation time is %d", $time );
