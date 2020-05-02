@@ -222,6 +222,14 @@ module decode_CONTROL_UNIT ( inst_in, mux_ctrl_unit, flush_id, exception, jump, 
 					jump = 0;
 					exception = 0;
 				end
+				SLTIU:
+				begin
+					ex = 6'b001011;
+					m = 4'b0000;
+					wb = 2'b10;
+					jump = 0;
+					exception = 0;
+				end
 				LB:
 				begin
 					ex = 6'b000001;
@@ -342,7 +350,7 @@ module ID ( clk, rst, pc, inst_in, write_register, write_data_reg, reg_write, ex
 	assign old_rs = inst_in[25:21];
 	assign old_rt = inst_in[20:16];
 	assign old_rd = ( old_ex == 6'b001110 ) ? 31 : inst_in[15:11];
-	assign old_imm = (ADDIU || SLTIU || LUI || LHU || LBU ) ? {16'h0000, inst_in[15:0]} : $signed(({inst_in[15:0], 16'h0000} >>> 16));
+	assign old_imm = ( inst_in[31:26] == ADDIU || inst_in[31:26] == SLTIU || inst_in[31:26] == LUI || inst_in[31:26] == LHU || inst_in[31:26] == LBU ) ? {16'h0000, inst_in[15:0]} : $signed(({inst_in[15:0], 16'h0000} >>> 16));
 
 
 	always_comb
