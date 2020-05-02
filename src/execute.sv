@@ -137,7 +137,7 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	//Inputs Declaration
 	input [3:0] ALU_ctrl;
 	input [5:0] fnc_code;
-	input [31:0] op_1, op_2;
+	input signed [31:0] op_1, op_2;
 
 	//Ouputs Declaration
 	output zero;
