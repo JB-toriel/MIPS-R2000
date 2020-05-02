@@ -137,7 +137,7 @@ module ALU ( op_1, fnc_code, op_2, ALU_ctrl, zero, over, res );
 	//Inputs Declaration
 	input [3:0] ALU_ctrl;
 	input [5:0] fnc_code;
-	input [31:0] op_1, op_2;
+	input signed [31:0] op_1, op_2;
 
 	//Ouputs Declaration
 	output zero;
@@ -195,7 +195,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 	input [4:0] rs, rt, rd, rd_WB;
 	input [31:0] imm, data_1, data_2;
 	input [5:0] ex;
-	input [2:0] m_EX;
+	input [3:0] m_EX;
 	input wb_WB;
 	input [1:0] wb_EX;
 	input flush_ex;
@@ -206,7 +206,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
   output over;
 	output reg [31:0] res;
 	output reg [4:0] write_register_ex;
-	output reg [2:0] m_MEM;
+	output reg [3:0] m_MEM;
 	output reg [1:0] wb_MEM;
 	output reg [31:0] write_data_ex;
 
@@ -219,7 +219,7 @@ module EX ( clk, pc, data_1, data_2, rs, rt, rd, ex, m_EX, wb_EX, wb_WB, rd_WB, 
 	wire [5:0] fnc_code;
 	reg [31:0] op_1, op_2, op_21;
 	wire [3:0] m_EX_mux;
-	wire [2:0] wb_EX_mux;
+	wire [1:0] wb_EX_mux;
 
 	reg [31:0] old_res;
 	reg [4:0] old_write_register_ex;

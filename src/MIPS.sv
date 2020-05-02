@@ -21,7 +21,7 @@ endmodule
 */
 
 
-module MIPS (clk, rst, pc_rom, inst_rom, ram_read, ram_write, ram_data, ram_word, ram_adr);
+module MIPS (clk, rst, pc_rom, inst_rom, ram_size, ram_read, ram_write, ram_data, ram_word, ram_adr);
 
 
   //Inputs Declaration
@@ -35,6 +35,7 @@ module MIPS (clk, rst, pc_rom, inst_rom, ram_read, ram_write, ram_data, ram_word
     //ROM
     output [31:0] pc_rom;
     //RAM
+    output [1:0] ram_size;
     output ram_read, ram_write;
     output [31:0] ram_data;
     output [31:0] ram_adr;
@@ -68,13 +69,13 @@ module MIPS (clk, rst, pc_rom, inst_rom, ram_read, ram_write, ram_data, ram_word
       reg jump;
       reg exception;
       reg [5:0] ex;
-      reg [2:0] m;
+      reg [3:0] m;
       reg [1:0] wb;
       reg flush_ex;
 
     //------For execute stage------//
 
-      reg [2:0] m_MEM;
+      reg [3:0] m_MEM;
       reg [1:0] wb_MEM;
       reg [31:0] res;
       reg [31:0] write_data_ex;
@@ -103,7 +104,7 @@ module MIPS (clk, rst, pc_rom, inst_rom, ram_read, ram_write, ram_data, ram_word
 
   EX execute ( clk, pc_ex, data_1, data_2, rs, rt, rd, ex, m, wb, wb_WB[1], write_register_mem, flush_ex, write_data_reg, imm, zero, over, res, write_register_ex, write_data_ex, m_MEM, wb_MEM );
 
-  MEM memory ( clk, ram_word, wb_MEM, m_MEM[1:0], res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem, ram_data, ram_adr, ram_read, ram_write );
+  MEM memory ( clk, ram_word, wb_MEM, m_MEM, res, write_data_ex, write_register_ex, wb_WB, read_data, address_WB, write_register_mem, ram_data, ram_adr, ram_read, ram_write, ram_size );
 
 
   WB writeback ( wb_WB, read_data, address_WB, write_register_mem, write_data_reg, write_register, reg_write );

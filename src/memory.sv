@@ -21,11 +21,11 @@ endmodule
 */
 
 
-module MEM ( clk, ram_word, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb, read_data, address_WB, write_register_mem, ram_data, ram_adr, ram_read, ram_write );
+module MEM ( clk, ram_word, wb_MEM, m, address_MEM, write_data_mem, write_register_ex, wb, read_data, address_WB, write_register_mem, ram_data, ram_adr, ram_read, ram_write, ram_size );
 
 	//Inputs declaration
 	input clk;
-	input [1:0] m;
+	input [3:0] m;
 	input [1:0] wb_MEM;
 	input [4:0] write_register_ex;
 	input [31:0] address_MEM, write_data_mem;
@@ -33,6 +33,7 @@ module MEM ( clk, ram_word, wb_MEM, m, address_MEM, write_data_mem, write_regist
 
 	//Outputs declaration
 	output ram_read, ram_write;
+	output [1:0] ram_size;
 	output reg [31:0] read_data, address_WB;
 	output reg [1:0] wb;
 	output reg [4:0] write_register_mem;
@@ -47,6 +48,7 @@ module MEM ( clk, ram_word, wb_MEM, m, address_MEM, write_data_mem, write_regist
 	//------Code starts Here------//
 	assign old_address_WB = address_MEM;
 	assign old_read_data = ram_word;
+	assign ram_size = m[3:2];
 	assign ram_read = m[1];
 	assign ram_write = m[0];
   assign ram_adr = address_MEM;
