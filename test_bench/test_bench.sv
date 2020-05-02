@@ -34,7 +34,8 @@ module test_bench;
 	//------For memory stage------//
 
 		// RAM
-		reg [31:0] ram [0:31];
+		wire [1:0] ram_size;
+		reg [7:0] ram [0:31][4]; //longueur, lignes, colonnes
 		reg ram_read, ram_write;
  		reg [31:0] ram_data, ram_word;
   	wire [31:0] ram_adr;
@@ -45,17 +46,37 @@ module test_bench;
 	always #(CLK_PERIOD/2.0) clk = ~clk;
 
 
-	MIPS mips ( clk, rst, pc_rom, inst_rom, ram_read, ram_write, ram_data, ram_word, ram_adr );
-
+	MIPS mips ( clk, rst, pc_rom, inst_rom, ram_size, ram_read, ram_write, ram_data, ram_word, ram_adr );
 
 	//RAM
   always @( ram_write, ram_adr, ram_data, ram_read  )
 		begin
 	    if(ram_write)
-	    	ram[ram_adr] <= ram_data;
+				begin
+					case (ram_size)
+						0: begin
+								ram[ram_adr/4][3] <= ram_data[7:0];
+								ram[ram_adr/4][2] <= ram_data[15:8];
+								ram[ram_adr/4][1] <= ram_data[23:16];
+								ram[ram_adr/4][0] <= ram_data[31:24]; // 12345678 00 00 00 00
+							end
+						1:	ram[ram_adr/4][ram_adr % 4] <= ram_data[7:0];
+						2:	begin
+								ram[ram_adr/4][ram_adr %2] <= ram_data[7:0]; //00 00 00 00 00 00
+								ram[ram_adr/4][(ram_adr %2) - 1] <= ram_data[15:8];
+						end
+						default:	ram[ram_adr/4][ram_adr % 4] <= ram_data[7:0];
+					endcase
+				end
 			if(ram_read)
-				ram_word <= ram[ram_adr];
-
+				begin
+					case (ram_size)
+						0:	ram_word <= {ram[ram_adr/4][0], ram[ram_adr/4][1], ram[ram_adr/4][2], ram[ram_adr/4][3]}; // 12345678 00 00 00 00
+						1:	ram_word <= {24'h0000_00, ram[ram_adr/4][ram_adr%4]};
+						2:	ram_word <= {16'h0000, ram[ram_adr/4][(ram_adr %2)-1], ram[ram_adr/4][ram_adr %2]};
+						default:	ram_word <= {ram[ram_adr/4][0], ram[ram_adr/4][1], ram[ram_adr/4][2], ram[ram_adr/4][3]};
+					endcase
+				end
 	  end
 
 		//ROM
@@ -67,18 +88,25 @@ module test_bench;
 	initial
 		begin
 
-    	init("ROM.list", "ram.txt");
-			#300
-
-			$display( "End of simulation time is %d", $time );
+    	init("Fibov0.txt", "ram.txt");
+			for(int i=0; i<32; i++) begin
+				for(int j=0; j<4; j++)begin
+						if (j == 3) begin
+							ram[i][j] <= i;
+						end
+						else ram[i][j] <= 0;
+				end
+			end
+			#1000
 			$stop;
+			$display( "End of simulation time is %d", $time );
 		end
 
 		task init;
     	input string ROM;
     	input string RAM;
     	$readmemh( ROM, rom );
-    	$readmemh( RAM, ram );
+    	//$readmemh( RAM, ram );
 			rst = 1;
 			#5
 			rst = 0;
