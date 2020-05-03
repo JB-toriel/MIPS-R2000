@@ -1,0 +1,37 @@
+24E60012 //addiu $a2 $a3 0x12 a2 <- 12
+34E50015 //ori   $a1 $a3 0x15 a1 <- 15
+38A70015 //xori  $a3 $a1 0x15 a3 <- 0
+
+20410001 //addi $at $v0 0x1 at <- 1
+20220001 //addi $v0 $at 0x1 v0 <- 2
+20430001 //addi $v1 $v0 0x1 v1 <- 3
+20470001 //addi $a3 $v0 0x1 a3 <- 3
+
+000733C0 //sll $a2 $a3 0x10 a2 <- ?
+0022282A //slt $a1 $at $v0 a1 <- at<v0 ? =1
+0041282A //slt $a1 $v0 $at a1 <- at<v0 ? =0
+00063402 //srl $a2 $a2 0x10 a2 <- 1
+
+00E63004 //sllv $a2 $a2 $a3 a2 <- 2
+00E63006 //srlv $a2 $a2 $a3 a2 <- 1
+
+00620820 //add $at $v1 $v0 at <- v1+v0=5
+00222022 //sub $a0 $at $v0 a0 <- at-v0=3
+00622825 //or $a1 $v1 $v0  a1 <- v1|v0=3
+00622824 //and $a1 $v1 $v0 a1 <- v1&v0=2
+00413026 //xor $a2 $v0 $at a2 <- v0^at=7
+00622827 //nor $a1 $v1 $v0 a1 <- -4
+
+3C09FFFF //lui t1 0xffff
+216AF000 //addi $t2 $t3 0xf000
+00095603 //sra t2 t1 0x18
+000A5603 //sra t2 t2 0x18
+
+20020001 //addi $v0 $zero 0x1 v0 <- 1
+20030001 //addi $v1 $zero 0x1 v1 <- 1
+00000000
+00000000
+10430002 //beq v0 v1 0x2
+2041ffff //addi $at $v0 0x1 at <- 1
+2041fddd //addi $at $v0 0x1 at <- 1
+0C000040 //jal 0x40
