@@ -90,10 +90,12 @@ module test_bench;
 	initial
 		begin
 
-    	init("instructions.txt"); //Instructions tests
+    	init("instructions.txt"); //Instructions tests excpet for load and store instructions
 			#1000
 			init("Fibonacci.txt");//Compute the Fibonacci sequence
 			#300
+			init("load_store.txt");
+			#3000
 
 			$stop;
 			$display( "End of simulation time is %d", $time );
