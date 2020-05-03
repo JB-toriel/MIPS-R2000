@@ -96,6 +96,8 @@ module test_bench;
 			#300
 			init("load_store.txt");
 			#3000
+			init("instruction_over.txt");
+			#3000
 
 			$stop;
 			$display( "End of simulation time is %d", $time );
