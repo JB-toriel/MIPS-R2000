@@ -47,6 +47,13 @@ Design of a 5 stages pipeline MIPS R2000.
     + **Netlist** -------------->  *./netmips.v*
     + **Old reports** -------->  *./old_reports.rar* : Previous Synthesis reports
     
+ ## Instruction set:
+    + J, JAL, BEQ, BNE : Branches and Jumps (4)
+    + ADDI, ADDIU, SLTIU, ANDIU, ANDI, ORI, XORI : Imediate Operations (7)
+    + LB, LW, LHU, SB, SH, SW, LBU : Load and Store (7)
+    + ADD, SUB, AND, OR, XOR, NOR, SLT, SLL, SRL, SRA, SRA, LUI : R-Type (12)
+    + Total = 30 Instructions
+    
 ---------------------------------
 
  ## Authors:
