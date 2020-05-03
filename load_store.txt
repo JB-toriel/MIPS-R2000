@@ -1,0 +1,14 @@
+3C04FFFF //lui a0 0xffff
+2084ffff //addi a0 a0 0x-1
+A0040005 //sb a0 0x5 zero
+A4040009 //sh a0 0x9 zero
+AC040005 //sw a0 0x5 zero
+80050009 //lb a1 0x9 zero
+90050009 //lbu a1 0x9 zero
+94060009 //lhu a2 0x9 zero
+00043E03 //sra a3 a0 0x18
+
+8C03000A //lw v1 A(zero) v1<-A
+8C010001 //lw at 1(zero) at<-1
+AC010002 //sw at 2 zero  mem[2]<-at
+8C020001 //lw v0 2(zero) v0<-at
