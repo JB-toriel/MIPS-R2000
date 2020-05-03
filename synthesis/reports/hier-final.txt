@@ -1,0 +1,33 @@
+ 
+****************************************
+Report : hierarchy
+        -noleaf
+Design : MIPS
+Version: J-2014.09-SP2
+Date   : Sat May  2 20:11:36 2020
+****************************************
+
+MIPS
+    EX
+        ALU
+            ALU_DW01_add_2
+            ALU_DW01_ash_1
+            ALU_DW01_cmp2_1
+            ALU_DW01_sub_3
+            ALU_DW_rash_1
+            ALU_DW_rash_2
+        ALU_ctrl_unit
+        execute_MUX_RTRD
+        forwarding_unit
+    ID
+        ID_DW01_add_0
+        ID_DW01_cmp6_1
+        decode_CONTROL_UNIT
+        decode_HAZARD_UNIT
+        decode_REG_MAPP
+    IF
+        fetch_MUX
+            fetch_MUX_DW01_add_2
+        fetch_PC_REG
+    MEM
+    WB
