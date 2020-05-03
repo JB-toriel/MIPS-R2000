@@ -90,9 +90,9 @@ module test_bench;
 	initial
 		begin
 
-    	init("instructions.txt");
+    	init("instructions.txt"); //Instructions tests
 			#1000
-			init("Fibonacci.txt");
+			init("Fibonacci.txt");//Compute the Fibonacci sequence
 			#300
 
 			$stop;
