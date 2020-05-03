@@ -58,7 +58,7 @@ module test_bench;
 								ram[ram_adr/4][3] <= ram_data[7:0];
 								ram[ram_adr/4][2] <= ram_data[15:8];
 								ram[ram_adr/4][1] <= ram_data[23:16];
-								ram[ram_adr/4][0] <= ram_data[31:24]; // 12345678 00 00 00 00
+								ram[ram_adr/4][0] <= ram_data[31:24];
 							end
 						1:	ram[ram_adr/4][ram_adr % 4] <= ram_data[7:0];
 						2:	begin
@@ -72,7 +72,7 @@ module test_bench;
 				begin
 					$display("%h %h %h", (ram[ram_adr/4][ram_adr%4]), {ram[ram_adr/4][ram_adr%4], 24'h00_0000}, ({ram[ram_adr/4][ram_adr%4], 24'h00_0000} >>> 24));
 					case (ram_size)
-						0:	ram_word <= {ram[ram_adr/4][0], ram[ram_adr/4][1], ram[ram_adr/4][2], ram[ram_adr/4][3]}; // 12345678 00 00 00 00
+						0:	ram_word <= {ram[ram_adr/4][0], ram[ram_adr/4][1], ram[ram_adr/4][2], ram[ram_adr/4][3]};
 						1:	ram_word <= $signed({ram[ram_adr/4][ram_adr%4], 24'h00_0000}) >>> 24; //LB
 						2:	ram_word <= {16'h0000, ram[ram_adr/4][(ram_adr %2)-1], ram[ram_adr/4][ram_adr %2]}; //LHU
 						3:  ram_word <= {24'h00A0_00, ram[ram_adr/4][ram_adr%4]};	//LBU
@@ -90,7 +90,20 @@ module test_bench;
 	initial
 		begin
 
-    	init("Fibov0.txt", "ram.txt");
+    	init("instructions.txt");
+			#1000
+			init("Fibonacci.txt");
+			#300
+
+			$stop;
+			$display( "End of simulation time is %d", $time );
+		end
+
+		//Initialisation Task
+		task init;
+    	input string ROM;
+    	$readmemh( ROM, rom );
+			//RAM initialisation
 			for(int i=0; i<32; i++) begin
 				for(int j=0; j<4; j++)begin
 						if (j == 3) begin
@@ -99,17 +112,6 @@ module test_bench;
 						else ram[i][j] <= 0;
 				end
 			end
-			ram[2][2] <= 8'haa;
-			#1000
-			$stop;
-			$display( "End of simulation time is %d", $time );
-		end
-
-		task init;
-    	input string ROM;
-    	input string RAM;
-    	$readmemh( ROM, rom );
-    	//$readmemh( RAM, ram );
 			rst = 1;
 			#5
 			rst = 0;
