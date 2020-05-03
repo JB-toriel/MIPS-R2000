@@ -30,7 +30,11 @@ Design of a 5 stages pipeline MIPS R2000.
  #### Test Bench:
  * **./test_bench/** : Contains all the test bench
     + ./test_bench.sv/
- 
+    
+ #### SpyGlass Lint reports:
+ * **./spyglass/** 
+ #### Synthesis reports:
+ * **./synthesis/** 
 ---------------------------------
 
  ## Authors:
