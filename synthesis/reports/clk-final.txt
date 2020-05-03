@@ -1,0 +1,38 @@
+ 
+****************************************
+Report : clocks
+Design : MIPS
+Version: J-2014.09-SP2
+Date   : Sat May  2 18:56:54 2020
+****************************************
+
+Attributes:
+    d - dont_touch_network
+    f - fix_hold
+    p - propagated_clock
+    G - generated_clock
+    g - lib_generated_clock
+
+Clock          Period   Waveform            Attrs     Sources
+--------------------------------------------------------------------------------
+CLK             10.00   {0 5}                         {clk}
+--------------------------------------------------------------------------------
+ 
+****************************************
+Report : clocks
+Design : MIPS
+Version: J-2014.09-SP2
+Date   : Sat May  2 20:14:26 2020
+****************************************
+
+Attributes:
+    d - dont_touch_network
+    f - fix_hold
+    p - propagated_clock
+    G - generated_clock
+    g - lib_generated_clock
+
+Clock          Period   Waveform            Attrs     Sources
+--------------------------------------------------------------------------------
+CLK             10.00   {0 5}                         {clk}
+--------------------------------------------------------------------------------
