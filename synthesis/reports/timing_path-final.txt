@@ -1,0 +1,106 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+        -sort_by group
+Design : MIPS
+Version: J-2014.09-SP2
+Date   : Sat May  2 19:13:01 2020
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: nom_pvt   Library: c35_CORELIB_TYP
+Wire Load Model Mode: enclosed
+No paths.
+
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+        -sort_by group
+Design : MIPS
+Version: J-2014.09-SP2
+Date   : Sat May  2 20:18:44 2020
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: nom_pvt   Library: c35_CORELIB_TYP
+Wire Load Model Mode: enclosed
+
+  Startpoint: instruction_decode/reg_MAPP/reg_file_reg[7][9]
+              (rising edge-triggered flip-flop clocked by CLK')
+  Endpoint: instruction_fetch/pc_REG/old_pc_reg[7]
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  decode_REG_MAPP    10k                   c35_CORELIB_TYP
+  ID                 10k                   c35_CORELIB_TYP
+  ID_DW01_cmp6_1     10k                   c35_CORELIB_TYP
+  MIPS               10k                   c35_CORELIB_TYP
+  fetch_MUX          10k                   c35_CORELIB_TYP
+  IF                 10k                   c35_CORELIB_TYP
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK' (rise edge)                                  5.00       5.00
+  clock network delay (ideal)                             0.00       5.00
+  instruction_decode/reg_MAPP/reg_file_reg[7][9]/C (DFEC1)
+                                                          0.00 #     5.00 r
+  instruction_decode/reg_MAPP/reg_file_reg[7][9]/Q (DFEC1)
+                                                          0.67       5.67 r
+  instruction_decode/reg_MAPP/U1427/Q (AOI221)            0.21       5.88 f
+  instruction_decode/reg_MAPP/U2151/Q (NAND22)            0.34       6.22 r
+  instruction_decode/reg_MAPP/U45/Q (NOR41)               0.34       6.56 f
+  instruction_decode/reg_MAPP/U6/Q (IMUX22)               0.29       6.85 r
+  instruction_decode/reg_MAPP/data_2[9] (decode_REG_MAPP)
+                                                          0.00       6.85 r
+  instruction_decode/r60/B[9] (ID_DW01_cmp6_1)            0.00       6.85 r
+  instruction_decode/r60/U79/Q (INV2)                     0.08       6.93 f
+  instruction_decode/r60/U129/Q (NOR21)                   0.20       7.13 r
+  instruction_decode/r60/U128/Q (AOI2111)                 0.23       7.36 f
+  instruction_decode/r60/U32/Q (NAND42)                   0.24       7.60 r
+  instruction_decode/r60/U31/Q (NOR22)                    0.16       7.77 f
+  instruction_decode/r60/U13/Q (NAND23)                   0.19       7.96 r
+  instruction_decode/r60/U12/Q (NOR32)                    0.17       8.13 f
+  instruction_decode/r60/EQ (ID_DW01_cmp6_1)              0.00       8.13 f
+  instruction_decode/U19/Q (NAND22)                       0.19       8.32 r
+  instruction_decode/U20/Q (INV3)                         0.08       8.40 f
+  instruction_decode/U4/Q (NAND23)                        0.17       8.57 r
+  instruction_decode/U10/Q (NAND24)                       0.06       8.62 f
+  instruction_decode/U74/Q (NAND24)                       0.15       8.78 r
+  instruction_decode/U77/Q (NOR24)                        0.16       8.93 f
+  instruction_decode/br (ID)                              0.00       8.93 f
+  instruction_fetch/br (IF)                               0.00       8.93 f
+  instruction_fetch/mux/br (fetch_MUX)                    0.00       8.93 f
+  instruction_fetch/mux/U76/Q (CLKIN6)                    0.10       9.04 r
+  instruction_fetch/mux/U80/Q (OAI212)                    0.12       9.16 f
+  instruction_fetch/mux/U77/Q (INV6)                      0.14       9.30 r
+  instruction_fetch/mux/U27/Q (BUF15)                     0.22       9.51 r
+  instruction_fetch/mux/U70/Q (AOI210)                    0.20       9.71 f
+  instruction_fetch/mux/U69/Q (NAND22)                    0.17       9.88 r
+  instruction_fetch/mux/new_pc[7] (fetch_MUX)             0.00       9.88 r
+  instruction_fetch/pc_REG/new_pc[7] (fetch_PC_REG)       0.00       9.88 r
+  instruction_fetch/pc_REG/old_pc_reg[7]/D (DFEC1)        0.00       9.88 r
+  data arrival time                                                  9.88
+
+  clock CLK (rise edge)                                  10.00      10.00
+  clock network delay (ideal)                             0.00      10.00
+  instruction_fetch/pc_REG/old_pc_reg[7]/C (DFEC1)        0.00      10.00 r
+  library setup time                                     -0.12       9.88
+  data required time                                                 9.88
+  --------------------------------------------------------------------------
+  data required time                                                 9.88
+  data arrival time                                                 -9.88
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
