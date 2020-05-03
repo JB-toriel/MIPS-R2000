@@ -1,3 +1,4 @@
+
 # Design of the MIPS R2000
 
 Design of a 5 stages pipeline MIPS R2000.
@@ -21,11 +22,11 @@ Design of a 5 stages pipeline MIPS R2000.
 
 #### Modules:
 - **./src/** : Contains all the modules of stages
-    + **TOP Module** ---------->  *./MIPS.sv*
-    + **IF/ID satge** ----------->  *./fetch.sv*
-    + **ID/EX stage** ----------> *./decode.sv* 
-    + **EX/MEM stage** ------> *./execute.sv* 
-    + **MEM/WB stage** ------> *./memory.sv* 
+    + **TOP Module** ----------->  *./MIPS.sv*
+    + **IF/ID satge** ------------->  *./fetch.sv*
+    + **ID/EX stage** ------------> *./decode.sv* 
+    + **EX/MEM stage** --------> *./execute.sv* 
+    + **MEM/WB stage** -------> *./memory.sv* 
     + **WB** ---------------------->./writeback.sv/
  #### Test Bench:
  * **./test_bench/** : Contains all the test bench
@@ -33,8 +34,8 @@ Design of a 5 stages pipeline MIPS R2000.
     
  #### SpyGlass Lint reports:
  * **./spyglass/** 
-    + **Run summury** ---------->  *./Run_Summury.txt* : Spyglass run summuray
-    + **Reports** -------------------->  *./moresimple.rpt* : Spyglass report
+    + **Run summury** --------------->  *./Run_Summury.txt* : Spyglass run summuray
+    + **Reports** ---------------------->  *./moresimple.rpt* : Spyglass report
     + **All spyglass project** -------->  *./spyglass.rar*
  #### Synthesis reports and netlist:
  * **./synthesis/** 
