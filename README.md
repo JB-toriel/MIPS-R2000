@@ -21,25 +21,26 @@ Design of a 5 stages pipeline MIPS R2000.
 
 #### Modules:
 - **./src/** : Contains all the modules of stages
-    + **TOP Module** ------------>  *./MIPS.sv*
+    + **TOP Module** ---------->  *./MIPS.sv*
     + **IF/ID satge** ----------->  *./fetch.sv*
     + **ID/EX stage** ----------> *./decode.sv* 
     + **EX/MEM stage** ------> *./execute.sv* 
     + **MEM/WB stage** ------> *./memory.sv* 
-    + **WB** ----------------------->./writeback.sv/
+    + **WB** ---------------------->./writeback.sv/
  #### Test Bench:
  * **./test_bench/** : Contains all the test bench
     + ./test_bench.sv/
     
  #### SpyGlass Lint reports:
  * **./spyglass/** 
-    + **Run summury** ------------>  *./Run_Summury.txt* : Spyglass run summuray
-    + **reports** ------------>  *./moresimple.rpt* : Spyglass report
+    + **Run summury** ---------->  *./Run_Summury.txt* : Spyglass run summuray
+    + **Reports** -------------------->  *./moresimple.rpt* : Spyglass report
+    + **All spyglass project** -------->  *./spyglass.rar*
  #### Synthesis reports and netlist:
  * **./synthesis/** 
-    + **reports** ------------>  *./reports/* : Synthesis reports such as area, power, etc.
-    + **netlist** ------------>  *./netmips.v*
-    + **old reports** ------------>  *./old_reports.rar* : Previous Synthesis reports
+    + **Reports** ------------->  *./reports/* : Synthesis reports such as area, power, etc.
+    + **Netlist** -------------->  *./netmips.v*
+    + **Old reports** -------->  *./old_reports.rar* : Previous Synthesis reports
     
 ---------------------------------
 
