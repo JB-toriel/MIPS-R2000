@@ -1,0 +1,13 @@
+//Fibonacci
+8C030027 //lw v1 A(zero) v1<-A
+8C010007 //lw at 1(zero) at<-1
+AC01000B //sw at 2 zero  mem[2]<-at
+8C020003 //lw v0 2(zero) v0<-at
+
+00410820 //add at at v0 at <- at + v0
+AC01000B //sw at 2 zero  mem[2]<-at
+
+20840001 //addi a0 a0 0x1  a0++
+00221020 //add v0 at v0 at <- at + v0
+00410820 //add at at v0 at <- at + v0
+1464FFFD //BNE v1 a0 0xFFFD
