@@ -21,7 +21,9 @@ Design of a 5 stages pipeline MIPS R2000.
 ## Directories:
 
 #### Test Programs: These files are read by the ram in the Test Bench
-- **./instructions.txt** : Test all the instructions (30)
+- **./instructions.txt** : Test all the instructions excepte load and store ones (23 instructions)
+- **./load_store.txt** : Test the load and store instructions (7 instructions)
+
 - **./Fibonacci.txt** : Small programm that conpute the terms of Fibonacci sequence
 
 #### Modules:
