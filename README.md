@@ -20,6 +20,12 @@ Design of a 5 stages pipeline MIPS R2000.
 
 ## Directories:
 
+#### Test Programs: These files are read by the ram in the Test Bench
+- **./instructions.txt** : Test all the instructions excepte load and store ones (23 instructions)
+- **./load_store.txt** : Test the load and store instructions (7 instructions)
+
+- **./Fibonacci.txt** : Small programm that conpute the terms of Fibonacci sequence
+
 #### Modules:
 - **./src/** : Contains all the modules of stages
     + **TOP Module** ----------->  *./MIPS.sv*
@@ -42,6 +48,13 @@ Design of a 5 stages pipeline MIPS R2000.
     + **Reports** ------------->  *./reports/* : Synthesis reports such as area, power, etc.
     + **Netlist** -------------->  *./netmips.v*
     + **Old reports** -------->  *./old_reports.rar* : Previous Synthesis reports
+    
+ ## Instruction set:
+    + J, JAL, BEQ, BNE : Branches and Jumps (4)
+    + ADDI, ADDIU, SLTIU, ANDIU, ANDI, ORI, XORI : Imediate Operations (7)
+    + LB, LW, LHU, SB, SH, SW, LBU : Load and Store (7)
+    + ADD, SUB, AND, OR, XOR, NOR, SLT, SLL, SRL, SRA, SRA, LUI : R-Type (12)
+    + Total = 30 Instructions
     
 ---------------------------------
 
