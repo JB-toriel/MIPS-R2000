@@ -1,0 +1,1638 @@
+ 
+****************************************
+Report : cell
+Design : MIPS
+Version: J-2014.09-SP2
+Date   : Sat May  2 18:55:53 2020
+****************************************
+
+Attributes:
+    b - black box (unknown)
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    u - contains unmapped logic
+
+Cell                      Reference       Library             Area  Attributes
+--------------------------------------------------------------------------------
+U1                        LOGIC0          c35_CORELIB_TYP 36.400002 
+U2                        BUF2            c35_CORELIB_TYP 54.599998 
+U3                        BUF2            c35_CORELIB_TYP 54.599998 
+U4                        BUF2            c35_CORELIB_TYP 54.599998 
+U5                        BUF2            c35_CORELIB_TYP 54.599998 
+U6                        BUF2            c35_CORELIB_TYP 54.599998 
+U7                        BUF2            c35_CORELIB_TYP 54.599998 
+U8                        BUF2            c35_CORELIB_TYP 54.599998 
+U9                        BUF2            c35_CORELIB_TYP 54.599998 
+U10                       BUF2            c35_CORELIB_TYP 54.599998 
+U11                       BUF2            c35_CORELIB_TYP 54.599998 
+U12                       BUF2            c35_CORELIB_TYP 54.599998 
+U13                       BUF2            c35_CORELIB_TYP 54.599998 
+U14                       BUF2            c35_CORELIB_TYP 54.599998 
+U15                       BUF2            c35_CORELIB_TYP 54.599998 
+U16                       BUF2            c35_CORELIB_TYP 54.599998 
+U17                       BUF2            c35_CORELIB_TYP 54.599998 
+U18                       BUF2            c35_CORELIB_TYP 54.599998 
+U19                       BUF2            c35_CORELIB_TYP 54.599998 
+U20                       BUF2            c35_CORELIB_TYP 54.599998 
+U21                       BUF2            c35_CORELIB_TYP 54.599998 
+U22                       BUF2            c35_CORELIB_TYP 54.599998 
+U23                       BUF2            c35_CORELIB_TYP 54.599998 
+U24                       BUF2            c35_CORELIB_TYP 54.599998 
+U25                       BUF2            c35_CORELIB_TYP 54.599998 
+U26                       BUF2            c35_CORELIB_TYP 54.599998 
+U27                       BUF2            c35_CORELIB_TYP 54.599998 
+U28                       BUF2            c35_CORELIB_TYP 54.599998 
+U29                       BUF2            c35_CORELIB_TYP 54.599998 
+U30                       BUF2            c35_CORELIB_TYP 54.599998 
+U31                       BUF2            c35_CORELIB_TYP 54.599998 
+U32                       BUF2            c35_CORELIB_TYP 54.599998 
+U33                       BUF2            c35_CORELIB_TYP 54.599998 
+U34                       BUF2            c35_CORELIB_TYP 54.599998 
+execute                   EX                              222021.800095
+                                                                    h, n
+instruction_decode        ID                              593119.786476
+                                                                    h, n
+instruction_fetch         IF                              47192.599930
+                                                                    h, n
+memory                    MEM                             19383.000000
+                                                                    h, n
+writeback                 WB                              3621.799904
+                                                                    h
+--------------------------------------------------------------------------------
+Total 39 cells                                            887177.186356
+ 
+****************************************
+Report : cell
+        -connections
+Design : MIPS
+Version: J-2014.09-SP2
+Date   : Sat May  2 20:13:18 2020
+****************************************
+
+
+Connections for cell 'U1':
+    Reference:          LOGIC0
+    Library:            c35_CORELIB_TYP
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n1
+
+Connections for cell 'U2':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[11]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n14
+
+Connections for cell 'U3':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[24]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n27
+
+Connections for cell 'U4':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[27]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n30
+
+Connections for cell 'U5':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[3]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n6
+
+Connections for cell 'U6':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[6]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n9
+
+Connections for cell 'U7':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[7]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n10
+
+Connections for cell 'U8':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[8]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n11
+
+Connections for cell 'U9':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[9]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n12
+
+Connections for cell 'U10':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[10]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n13
+
+Connections for cell 'U11':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[12]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n15
+
+Connections for cell 'U12':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[13]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n16
+
+Connections for cell 'U13':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[16]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n19
+
+Connections for cell 'U14':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[17]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n20
+
+Connections for cell 'U15':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[18]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n21
+
+Connections for cell 'U16':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[19]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n22
+
+Connections for cell 'U17':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[20]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n23
+
+Connections for cell 'U18':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[21]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n24
+
+Connections for cell 'U19':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[22]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n25
+
+Connections for cell 'U20':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[23]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n26
+
+Connections for cell 'U21':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[25]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n28
+
+Connections for cell 'U22':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[31]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n34
+
+Connections for cell 'U23':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[0]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n3
+
+Connections for cell 'U24':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[1]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n4
+
+Connections for cell 'U25':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[5]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n8
+
+Connections for cell 'U26':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[4]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n7
+
+Connections for cell 'U27':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[2]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n5
+
+Connections for cell 'U28':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[15]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n18
+
+Connections for cell 'U29':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[14]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n17
+
+Connections for cell 'U30':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[26]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n29
+
+Connections for cell 'U31':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[28]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n31
+
+Connections for cell 'U32':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[29]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n32
+
+Connections for cell 'U33':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_data_reg[30]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n33
+
+Connections for cell 'U34':
+    Reference:          BUF2
+    Library:            c35_CORELIB_TYP
+
+    Input Pins          Net
+    ----------------    ------------
+    A                   write_register_mem[4]
+
+    Output Pins         Net
+    ----------------    ------------
+    Q                   n2
+
+Connections for cell 'execute':
+    Reference:          EX
+    Hierarchical:       TRUE
+
+    Input Pins          Net
+    ----------------    ------------
+    clk                 clk
+    pc[31]              pc_ex[31]
+    pc[30]              pc_ex[30]
+    pc[29]              pc_ex[29]
+    pc[28]              pc_ex[28]
+    pc[27]              pc_ex[27]
+    pc[26]              pc_ex[26]
+    pc[25]              pc_ex[25]
+    pc[24]              pc_ex[24]
+    pc[23]              pc_ex[23]
+    pc[22]              pc_ex[22]
+    pc[21]              pc_ex[21]
+    pc[20]              pc_ex[20]
+    pc[19]              pc_ex[19]
+    pc[18]              pc_ex[18]
+    pc[17]              pc_ex[17]
+    pc[16]              pc_ex[16]
+    pc[15]              pc_ex[15]
+    pc[14]              pc_ex[14]
+    pc[13]              pc_ex[13]
+    pc[12]              pc_ex[12]
+    pc[11]              pc_ex[11]
+    pc[10]              pc_ex[10]
+    pc[9]               pc_ex[9]
+    pc[8]               pc_ex[8]
+    pc[7]               pc_ex[7]
+    pc[6]               pc_ex[6]
+    pc[5]               pc_ex[5]
+    pc[4]               pc_ex[4]
+    pc[3]               pc_ex[3]
+    pc[2]               pc_ex[2]
+    pc[1]               pc_ex[1]
+    pc[0]               pc_ex[0]
+    data_1[31]          data_1[31]
+    data_1[30]          data_1[30]
+    data_1[29]          data_1[29]
+    data_1[28]          data_1[28]
+    data_1[27]          data_1[27]
+    data_1[26]          data_1[26]
+    data_1[25]          data_1[25]
+    data_1[24]          data_1[24]
+    data_1[23]          data_1[23]
+    data_1[22]          data_1[22]
+    data_1[21]          data_1[21]
+    data_1[20]          data_1[20]
+    data_1[19]          data_1[19]
+    data_1[18]          data_1[18]
+    data_1[17]          data_1[17]
+    data_1[16]          data_1[16]
+    data_1[15]          data_1[15]
+    data_1[14]          data_1[14]
+    data_1[13]          data_1[13]
+    data_1[12]          data_1[12]
+    data_1[11]          data_1[11]
+    data_1[10]          data_1[10]
+    data_1[9]           data_1[9]
+    data_1[8]           data_1[8]
+    data_1[7]           data_1[7]
+    data_1[6]           data_1[6]
+    data_1[5]           data_1[5]
+    data_1[4]           data_1[4]
+    data_1[3]           data_1[3]
+    data_1[2]           data_1[2]
+    data_1[1]           data_1[1]
+    data_1[0]           data_1[0]
+    data_2[31]          data_2[31]
+    data_2[30]          data_2[30]
+    data_2[29]          data_2[29]
+    data_2[28]          data_2[28]
+    data_2[27]          data_2[27]
+    data_2[26]          data_2[26]
+    data_2[25]          data_2[25]
+    data_2[24]          data_2[24]
+    data_2[23]          data_2[23]
+    data_2[22]          data_2[22]
+    data_2[21]          data_2[21]
+    data_2[20]          data_2[20]
+    data_2[19]          data_2[19]
+    data_2[18]          data_2[18]
+    data_2[17]          data_2[17]
+    data_2[16]          data_2[16]
+    data_2[15]          data_2[15]
+    data_2[14]          data_2[14]
+    data_2[13]          data_2[13]
+    data_2[12]          data_2[12]
+    data_2[11]          data_2[11]
+    data_2[10]          data_2[10]
+    data_2[9]           data_2[9]
+    data_2[8]           data_2[8]
+    data_2[7]           data_2[7]
+    data_2[6]           data_2[6]
+    data_2[5]           data_2[5]
+    data_2[4]           data_2[4]
+    data_2[3]           data_2[3]
+    data_2[2]           data_2[2]
+    data_2[1]           data_2[1]
+    data_2[0]           data_2[0]
+    rs[4]               rs[4]
+    rs[3]               rs[3]
+    rs[2]               rs[2]
+    rs[1]               rs[1]
+    rs[0]               rs[0]
+    rt[4]               rt[4]
+    rt[3]               rt[3]
+    rt[2]               rt[2]
+    rt[1]               rt[1]
+    rt[0]               rt[0]
+    rd[4]               rd[4]
+    rd[3]               rd[3]
+    rd[2]               rd[2]
+    rd[1]               rd[1]
+    rd[0]               rd[0]
+    ex[5]               ex[5]
+    ex[4]               n1
+    ex[3]               ex[3]
+    ex[2]               ex[2]
+    ex[1]               ex[1]
+    ex[0]               ex[0]
+    m_EX[3]             m[3]
+    m_EX[2]             m[2]
+    m_EX[1]             m[1]
+    m_EX[0]             m[0]
+    wb_EX[1]            wb[1]
+    wb_EX[0]            wb[0]
+    wb_WB               wb_WB[1]
+    rd_WB[4]            write_register_mem[4]
+    rd_WB[3]            write_register_mem[3]
+    rd_WB[2]            write_register_mem[2]
+    rd_WB[1]            write_register_mem[1]
+    rd_WB[0]            write_register_mem[0]
+    flush_ex            flush_ex
+    write_data_reg[31]  n34
+    write_data_reg[30]  n33
+    write_data_reg[29]  n32
+    write_data_reg[28]  n31
+    write_data_reg[27]  n30
+    write_data_reg[26]  n29
+    write_data_reg[25]  n28
+    write_data_reg[24]  n27
+    write_data_reg[23]  n26
+    write_data_reg[22]  n25
+    write_data_reg[21]  n24
+    write_data_reg[20]  n23
+    write_data_reg[19]  n22
+    write_data_reg[18]  n21
+    write_data_reg[17]  n20
+    write_data_reg[16]  n19
+    write_data_reg[15]  n18
+    write_data_reg[14]  n17
+    write_data_reg[13]  n16
+    write_data_reg[12]  n15
+    write_data_reg[11]  n14
+    write_data_reg[10]  n13
+    write_data_reg[9]   n12
+    write_data_reg[8]   n11
+    write_data_reg[7]   n10
+    write_data_reg[6]   n9
+    write_data_reg[5]   n8
+    write_data_reg[4]   n7
+    write_data_reg[3]   n6
+    write_data_reg[2]   n5
+    write_data_reg[1]   n4
+    write_data_reg[0]   n3
+    imm[31]             n1
+    imm[30]             n1
+    imm[29]             n1
+    imm[28]             n1
+    imm[27]             n1
+    imm[26]             n1
+    imm[25]             n1
+    imm[24]             n1
+    imm[23]             n1
+    imm[22]             n1
+    imm[21]             n1
+    imm[20]             n1
+    imm[19]             n1
+    imm[18]             n1
+    imm[17]             n1
+    imm[16]             n1
+    imm[15]             imm[15]
+    imm[14]             imm[14]
+    imm[13]             imm[13]
+    imm[12]             imm[12]
+    imm[11]             imm[11]
+    imm[10]             imm[10]
+    imm[9]              imm[9]
+    imm[8]              imm[8]
+    imm[7]              imm[7]
+    imm[6]              imm[6]
+    imm[5]              imm[5]
+    imm[4]              imm[4]
+    imm[3]              imm[3]
+    imm[2]              imm[2]
+    imm[1]              imm[1]
+    imm[0]              imm[0]
+
+    Output Pins         Net
+    ----------------    ------------
+    zero                
+    over                over
+    res[31]             res[31]
+    res[30]             res[30]
+    res[29]             res[29]
+    res[28]             res[28]
+    res[27]             res[27]
+    res[26]             res[26]
+    res[25]             res[25]
+    res[24]             res[24]
+    res[23]             res[23]
+    res[22]             res[22]
+    res[21]             res[21]
+    res[20]             res[20]
+    res[19]             res[19]
+    res[18]             res[18]
+    res[17]             res[17]
+    res[16]             res[16]
+    res[15]             res[15]
+    res[14]             res[14]
+    res[13]             res[13]
+    res[12]             res[12]
+    res[11]             res[11]
+    res[10]             res[10]
+    res[9]              res[9]
+    res[8]              res[8]
+    res[7]              res[7]
+    res[6]              res[6]
+    res[5]              res[5]
+    res[4]              res[4]
+    res[3]              res[3]
+    res[2]              res[2]
+    res[1]              res[1]
+    res[0]              res[0]
+    write_register_ex[4]
+                        write_register_ex[4]
+    write_register_ex[3]
+                        write_register_ex[3]
+    write_register_ex[2]
+                        write_register_ex[2]
+    write_register_ex[1]
+                        write_register_ex[1]
+    write_register_ex[0]
+                        write_register_ex[0]
+    write_data_ex[31]   write_data_ex[31]
+    write_data_ex[30]   write_data_ex[30]
+    write_data_ex[29]   write_data_ex[29]
+    write_data_ex[28]   write_data_ex[28]
+    write_data_ex[27]   write_data_ex[27]
+    write_data_ex[26]   write_data_ex[26]
+    write_data_ex[25]   write_data_ex[25]
+    write_data_ex[24]   write_data_ex[24]
+    write_data_ex[23]   write_data_ex[23]
+    write_data_ex[22]   write_data_ex[22]
+    write_data_ex[21]   write_data_ex[21]
+    write_data_ex[20]   write_data_ex[20]
+    write_data_ex[19]   write_data_ex[19]
+    write_data_ex[18]   write_data_ex[18]
+    write_data_ex[17]   write_data_ex[17]
+    write_data_ex[16]   write_data_ex[16]
+    write_data_ex[15]   write_data_ex[15]
+    write_data_ex[14]   write_data_ex[14]
+    write_data_ex[13]   write_data_ex[13]
+    write_data_ex[12]   write_data_ex[12]
+    write_data_ex[11]   write_data_ex[11]
+    write_data_ex[10]   write_data_ex[10]
+    write_data_ex[9]    write_data_ex[9]
+    write_data_ex[8]    write_data_ex[8]
+    write_data_ex[7]    write_data_ex[7]
+    write_data_ex[6]    write_data_ex[6]
+    write_data_ex[5]    write_data_ex[5]
+    write_data_ex[4]    write_data_ex[4]
+    write_data_ex[3]    write_data_ex[3]
+    write_data_ex[2]    write_data_ex[2]
+    write_data_ex[1]    write_data_ex[1]
+    write_data_ex[0]    write_data_ex[0]
+    m_MEM[3]            m_MEM[3]
+    m_MEM[2]            m_MEM[2]
+    m_MEM[1]            m_MEM[1]
+    m_MEM[0]            m_MEM[0]
+    wb_MEM[1]           wb_MEM[1]
+    wb_MEM[0]           wb_MEM[0]
+
+Connections for cell 'instruction_decode':
+    Reference:          ID
+    Hierarchical:       TRUE
+
+    Input Pins          Net
+    ----------------    ------------
+    clk                 clk
+    rst                 rst
+    pc[31]              pc_out[31]
+    pc[30]              pc_out[30]
+    pc[29]              pc_out[29]
+    pc[28]              pc_out[28]
+    pc[27]              pc_out[27]
+    pc[26]              pc_out[26]
+    pc[25]              pc_out[25]
+    pc[24]              pc_out[24]
+    pc[23]              pc_out[23]
+    pc[22]              pc_out[22]
+    pc[21]              pc_out[21]
+    pc[20]              pc_out[20]
+    pc[19]              pc_out[19]
+    pc[18]              pc_out[18]
+    pc[17]              pc_out[17]
+    pc[16]              pc_out[16]
+    pc[15]              pc_out[15]
+    pc[14]              pc_out[14]
+    pc[13]              pc_out[13]
+    pc[12]              pc_out[12]
+    pc[11]              pc_out[11]
+    pc[10]              pc_out[10]
+    pc[9]               pc_out[9]
+    pc[8]               pc_out[8]
+    pc[7]               pc_out[7]
+    pc[6]               pc_out[6]
+    pc[5]               pc_out[5]
+    pc[4]               pc_out[4]
+    pc[3]               pc_out[3]
+    pc[2]               pc_out[2]
+    pc[1]               pc_out[1]
+    pc[0]               pc_out[0]
+    inst_in[31]         inst_out[31]
+    inst_in[30]         inst_out[30]
+    inst_in[29]         inst_out[29]
+    inst_in[28]         inst_out[28]
+    inst_in[27]         inst_out[27]
+    inst_in[26]         inst_out[26]
+    inst_in[25]         inst_out[25]
+    inst_in[24]         inst_out[24]
+    inst_in[23]         inst_out[23]
+    inst_in[22]         inst_out[22]
+    inst_in[21]         inst_out[21]
+    inst_in[20]         inst_out[20]
+    inst_in[19]         inst_out[19]
+    inst_in[18]         inst_out[18]
+    inst_in[17]         inst_out[17]
+    inst_in[16]         inst_out[16]
+    inst_in[15]         inst_out[15]
+    inst_in[14]         inst_out[14]
+    inst_in[13]         inst_out[13]
+    inst_in[12]         inst_out[12]
+    inst_in[11]         inst_out[11]
+    inst_in[10]         inst_out[10]
+    inst_in[9]          inst_out[9]
+    inst_in[8]          inst_out[8]
+    inst_in[7]          inst_out[7]
+    inst_in[6]          inst_out[6]
+    inst_in[5]          inst_out[5]
+    inst_in[4]          inst_out[4]
+    inst_in[3]          inst_out[3]
+    inst_in[2]          inst_out[2]
+    inst_in[1]          inst_out[1]
+    inst_in[0]          inst_out[0]
+    write_register[4]   write_register[4]
+    write_register[3]   write_register[3]
+    write_register[2]   write_register[2]
+    write_register[1]   write_register[1]
+    write_register[0]   write_register[0]
+    write_data_reg[31]  n34
+    write_data_reg[30]  n33
+    write_data_reg[29]  n32
+    write_data_reg[28]  n31
+    write_data_reg[27]  n30
+    write_data_reg[26]  n29
+    write_data_reg[25]  n28
+    write_data_reg[24]  n27
+    write_data_reg[23]  n26
+    write_data_reg[22]  n25
+    write_data_reg[21]  n24
+    write_data_reg[20]  n23
+    write_data_reg[19]  n22
+    write_data_reg[18]  n21
+    write_data_reg[17]  n20
+    write_data_reg[16]  n19
+    write_data_reg[15]  n18
+    write_data_reg[14]  n17
+    write_data_reg[13]  n16
+    write_data_reg[12]  n15
+    write_data_reg[11]  n14
+    write_data_reg[10]  n13
+    write_data_reg[9]   n12
+    write_data_reg[8]   n11
+    write_data_reg[7]   n10
+    write_data_reg[6]   n9
+    write_data_reg[5]   n8
+    write_data_reg[4]   n7
+    write_data_reg[3]   n6
+    write_data_reg[2]   n5
+    write_data_reg[1]   n4
+    write_data_reg[0]   n3
+    reg_write           reg_write
+    flush_id            over
+
+    Output Pins         Net
+    ----------------    ------------
+    exception           
+    jump                
+    rs[4]               rs[4]
+    rs[3]               rs[3]
+    rs[2]               rs[2]
+    rs[1]               rs[1]
+    rs[0]               rs[0]
+    rt[4]               rt[4]
+    rt[3]               rt[3]
+    rt[2]               rt[2]
+    rt[1]               rt[1]
+    rt[0]               rt[0]
+    rd[4]               rd[4]
+    rd[3]               rd[3]
+    rd[2]               rd[2]
+    rd[1]               rd[1]
+    rd[0]               rd[0]
+    imm[31]             
+    imm[30]             
+    imm[29]             
+    imm[28]             
+    imm[27]             
+    imm[26]             
+    imm[25]             
+    imm[24]             
+    imm[23]             
+    imm[22]             
+    imm[21]             
+    imm[20]             
+    imm[19]             
+    imm[18]             
+    imm[17]             
+    imm[16]             
+    imm[15]             imm[15]
+    imm[14]             imm[14]
+    imm[13]             imm[13]
+    imm[12]             imm[12]
+    imm[11]             imm[11]
+    imm[10]             imm[10]
+    imm[9]              imm[9]
+    imm[8]              imm[8]
+    imm[7]              imm[7]
+    imm[6]              imm[6]
+    imm[5]              imm[5]
+    imm[4]              imm[4]
+    imm[3]              imm[3]
+    imm[2]              imm[2]
+    imm[1]              imm[1]
+    imm[0]              imm[0]
+    data_1[31]          data_1[31]
+    data_1[30]          data_1[30]
+    data_1[29]          data_1[29]
+    data_1[28]          data_1[28]
+    data_1[27]          data_1[27]
+    data_1[26]          data_1[26]
+    data_1[25]          data_1[25]
+    data_1[24]          data_1[24]
+    data_1[23]          data_1[23]
+    data_1[22]          data_1[22]
+    data_1[21]          data_1[21]
+    data_1[20]          data_1[20]
+    data_1[19]          data_1[19]
+    data_1[18]          data_1[18]
+    data_1[17]          data_1[17]
+    data_1[16]          data_1[16]
+    data_1[15]          data_1[15]
+    data_1[14]          data_1[14]
+    data_1[13]          data_1[13]
+    data_1[12]          data_1[12]
+    data_1[11]          data_1[11]
+    data_1[10]          data_1[10]
+    data_1[9]           data_1[9]
+    data_1[8]           data_1[8]
+    data_1[7]           data_1[7]
+    data_1[6]           data_1[6]
+    data_1[5]           data_1[5]
+    data_1[4]           data_1[4]
+    data_1[3]           data_1[3]
+    data_1[2]           data_1[2]
+    data_1[1]           data_1[1]
+    data_1[0]           data_1[0]
+    data_2[31]          data_2[31]
+    data_2[30]          data_2[30]
+    data_2[29]          data_2[29]
+    data_2[28]          data_2[28]
+    data_2[27]          data_2[27]
+    data_2[26]          data_2[26]
+    data_2[25]          data_2[25]
+    data_2[24]          data_2[24]
+    data_2[23]          data_2[23]
+    data_2[22]          data_2[22]
+    data_2[21]          data_2[21]
+    data_2[20]          data_2[20]
+    data_2[19]          data_2[19]
+    data_2[18]          data_2[18]
+    data_2[17]          data_2[17]
+    data_2[16]          data_2[16]
+    data_2[15]          data_2[15]
+    data_2[14]          data_2[14]
+    data_2[13]          data_2[13]
+    data_2[12]          data_2[12]
+    data_2[11]          data_2[11]
+    data_2[10]          data_2[10]
+    data_2[9]           data_2[9]
+    data_2[8]           data_2[8]
+    data_2[7]           data_2[7]
+    data_2[6]           data_2[6]
+    data_2[5]           data_2[5]
+    data_2[4]           data_2[4]
+    data_2[3]           data_2[3]
+    data_2[2]           data_2[2]
+    data_2[1]           data_2[1]
+    data_2[0]           data_2[0]
+    wb[1]               wb[1]
+    wb[0]               wb[0]
+    m[3]                m[3]
+    m[2]                m[2]
+    m[1]                m[1]
+    m[0]                m[0]
+    ex[5]               ex[5]
+    ex[4]               
+    ex[3]               ex[3]
+    ex[2]               ex[2]
+    ex[1]               ex[1]
+    ex[0]               ex[0]
+    br                  br
+    pc_branch[31]       pc_branch[31]
+    pc_branch[30]       pc_branch[30]
+    pc_branch[29]       pc_branch[29]
+    pc_branch[28]       pc_branch[28]
+    pc_branch[27]       pc_branch[27]
+    pc_branch[26]       pc_branch[26]
+    pc_branch[25]       pc_branch[25]
+    pc_branch[24]       pc_branch[24]
+    pc_branch[23]       pc_branch[23]
+    pc_branch[22]       pc_branch[22]
+    pc_branch[21]       pc_branch[21]
+    pc_branch[20]       pc_branch[20]
+    pc_branch[19]       pc_branch[19]
+    pc_branch[18]       pc_branch[18]
+    pc_branch[17]       pc_branch[17]
+    pc_branch[16]       pc_branch[16]
+    pc_branch[15]       pc_branch[15]
+    pc_branch[14]       pc_branch[14]
+    pc_branch[13]       pc_branch[13]
+    pc_branch[12]       pc_branch[12]
+    pc_branch[11]       pc_branch[11]
+    pc_branch[10]       pc_branch[10]
+    pc_branch[9]        pc_branch[9]
+    pc_branch[8]        pc_branch[8]
+    pc_branch[7]        pc_branch[7]
+    pc_branch[6]        pc_branch[6]
+    pc_branch[5]        pc_branch[5]
+    pc_branch[4]        pc_branch[4]
+    pc_branch[3]        pc_branch[3]
+    pc_branch[2]        pc_branch[2]
+    pc_branch[1]        pc_branch[1]
+    pc_branch[0]        pc_branch[0]
+    hold_pc             hold_pc
+    hold_if             hold_if
+    flush_ex            flush_ex
+    pc_ex[31]           pc_ex[31]
+    pc_ex[30]           pc_ex[30]
+    pc_ex[29]           pc_ex[29]
+    pc_ex[28]           pc_ex[28]
+    pc_ex[27]           pc_ex[27]
+    pc_ex[26]           pc_ex[26]
+    pc_ex[25]           pc_ex[25]
+    pc_ex[24]           pc_ex[24]
+    pc_ex[23]           pc_ex[23]
+    pc_ex[22]           pc_ex[22]
+    pc_ex[21]           pc_ex[21]
+    pc_ex[20]           pc_ex[20]
+    pc_ex[19]           pc_ex[19]
+    pc_ex[18]           pc_ex[18]
+    pc_ex[17]           pc_ex[17]
+    pc_ex[16]           pc_ex[16]
+    pc_ex[15]           pc_ex[15]
+    pc_ex[14]           pc_ex[14]
+    pc_ex[13]           pc_ex[13]
+    pc_ex[12]           pc_ex[12]
+    pc_ex[11]           pc_ex[11]
+    pc_ex[10]           pc_ex[10]
+    pc_ex[9]            pc_ex[9]
+    pc_ex[8]            pc_ex[8]
+    pc_ex[7]            pc_ex[7]
+    pc_ex[6]            pc_ex[6]
+    pc_ex[5]            pc_ex[5]
+    pc_ex[4]            pc_ex[4]
+    pc_ex[3]            pc_ex[3]
+    pc_ex[2]            pc_ex[2]
+    pc_ex[1]            pc_ex[1]
+    pc_ex[0]            pc_ex[0]
+
+Connections for cell 'instruction_fetch':
+    Reference:          IF
+    Hierarchical:       TRUE
+
+    Input Pins          Net
+    ----------------    ------------
+    clk                 clk
+    inst_rom[31]        inst_rom[31]
+    inst_rom[30]        inst_rom[30]
+    inst_rom[29]        inst_rom[29]
+    inst_rom[28]        inst_rom[28]
+    inst_rom[27]        inst_rom[27]
+    inst_rom[26]        inst_rom[26]
+    inst_rom[25]        inst_rom[25]
+    inst_rom[24]        inst_rom[24]
+    inst_rom[23]        inst_rom[23]
+    inst_rom[22]        inst_rom[22]
+    inst_rom[21]        inst_rom[21]
+    inst_rom[20]        inst_rom[20]
+    inst_rom[19]        inst_rom[19]
+    inst_rom[18]        inst_rom[18]
+    inst_rom[17]        inst_rom[17]
+    inst_rom[16]        inst_rom[16]
+    inst_rom[15]        inst_rom[15]
+    inst_rom[14]        inst_rom[14]
+    inst_rom[13]        inst_rom[13]
+    inst_rom[12]        inst_rom[12]
+    inst_rom[11]        inst_rom[11]
+    inst_rom[10]        inst_rom[10]
+    inst_rom[9]         inst_rom[9]
+    inst_rom[8]         inst_rom[8]
+    inst_rom[7]         inst_rom[7]
+    inst_rom[6]         inst_rom[6]
+    inst_rom[5]         inst_rom[5]
+    inst_rom[4]         inst_rom[4]
+    inst_rom[3]         inst_rom[3]
+    inst_rom[2]         inst_rom[2]
+    inst_rom[1]         inst_rom[1]
+    inst_rom[0]         inst_rom[0]
+    rst                 rst
+    hold_pc             hold_pc
+    hold_if             hold_if
+    pc_branch[31]       pc_branch[31]
+    pc_branch[30]       pc_branch[30]
+    pc_branch[29]       pc_branch[29]
+    pc_branch[28]       pc_branch[28]
+    pc_branch[27]       pc_branch[27]
+    pc_branch[26]       pc_branch[26]
+    pc_branch[25]       pc_branch[25]
+    pc_branch[24]       pc_branch[24]
+    pc_branch[23]       pc_branch[23]
+    pc_branch[22]       pc_branch[22]
+    pc_branch[21]       pc_branch[21]
+    pc_branch[20]       pc_branch[20]
+    pc_branch[19]       pc_branch[19]
+    pc_branch[18]       pc_branch[18]
+    pc_branch[17]       pc_branch[17]
+    pc_branch[16]       pc_branch[16]
+    pc_branch[15]       pc_branch[15]
+    pc_branch[14]       pc_branch[14]
+    pc_branch[13]       pc_branch[13]
+    pc_branch[12]       pc_branch[12]
+    pc_branch[11]       pc_branch[11]
+    pc_branch[10]       pc_branch[10]
+    pc_branch[9]        pc_branch[9]
+    pc_branch[8]        pc_branch[8]
+    pc_branch[7]        pc_branch[7]
+    pc_branch[6]        pc_branch[6]
+    pc_branch[5]        pc_branch[5]
+    pc_branch[4]        pc_branch[4]
+    pc_branch[3]        pc_branch[3]
+    pc_branch[2]        pc_branch[2]
+    pc_branch[1]        pc_branch[1]
+    pc_branch[0]        pc_branch[0]
+    br                  br
+    except              n1
+
+    Output Pins         Net
+    ----------------    ------------
+    pc_rom[31]          pc_rom[31]
+    pc_rom[30]          pc_rom[30]
+    pc_rom[29]          pc_rom[29]
+    pc_rom[28]          pc_rom[28]
+    pc_rom[27]          pc_rom[27]
+    pc_rom[26]          pc_rom[26]
+    pc_rom[25]          pc_rom[25]
+    pc_rom[24]          pc_rom[24]
+    pc_rom[23]          pc_rom[23]
+    pc_rom[22]          pc_rom[22]
+    pc_rom[21]          pc_rom[21]
+    pc_rom[20]          pc_rom[20]
+    pc_rom[19]          pc_rom[19]
+    pc_rom[18]          pc_rom[18]
+    pc_rom[17]          pc_rom[17]
+    pc_rom[16]          pc_rom[16]
+    pc_rom[15]          pc_rom[15]
+    pc_rom[14]          pc_rom[14]
+    pc_rom[13]          pc_rom[13]
+    pc_rom[12]          pc_rom[12]
+    pc_rom[11]          pc_rom[11]
+    pc_rom[10]          pc_rom[10]
+    pc_rom[9]           pc_rom[9]
+    pc_rom[8]           pc_rom[8]
+    pc_rom[7]           pc_rom[7]
+    pc_rom[6]           pc_rom[6]
+    pc_rom[5]           pc_rom[5]
+    pc_rom[4]           pc_rom[4]
+    pc_rom[3]           pc_rom[3]
+    pc_rom[2]           pc_rom[2]
+    pc_rom[1]           pc_rom[1]
+    pc_rom[0]           pc_rom[0]
+    pc_out[31]          pc_out[31]
+    pc_out[30]          pc_out[30]
+    pc_out[29]          pc_out[29]
+    pc_out[28]          pc_out[28]
+    pc_out[27]          pc_out[27]
+    pc_out[26]          pc_out[26]
+    pc_out[25]          pc_out[25]
+    pc_out[24]          pc_out[24]
+    pc_out[23]          pc_out[23]
+    pc_out[22]          pc_out[22]
+    pc_out[21]          pc_out[21]
+    pc_out[20]          pc_out[20]
+    pc_out[19]          pc_out[19]
+    pc_out[18]          pc_out[18]
+    pc_out[17]          pc_out[17]
+    pc_out[16]          pc_out[16]
+    pc_out[15]          pc_out[15]
+    pc_out[14]          pc_out[14]
+    pc_out[13]          pc_out[13]
+    pc_out[12]          pc_out[12]
+    pc_out[11]          pc_out[11]
+    pc_out[10]          pc_out[10]
+    pc_out[9]           pc_out[9]
+    pc_out[8]           pc_out[8]
+    pc_out[7]           pc_out[7]
+    pc_out[6]           pc_out[6]
+    pc_out[5]           pc_out[5]
+    pc_out[4]           pc_out[4]
+    pc_out[3]           pc_out[3]
+    pc_out[2]           pc_out[2]
+    pc_out[1]           pc_out[1]
+    pc_out[0]           pc_out[0]
+    inst_out[31]        inst_out[31]
+    inst_out[30]        inst_out[30]
+    inst_out[29]        inst_out[29]
+    inst_out[28]        inst_out[28]
+    inst_out[27]        inst_out[27]
+    inst_out[26]        inst_out[26]
+    inst_out[25]        inst_out[25]
+    inst_out[24]        inst_out[24]
+    inst_out[23]        inst_out[23]
+    inst_out[22]        inst_out[22]
+    inst_out[21]        inst_out[21]
+    inst_out[20]        inst_out[20]
+    inst_out[19]        inst_out[19]
+    inst_out[18]        inst_out[18]
+    inst_out[17]        inst_out[17]
+    inst_out[16]        inst_out[16]
+    inst_out[15]        inst_out[15]
+    inst_out[14]        inst_out[14]
+    inst_out[13]        inst_out[13]
+    inst_out[12]        inst_out[12]
+    inst_out[11]        inst_out[11]
+    inst_out[10]        inst_out[10]
+    inst_out[9]         inst_out[9]
+    inst_out[8]         inst_out[8]
+    inst_out[7]         inst_out[7]
+    inst_out[6]         inst_out[6]
+    inst_out[5]         inst_out[5]
+    inst_out[4]         inst_out[4]
+    inst_out[3]         inst_out[3]
+    inst_out[2]         inst_out[2]
+    inst_out[1]         inst_out[1]
+    inst_out[0]         inst_out[0]
+
+Connections for cell 'memory':
+    Reference:          MEM
+    Hierarchical:       TRUE
+
+    Input Pins          Net
+    ----------------    ------------
+    clk                 clk
+    ram_word[31]        ram_word[31]
+    ram_word[30]        ram_word[30]
+    ram_word[29]        ram_word[29]
+    ram_word[28]        ram_word[28]
+    ram_word[27]        ram_word[27]
+    ram_word[26]        ram_word[26]
+    ram_word[25]        ram_word[25]
+    ram_word[24]        ram_word[24]
+    ram_word[23]        ram_word[23]
+    ram_word[22]        ram_word[22]
+    ram_word[21]        ram_word[21]
+    ram_word[20]        ram_word[20]
+    ram_word[19]        ram_word[19]
+    ram_word[18]        ram_word[18]
+    ram_word[17]        ram_word[17]
+    ram_word[16]        ram_word[16]
+    ram_word[15]        ram_word[15]
+    ram_word[14]        ram_word[14]
+    ram_word[13]        ram_word[13]
+    ram_word[12]        ram_word[12]
+    ram_word[11]        ram_word[11]
+    ram_word[10]        ram_word[10]
+    ram_word[9]         ram_word[9]
+    ram_word[8]         ram_word[8]
+    ram_word[7]         ram_word[7]
+    ram_word[6]         ram_word[6]
+    ram_word[5]         ram_word[5]
+    ram_word[4]         ram_word[4]
+    ram_word[3]         ram_word[3]
+    ram_word[2]         ram_word[2]
+    ram_word[1]         ram_word[1]
+    ram_word[0]         ram_word[0]
+    wb_MEM[1]           wb_MEM[1]
+    wb_MEM[0]           wb_MEM[0]
+    m[3]                m_MEM[3]
+    m[2]                m_MEM[2]
+    m[1]                m_MEM[1]
+    m[0]                m_MEM[0]
+    address_MEM[31]     res[31]
+    address_MEM[30]     res[30]
+    address_MEM[29]     res[29]
+    address_MEM[28]     res[28]
+    address_MEM[27]     res[27]
+    address_MEM[26]     res[26]
+    address_MEM[25]     res[25]
+    address_MEM[24]     res[24]
+    address_MEM[23]     res[23]
+    address_MEM[22]     res[22]
+    address_MEM[21]     res[21]
+    address_MEM[20]     res[20]
+    address_MEM[19]     res[19]
+    address_MEM[18]     res[18]
+    address_MEM[17]     res[17]
+    address_MEM[16]     res[16]
+    address_MEM[15]     res[15]
+    address_MEM[14]     res[14]
+    address_MEM[13]     res[13]
+    address_MEM[12]     res[12]
+    address_MEM[11]     res[11]
+    address_MEM[10]     res[10]
+    address_MEM[9]      res[9]
+    address_MEM[8]      res[8]
+    address_MEM[7]      res[7]
+    address_MEM[6]      res[6]
+    address_MEM[5]      res[5]
+    address_MEM[4]      res[4]
+    address_MEM[3]      res[3]
+    address_MEM[2]      res[2]
+    address_MEM[1]      res[1]
+    address_MEM[0]      res[0]
+    write_data_mem[31]  write_data_ex[31]
+    write_data_mem[30]  write_data_ex[30]
+    write_data_mem[29]  write_data_ex[29]
+    write_data_mem[28]  write_data_ex[28]
+    write_data_mem[27]  write_data_ex[27]
+    write_data_mem[26]  write_data_ex[26]
+    write_data_mem[25]  write_data_ex[25]
+    write_data_mem[24]  write_data_ex[24]
+    write_data_mem[23]  write_data_ex[23]
+    write_data_mem[22]  write_data_ex[22]
+    write_data_mem[21]  write_data_ex[21]
+    write_data_mem[20]  write_data_ex[20]
+    write_data_mem[19]  write_data_ex[19]
+    write_data_mem[18]  write_data_ex[18]
+    write_data_mem[17]  write_data_ex[17]
+    write_data_mem[16]  write_data_ex[16]
+    write_data_mem[15]  write_data_ex[15]
+    write_data_mem[14]  write_data_ex[14]
+    write_data_mem[13]  write_data_ex[13]
+    write_data_mem[12]  write_data_ex[12]
+    write_data_mem[11]  write_data_ex[11]
+    write_data_mem[10]  write_data_ex[10]
+    write_data_mem[9]   write_data_ex[9]
+    write_data_mem[8]   write_data_ex[8]
+    write_data_mem[7]   write_data_ex[7]
+    write_data_mem[6]   write_data_ex[6]
+    write_data_mem[5]   write_data_ex[5]
+    write_data_mem[4]   write_data_ex[4]
+    write_data_mem[3]   write_data_ex[3]
+    write_data_mem[2]   write_data_ex[2]
+    write_data_mem[1]   write_data_ex[1]
+    write_data_mem[0]   write_data_ex[0]
+    write_register_ex[4]
+                        write_register_ex[4]
+    write_register_ex[3]
+                        write_register_ex[3]
+    write_register_ex[2]
+                        write_register_ex[2]
+    write_register_ex[1]
+                        write_register_ex[1]
+    write_register_ex[0]
+                        write_register_ex[0]
+
+    Output Pins         Net
+    ----------------    ------------
+    wb[1]               wb_WB[1]
+    wb[0]               wb_WB[0]
+    read_data[31]       read_data[31]
+    read_data[30]       read_data[30]
+    read_data[29]       read_data[29]
+    read_data[28]       read_data[28]
+    read_data[27]       read_data[27]
+    read_data[26]       read_data[26]
+    read_data[25]       read_data[25]
+    read_data[24]       read_data[24]
+    read_data[23]       read_data[23]
+    read_data[22]       read_data[22]
+    read_data[21]       read_data[21]
+    read_data[20]       read_data[20]
+    read_data[19]       read_data[19]
+    read_data[18]       read_data[18]
+    read_data[17]       read_data[17]
+    read_data[16]       read_data[16]
+    read_data[15]       read_data[15]
+    read_data[14]       read_data[14]
+    read_data[13]       read_data[13]
+    read_data[12]       read_data[12]
+    read_data[11]       read_data[11]
+    read_data[10]       read_data[10]
+    read_data[9]        read_data[9]
+    read_data[8]        read_data[8]
+    read_data[7]        read_data[7]
+    read_data[6]        read_data[6]
+    read_data[5]        read_data[5]
+    read_data[4]        read_data[4]
+    read_data[3]        read_data[3]
+    read_data[2]        read_data[2]
+    read_data[1]        read_data[1]
+    read_data[0]        read_data[0]
+    address_WB[31]      address_WB[31]
+    address_WB[30]      address_WB[30]
+    address_WB[29]      address_WB[29]
+    address_WB[28]      address_WB[28]
+    address_WB[27]      address_WB[27]
+    address_WB[26]      address_WB[26]
+    address_WB[25]      address_WB[25]
+    address_WB[24]      address_WB[24]
+    address_WB[23]      address_WB[23]
+    address_WB[22]      address_WB[22]
+    address_WB[21]      address_WB[21]
+    address_WB[20]      address_WB[20]
+    address_WB[19]      address_WB[19]
+    address_WB[18]      address_WB[18]
+    address_WB[17]      address_WB[17]
+    address_WB[16]      address_WB[16]
+    address_WB[15]      address_WB[15]
+    address_WB[14]      address_WB[14]
+    address_WB[13]      address_WB[13]
+    address_WB[12]      address_WB[12]
+    address_WB[11]      address_WB[11]
+    address_WB[10]      address_WB[10]
+    address_WB[9]       address_WB[9]
+    address_WB[8]       address_WB[8]
+    address_WB[7]       address_WB[7]
+    address_WB[6]       address_WB[6]
+    address_WB[5]       address_WB[5]
+    address_WB[4]       address_WB[4]
+    address_WB[3]       address_WB[3]
+    address_WB[2]       address_WB[2]
+    address_WB[1]       address_WB[1]
+    address_WB[0]       address_WB[0]
+    write_register_mem[4]
+                        write_register_mem[4]
+    write_register_mem[3]
+                        write_register_mem[3]
+    write_register_mem[2]
+                        write_register_mem[2]
+    write_register_mem[1]
+                        write_register_mem[1]
+    write_register_mem[0]
+                        write_register_mem[0]
+    ram_data[31]        ram_data[31]
+    ram_data[30]        ram_data[30]
+    ram_data[29]        ram_data[29]
+    ram_data[28]        ram_data[28]
+    ram_data[27]        ram_data[27]
+    ram_data[26]        ram_data[26]
+    ram_data[25]        ram_data[25]
+    ram_data[24]        ram_data[24]
+    ram_data[23]        ram_data[23]
+    ram_data[22]        ram_data[22]
+    ram_data[21]        ram_data[21]
+    ram_data[20]        ram_data[20]
+    ram_data[19]        ram_data[19]
+    ram_data[18]        ram_data[18]
+    ram_data[17]        ram_data[17]
+    ram_data[16]        ram_data[16]
+    ram_data[15]        ram_data[15]
+    ram_data[14]        ram_data[14]
+    ram_data[13]        ram_data[13]
+    ram_data[12]        ram_data[12]
+    ram_data[11]        ram_data[11]
+    ram_data[10]        ram_data[10]
+    ram_data[9]         ram_data[9]
+    ram_data[8]         ram_data[8]
+    ram_data[7]         ram_data[7]
+    ram_data[6]         ram_data[6]
+    ram_data[5]         ram_data[5]
+    ram_data[4]         ram_data[4]
+    ram_data[3]         ram_data[3]
+    ram_data[2]         ram_data[2]
+    ram_data[1]         ram_data[1]
+    ram_data[0]         ram_data[0]
+    ram_adr[31]         ram_adr[31]
+    ram_adr[30]         ram_adr[30]
+    ram_adr[29]         ram_adr[29]
+    ram_adr[28]         ram_adr[28]
+    ram_adr[27]         ram_adr[27]
+    ram_adr[26]         ram_adr[26]
+    ram_adr[25]         ram_adr[25]
+    ram_adr[24]         ram_adr[24]
+    ram_adr[23]         ram_adr[23]
+    ram_adr[22]         ram_adr[22]
+    ram_adr[21]         ram_adr[21]
+    ram_adr[20]         ram_adr[20]
+    ram_adr[19]         ram_adr[19]
+    ram_adr[18]         ram_adr[18]
+    ram_adr[17]         ram_adr[17]
+    ram_adr[16]         ram_adr[16]
+    ram_adr[15]         ram_adr[15]
+    ram_adr[14]         ram_adr[14]
+    ram_adr[13]         ram_adr[13]
+    ram_adr[12]         ram_adr[12]
+    ram_adr[11]         ram_adr[11]
+    ram_adr[10]         ram_adr[10]
+    ram_adr[9]          ram_adr[9]
+    ram_adr[8]          ram_adr[8]
+    ram_adr[7]          ram_adr[7]
+    ram_adr[6]          ram_adr[6]
+    ram_adr[5]          ram_adr[5]
+    ram_adr[4]          ram_adr[4]
+    ram_adr[3]          ram_adr[3]
+    ram_adr[2]          ram_adr[2]
+    ram_adr[1]          ram_adr[1]
+    ram_adr[0]          ram_adr[0]
+    ram_read            ram_read
+    ram_write           ram_write
+    ram_size[1]         ram_size[1]
+    ram_size[0]         ram_size[0]
+
+Connections for cell 'writeback':
+    Reference:          WB
+    Hierarchical:       TRUE
+
+    Input Pins          Net
+    ----------------    ------------
+    wb[1]               wb_WB[1]
+    wb[0]               wb_WB[0]
+    read_data[31]       read_data[31]
+    read_data[30]       read_data[30]
+    read_data[29]       read_data[29]
+    read_data[28]       read_data[28]
+    read_data[27]       read_data[27]
+    read_data[26]       read_data[26]
+    read_data[25]       read_data[25]
+    read_data[24]       read_data[24]
+    read_data[23]       read_data[23]
+    read_data[22]       read_data[22]
+    read_data[21]       read_data[21]
+    read_data[20]       read_data[20]
+    read_data[19]       read_data[19]
+    read_data[18]       read_data[18]
+    read_data[17]       read_data[17]
+    read_data[16]       read_data[16]
+    read_data[15]       read_data[15]
+    read_data[14]       read_data[14]
+    read_data[13]       read_data[13]
+    read_data[12]       read_data[12]
+    read_data[11]       read_data[11]
+    read_data[10]       read_data[10]
+    read_data[9]        read_data[9]
+    read_data[8]        read_data[8]
+    read_data[7]        read_data[7]
+    read_data[6]        read_data[6]
+    read_data[5]        read_data[5]
+    read_data[4]        read_data[4]
+    read_data[3]        read_data[3]
+    read_data[2]        read_data[2]
+    read_data[1]        read_data[1]
+    read_data[0]        read_data[0]
+    address_WB[31]      address_WB[31]
+    address_WB[30]      address_WB[30]
+    address_WB[29]      address_WB[29]
+    address_WB[28]      address_WB[28]
+    address_WB[27]      address_WB[27]
+    address_WB[26]      address_WB[26]
+    address_WB[25]      address_WB[25]
+    address_WB[24]      address_WB[24]
+    address_WB[23]      address_WB[23]
+    address_WB[22]      address_WB[22]
+    address_WB[21]      address_WB[21]
+    address_WB[20]      address_WB[20]
+    address_WB[19]      address_WB[19]
+    address_WB[18]      address_WB[18]
+    address_WB[17]      address_WB[17]
+    address_WB[16]      address_WB[16]
+    address_WB[15]      address_WB[15]
+    address_WB[14]      address_WB[14]
+    address_WB[13]      address_WB[13]
+    address_WB[12]      address_WB[12]
+    address_WB[11]      address_WB[11]
+    address_WB[10]      address_WB[10]
+    address_WB[9]       address_WB[9]
+    address_WB[8]       address_WB[8]
+    address_WB[7]       address_WB[7]
+    address_WB[6]       address_WB[6]
+    address_WB[5]       address_WB[5]
+    address_WB[4]       address_WB[4]
+    address_WB[3]       address_WB[3]
+    address_WB[2]       address_WB[2]
+    address_WB[1]       address_WB[1]
+    address_WB[0]       address_WB[0]
+    write_register_mem[4]
+                        n2
+    write_register_mem[3]
+                        write_register_mem[3]
+    write_register_mem[2]
+                        write_register_mem[2]
+    write_register_mem[1]
+                        write_register_mem[1]
+    write_register_mem[0]
+                        write_register_mem[0]
+
+    Output Pins         Net
+    ----------------    ------------
+    write_data_reg[31]  write_data_reg[31]
+    write_data_reg[30]  write_data_reg[30]
+    write_data_reg[29]  write_data_reg[29]
+    write_data_reg[28]  write_data_reg[28]
+    write_data_reg[27]  write_data_reg[27]
+    write_data_reg[26]  write_data_reg[26]
+    write_data_reg[25]  write_data_reg[25]
+    write_data_reg[24]  write_data_reg[24]
+    write_data_reg[23]  write_data_reg[23]
+    write_data_reg[22]  write_data_reg[22]
+    write_data_reg[21]  write_data_reg[21]
+    write_data_reg[20]  write_data_reg[20]
+    write_data_reg[19]  write_data_reg[19]
+    write_data_reg[18]  write_data_reg[18]
+    write_data_reg[17]  write_data_reg[17]
+    write_data_reg[16]  write_data_reg[16]
+    write_data_reg[15]  write_data_reg[15]
+    write_data_reg[14]  write_data_reg[14]
+    write_data_reg[13]  write_data_reg[13]
+    write_data_reg[12]  write_data_reg[12]
+    write_data_reg[11]  write_data_reg[11]
+    write_data_reg[10]  write_data_reg[10]
+    write_data_reg[9]   write_data_reg[9]
+    write_data_reg[8]   write_data_reg[8]
+    write_data_reg[7]   write_data_reg[7]
+    write_data_reg[6]   write_data_reg[6]
+    write_data_reg[5]   write_data_reg[5]
+    write_data_reg[4]   write_data_reg[4]
+    write_data_reg[3]   write_data_reg[3]
+    write_data_reg[2]   write_data_reg[2]
+    write_data_reg[1]   write_data_reg[1]
+    write_data_reg[0]   write_data_reg[0]
+    write_register[4]   write_register[4]
+    write_register[3]   write_register[3]
+    write_register[2]   write_register[2]
+    write_register[1]   write_register[1]
+    write_register[0]   write_register[0]
+    reg_write           reg_write
