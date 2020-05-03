@@ -1,0 +1,12 @@
+ 
+****************************************
+Report : resources
+Design : MIPS
+Version: J-2014.09-SP2
+Date   : Sat May  2 20:11:56 2020
+****************************************
+
+
+No resource sharing information to report.
+
+No implementations to report
