@@ -1,0 +1,8 @@
+200b0001 //addi
+3C098001 //lui t1 0xffff
+3C0A8001 //lui t2 0xffff
+012A5820 //add $t3 $t1 $t2
+012A5821 //addu $t3 $t1 $t2
+20010001 //addi
+20010002 //addi
+20010003 //addi
