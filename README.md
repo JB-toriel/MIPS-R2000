@@ -59,6 +59,6 @@ Design of a 5 stages pipeline MIPS R2000.
 ---------------------------------
 
  ## Authors:
- * de Sainte Marie Nils & Edde Jean-Baptiste - Fourth year Master's students at **Grenoble INP Phelma**
+ * de Sainte Marie Nils & Edde Jean-Baptiste - Master's students at **Grenoble INP Phelma**
 
 
